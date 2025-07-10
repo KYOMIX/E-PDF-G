@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Envelope PDF Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    /* Beautiful wallpaper background */
+    body {
+      background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+    
+    /* Frosted glass effect for content */
+    .card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    }
+    
+    /* Button styling */
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    }
+    
+    /* Input field styling */
+    .input-field {
+      transition: all 0.3s ease;
+      border: 1px solid #e5e7eb;
+      background: rgba(255, 255, 255, 0.8);
+    }
+    .input-field:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      background: white;
+    }
+    
+    /* Room block styling */
+    .room-block {
+      background: rgba(249, 250, 251, 0.8);
+      border-left: 3px solid #6366f1;
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+  <div class="max-w-4xl mx-auto card p-6 md:p-8">
+    <h1 class="text-3xl font-bold mb-2 text-center text-gray-800">Envelope  Generator by THE KYOMIX</h1>
+    <p class="text-gray-600 text-center mb-8">Generate Practical envelopes for your guests</p>
+
+    <!-- Logo Upload -->
+    <div class="mb-6 p-4 bg-white bg-opacity-50 rounded-lg">
+      <label class="block font-semibold mb-3 text-gray-700">Upload Logo</label>
+      <div class="flex items-center space-x-4">
+        <label class="btn-primary px-6 py-2 text-white rounded-lg cursor-pointer inline-flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+          </svg>
+          Select File
+          <input type="file" id="logoInput" accept="image/png, image/jpeg" class="hidden" />
+        </label>
+        <img id="logoPreview" src="" alt="Logo Preview" class="h-20 object-contain rounded-lg border border-gray-200 bg-white p-1"/>
+      </div>
+    </div>
+
+    <!-- Rooms Input -->
+    <div id="roomsContainer" class="space-y-4"></div>
+    
+    <button id="addRoom" class="btn-primary mt-6 px-6 py-3 text-white rounded-lg font-medium w-full md:w-auto flex items-center justify-center mx-auto">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+      </svg>
+      Add Room
+    </button>
+
+    <!-- PDF Download -->
+    <div class="mt-10 text-center">
+      <button id="downloadPdf" class="btn-primary px-8 py-3 text-white rounded-lg text-lg font-medium flex items-center justify-center mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        Generate PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- ALL YOUR ORIGINAL JAVASCRIPT CODE REMAINS EXACTLY THE SAME -->
+  <script>
+    let roomCounter = 0;
+    const roomsContainer = document.getElementById("roomsContainer");
+    const logoInput = document.getElementById("logoInput");
+    const logoPreview = document.getElementById("logoPreview");
+    let logoDataUrl = "";
+    let logoImage = null;
+
+    logoInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        logoPreview.src = reader.result;
+        logoDataUrl = reader.result;
+        logoImage = new Image();
+        logoImage.src = logoDataUrl;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function createRoomBlock() {
+      const roomId = `room-${roomCounter++}`;
+      const roomDiv = document.createElement("div");
+      roomDiv.className = "room-block p-4 mb-4 rounded-lg";
+      roomDiv.innerHTML = `
+        <div class="flex justify-between items-center mb-2">
+          <label class="font-semibold text-gray-700">Room Number:</label>
+          <input type="text" placeholder="e.g. 101" class="room-number input-field border rounded px-3 py-2 w-32" />
+          <button class="remove-room text-red-500 hover:text-red-700 rounded px-3 py-1 transition-colors flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            Remove
+          </button>
+        </div>
+        <div class="names-container space-y-2">
+          <div class="flex gap-2 items-center">
+            <input type="text" class="guest-name input-field border rounded px-3 py-2 w-full" placeholder="Guest Name" />
+            <button class="remove-name text-red-400 hover:text-red-600 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <button class="add-name mt-2 px-3 py-1 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded transition-colors flex items-center justify-center w-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+          </svg>
+          Add Name
+        </button>
+      `;
+      roomsContainer.appendChild(roomDiv);
+    }
+
+    document.getElementById("addRoom").addEventListener("click", () => {
+      createRoomBlock();
+    });
+
+    roomsContainer.addEventListener("click", (e) => {
+      if (e.target.classList.contains("remove-room")) {
+        e.target.closest(".room-block").remove();
+      }
+
+      if (e.target.classList.contains("add-name")) {
+        const namesContainer = e.target.previousElementSibling;
+        const newInput = document.createElement("div");
+        newInput.className = "flex gap-2 items-center";
+        newInput.innerHTML = `
+          <input type="text" class="guest-name input-field border rounded px-3 py-2 w-full" placeholder="Guest Name" />
+          <button class="remove-name text-red-400 hover:text-red-600 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        `;
+        namesContainer.appendChild(newInput);
+      }
+
+      if (e.target.classList.contains("remove-name")) {
+        e.target.closest("div").remove();
+      }
+    });
+
+    document.getElementById("downloadPdf").addEventListener("click", async () => {
+      const { jsPDF } = window.jspdf;
+      
+      // DL envelope size in landscape (220mm × 110mm)
+      const width = 220 * 2.83465;
+      const height = 110 * 2.83465;
+      
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "pt",
+        format: [width, height]
+      });
+      
+      // Set default font (Arial)
+      pdf.setFont("helvetica");
+      
+      const rooms = document.querySelectorAll("#roomsContainer > div");
+
+      if (rooms.length === 0) {
+        alert("Please add at least one room.");
+        return;
+      }
+
+      // Add loading state to button
+      const btn = document.getElementById("downloadPdf");
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Generating...
+      `;
+      btn.disabled = true;
+
+      try {
+        for (let i = 0; i < rooms.length; i++) {
+          if (i > 0) pdf.addPage();
+
+          const roomEl = rooms[i];
+          const roomNumber = roomEl.querySelector(".room-number").value.trim();
+          const guestNames = [...roomEl.querySelectorAll(".guest-name")]
+            .map(input => input.value.trim())
+            .filter(name => name !== "");
+
+          if (!roomNumber || guestNames.length === 0) continue;
+
+          // Add logo if exists (now using preloaded image)
+          if (logoDataUrl && logoImage && logoImage.complete) {
+            const scale = 80 / logoImage.height;
+            const logoWidth = logoImage.width * scale;
+            pdf.addImage(logoImage, "PNG", 70, 70, logoWidth, 80);
+          }
+
+          // Room number (top-right) - Bold Arial
+          pdf.setFont("helvetica", "bold");
+          pdf.setFontSize(16);
+          pdf.text(`CHAMBRE: ${roomNumber}`, width - 70, 70, { align: "right" });
+
+          // Guest Names (center) - All caps Bold Arial
+          pdf.setFont("helvetica", "bold");
+          pdf.setFontSize(20);
+          
+          const centerX = width / 2;
+          const centerY = height / 2;
+          const nameSpacing = 30;
+          
+          guestNames.forEach((name, index) => {
+            const nameUpper = name.toUpperCase();
+            const textWidth = pdf.getTextWidth(nameUpper);
+            const xPos = centerX - (textWidth / 2);
+            const yPos = centerY - ((guestNames.length - 1) * nameSpacing / 2) + (index * nameSpacing);
+            pdf.text(nameUpper, xPos, yPos);
+          });
+        }
+
+        pdf.save("envelopes.pdf");
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+        alert("Error generating PDF. Please check console for details.");
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    });
+
+    // Initial one room block
+    createRoomBlock();
+  </script>
+</body>
+</html>
