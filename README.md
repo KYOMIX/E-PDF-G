@@ -1,10 +1,5 @@
 README - Envelope PDF Generator
-Table of Contents
-1.	Features
-2.	How to Use
-3.	Technical Details
-4.	Customization
-5.	License
+
 Features
 •	Logo Upload: Add your organization's logo to all generated envelopes
 •	Excel/CSV Import: Bulk import guest data from spreadsheet files
