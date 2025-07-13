@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Envelope PDF Generator</title>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
@@ -17,6 +17,7 @@
 
     * {
       font-family: 'Montserrat', sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
     
     body {
@@ -25,17 +26,29 @@
       background-position: center;
       background-attachment: fixed;
       min-height: 100vh;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
     
     .card {
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border-radius: 20px;
+      border-radius: 16px;
       border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
       animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       opacity: 0;
+      margin: 12px;
+      width: calc(100% - 24px);
+    }
+    
+    @media (min-width: 768px) {
+      .card {
+        border-radius: 20px;
+        margin: 0;
+        width: auto;
+        max-width: 42rem;
+      }
     }
     
     @keyframes fadeIn {
@@ -48,6 +61,15 @@
       -webkit-text-fill-color: transparent;
       background-size: 200% auto;
       animation: textShine 5s linear infinite;
+      font-size: 1.75rem;
+      line-height: 2.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .main-title {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+      }
     }
 
     @keyframes textShine {
@@ -58,6 +80,7 @@
       background: var(--brand-gradient);
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+      touch-action: manipulation;
     }
     .btn-primary:hover {
       transform: translateY(-3px);
@@ -72,6 +95,14 @@
       transition: all 0.3s ease;
       border: 1px solid #d1d5db;
       background: rgba(255, 255, 255, 0.7);
+      font-size: 0.875rem;
+      padding: 0.5rem 0.75rem;
+    }
+    @media (min-width: 768px) {
+      .input-field {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+      }
     }
     .input-field:focus {
       border-color: #6366f1;
@@ -80,11 +111,19 @@
     }
     
     .room-block {
-      background: rgba(249, 250, 251, 0.9);
+      background: rgba(249, 250, 251, 0.95);
       border-left: 4px solid #6366f1;
       backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       transition: all 0.3s ease;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) {
+      .room-block {
+        padding: 1.25rem;
+      }
     }
     .room-block.slide-in { animation: slideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
     .room-block.slide-out { animation: slideOut 0.4s ease-out forwards; }
@@ -106,6 +145,12 @@
     #logoDropzone, #excelDropzone {
       border: 2px dashed #cbd5e1;
       transition: all 0.3s ease;
+      padding: 1.5rem;
+    }
+    @media (min-width: 768px) {
+      #logoDropzone, #excelDropzone {
+        padding: 1.5rem;
+      }
     }
     #logoDropzone.dragover, #excelDropzone.dragover {
       border-color: #6366f1;
@@ -124,87 +169,151 @@
       transform: scale(0.8);
     }
 
-    #devPopup .social-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
+    /* Toast Notifications */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
       color: white;
-      transition: all 0.3s ease;
+      padding: 12px 24px;
+      border-radius: 8px;
+      z-index: 1000;
+      animation: fadeInOut 3s ease forwards;
     }
-    #devPopup .social-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-    }
-    #devPopup .social-btn svg {
-      transition: transform 0.3s ease;
-    }
-    #devPopup .social-btn:hover svg {
-      transform: rotate(-10deg) scale(1.1);
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      10%, 90% { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
 
-    @keyframes popIn {
-      0% { transform: scale(0.95); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+    /* Import Dialog */
+    #importDialog {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
     }
-    #devPopup > div {
-      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    #importDialog .dialog-content {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+    #importDialog .dialog-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    #importDialog .dialog-button {
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    #importDialog .dialog-button.replace {
+      background: #ef4444;
+      color: white;
+    }
+    #importDialog .dialog-button.merge {
+      background: #3b82f6;
+      color: white;
+    }
+    #importDialog .dialog-button.cancel {
+      background: #e5e7eb;
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 767px) {
+      body {
+        padding: 0.5rem;
+        align-items: flex-start;
+      }
+      
+      .card {
+        padding: 1rem;
+      }
+      
+      #downloadPdf, #addRoom {
+        width: 100%;
+        padding: 0.75rem;
+      }
+      
+      .room-number {
+        width: 6rem !important;
+      }
+    }
+
+    /* Prevent zooming on input focus */
+    @media screen and (-webkit-min-device-pixel-ratio:0) {
+      select:focus,
+      textarea:focus,
+      input:focus {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body class="p-4 md:p-8 flex items-center justify-center min-h-screen">
-  <div class="max-w-4xl w-full mx-auto card p-6 md:p-10 transform -translate-y-4">
-    <h1 class="main-title text-4xl font-bold mb-2 text-center">Envelope Generator</h1>
-    <p class="text-gray-600 text-center mb-10">Crafted with ❤️ by <span class="font-semibold text-indigo-500">THE KYOMIX</span> to generate practical envelopes for your guests.</p>
+  <div class="max-w-4xl w-full mx-auto card p-6 md:p-8 transform -translate-y-4">
+    <h1 class="main-title text-3xl md:text-4xl font-bold mb-2 text-center">Envelope Generator</h1>
+    <p class="text-gray-600 text-center mb-6 md:mb-8 text-sm md:text-base">Crafted with ❤️ by <span class="font-semibold text-indigo-500">THE KYOMIX</span></p>
 
     <!-- Logo Upload -->
-    <div class="mb-8">
-      <label class="block font-semibold mb-3 text-gray-700 text-lg">Upload Your Logo</label>
-      <div id="logoDropzone" class="relative bg-gray-50 rounded-xl p-6 text-center cursor-pointer">
+    <div class="mb-6 md:mb-8">
+      <label class="block font-semibold mb-2 md:mb-3 text-gray-700 text-base md:text-lg">Upload Your Logo</label>
+      <div id="logoDropzone" class="relative bg-gray-50 rounded-lg md:rounded-xl p-4 md:p-6 text-center cursor-pointer">
         <div id="logoPlaceholder" class="text-gray-500">
-            <svg class="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-            <p class="mt-2 text-sm">Drag & Drop or <span class="font-semibold text-indigo-600">click to select a file</span></p>
+            <svg class="mx-auto h-10 md:h-12 w-10 md:w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <p class="mt-2 text-xs md:text-sm">Drag & Drop or <span class="font-semibold text-indigo-600">click to select</span></p>
             <p class="text-xs text-gray-400 mt-1">PNG or JPG supported</p>
         </div>
-        <img id="logoPreview" src="" alt="Logo Preview" class="absolute inset-0 w-full h-full object-contain rounded-xl bg-white p-2"/>
+        <img id="logoPreview" src="" alt="Logo Preview" class="absolute inset-0 w-full h-full object-contain rounded-lg md:rounded-xl bg-white p-2"/>
         <input type="file" id="logoInput" accept="image/png, image/jpeg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
       </div>
     </div>
 
     <!-- Excel/CSV Upload -->
-    <div class="mb-8">
-      <label class="block font-semibold mb-3 text-gray-700 text-lg">Import from Excel/CSV</label>
-      <div id="excelDropzone" class="relative bg-gray-50 rounded-xl p-6 text-center cursor-pointer">
+    <div class="mb-6 md:mb-8">
+      <label class="block font-semibold mb-2 md:mb-3 text-gray-700 text-base md:text-lg">Import from Excel/CSV</label>
+      <div id="excelDropzone" class="relative bg-gray-50 rounded-lg md:rounded-xl p-4 md:p-6 text-center cursor-pointer">
         <div id="excelPlaceholder" class="text-gray-500">
-          <svg class="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-          <p class="mt-2 text-sm">Drag & Drop or <span class="font-semibold text-indigo-600">click to select a file</span></p>
-          <p class="text-xs text-gray-400 mt-1">Supports .xlsx, .xls, or .csv files</p>
+          <svg class="mx-auto h-10 md:h-12 w-10 md:w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          <p class="mt-2 text-xs md:text-sm">Drag & Drop or <span class="font-semibold text-indigo-600">click to select</span></p>
+          <p class="text-xs text-gray-400 mt-1">Supports .xlsx, .xls, or .csv</p>
         </div>
         <input type="file" id="excelInput" accept=".csv,.xlsx,.xls" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
       </div>
     </div>
 
     <!-- Rooms Input -->
-    <div id="roomsContainer" class="space-y-4"></div>
-    <div id="emptyState" class="text-center py-10 border-2 border-dashed border-gray-300 rounded-lg hidden">
-      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
+    <div id="roomsContainer" class="space-y-3 md:space-y-4"></div>
+    <div id="emptyState" class="text-center py-8 md:py-10 border-2 border-dashed border-gray-300 rounded-lg hidden">
+      <svg class="mx-auto h-10 md:h-12 w-10 md:w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
       <h3 class="mt-2 text-sm font-medium text-gray-900">No rooms added</h3>
-      <p class="mt-1 text-sm text-gray-500">Get started by adding a room for your guests.</p>
+      <p class="mt-1 text-xs md:text-sm text-gray-500">Get started by adding a room</p>
     </div>
     
-    <button id="addRoom" class="btn-primary mt-6 px-6 py-3 text-white rounded-lg font-semibold w-full md:w-auto flex items-center justify-center mx-auto">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+    <button id="addRoom" class="btn-primary mt-4 md:mt-6 px-4 py-2 md:px-6 md:py-3 text-white rounded-lg font-semibold w-full flex items-center justify-center mx-auto">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 md:h-5 w-4 md:w-5 mr-1 md:mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
       </svg>
       Add Room
     </button>
 
     <!-- PDF Download -->
-    <div class="mt-12 text-center border-t pt-8">
-      <button id="downloadPdf" class="btn-primary px-8 py-4 text-white rounded-lg text-lg font-bold flex items-center justify-center mx-auto w-full md:w-auto">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="mt-8 md:mt-10 text-center border-t pt-6 md:pt-8">
+      <button id="downloadPdf" class="btn-primary px-6 py-3 md:px-8 md:py-4 text-white rounded-lg text-base md:text-lg font-bold flex items-center justify-center mx-auto w-full md:w-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 md:h-6 w-5 md:w-6 mr-2 md:mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
         </svg>
         Generate & Download PDF
@@ -212,18 +321,24 @@
     </div>
   </div>
 
+  <!-- Import Dialog (Hidden by default) -->
+  <div id="importDialog">
+    <div class="dialog-content">
+      <h3 class="font-bold text-lg mb-4">You have existing room data</h3>
+      <p class="text-gray-600 mb-6">How would you like to handle the imported data?</p>
+      <div class="dialog-buttons">
+        <button class="dialog-button replace">Replace All</button>
+        <button class="dialog-button merge">Merge</button>
+        <button class="dialog-button cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Developer Popup -->
   <div id="devPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden p-4">
     <div class="card p-6 max-w-md w-full">
-      <h2 class="text-2xl font-bold mb-4 text-indigo-600">Thank you for using my Web App! ❤️</h2>
-      <p class="text-gray-700 mb-4">Created by <span class="font-semibold">THE KYOMIX</span></p>
-      
-      <div class="social-media-grid grid grid-cols-2 gap-4 mb-6">
-        <a href="https://twitter.com/yourhandle" target="_blank" class="social-btn bg-blue-400 hover:bg-blue-500"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/></svg> <span>Twitter</span></a>
-        <a href="https://instagram.com/yourhandle" target="_blank" class="social-btn" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> <span>Instagram</span></a>
-        <a href="https://github.com/yourhandle" target="_blank" class="social-btn bg-gray-800 hover:bg-gray-900"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg> <span>GitHub</span></a>
-        <a href="https://linkedin.com/in/yourhandle" target="_blank" class="social-btn bg-blue-600 hover:bg-blue-700"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> <span>LinkedIn</span></a>
-      </div>
+      <h2 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-indigo-600">Thank you for using my Web App! ❤️</h2>
+      <p class="text-gray-700 mb-4 md:mb-6">Created by <span class="font-semibold">THE KYOMIX</span></p>
       
       <div class="flex justify-end">
         <button id="closePopup" class="btn-primary px-4 py-2 text-white rounded-lg text-sm font-semibold">Close & Don't show for a week</button>
@@ -243,8 +358,36 @@
       const logoPlaceholder = document.getElementById("logoPlaceholder");
       const excelInput = document.getElementById("excelInput");
       const excelDropzone = document.getElementById("excelDropzone");
+      const importDialog = document.getElementById("importDialog");
       let logoDataUrl = "";
       let logoImage = null;
+
+      // --- Helper Functions ---
+      function showToast(message, type = "success") {
+        const toast = document.createElement("div");
+        toast.className = `toast ${type === "error" ? "bg-red-500" : "bg-green-500"}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+          toast.remove();
+        }, 3000);
+      }
+
+      function showImportDialog() {
+        return new Promise((resolve) => {
+          importDialog.style.display = "flex";
+          
+          const buttons = importDialog.querySelectorAll(".dialog-button");
+          buttons.forEach(btn => {
+            btn.addEventListener("click", () => {
+              importDialog.style.display = "none";
+              resolve(btn.classList.contains("replace") ? "replace" : 
+                     btn.classList.contains("merge") ? "merge" : "cancel");
+            }, { once: true });
+          });
+        });
+      }
 
       // --- Weekly Developer Popup ---
       (() => {
@@ -309,15 +452,33 @@
         const file = e.target.files[0];
         if (!file) return;
 
-        // Clear existing rooms (optional)
-        document.querySelectorAll(".room-block").forEach(room => room.remove());
+        const existingRooms = document.querySelectorAll(".room-block").length > 0;
+        
+        if (existingRooms) {
+          const userChoice = await showImportDialog();
+          
+          if (userChoice === "replace") {
+            // Remove all rooms with animation
+            document.querySelectorAll(".room-block").forEach(room => {
+              room.classList.add('slide-out');
+              room.addEventListener('animationend', () => room.remove(), { once: true });
+            });
+          } else if (userChoice === "cancel") {
+            e.target.value = '';
+            return; // User canceled
+          }
+          // If "merge", proceed without clearing
+        }
 
         try {
           const data = await parseExcel(file);
           populateRooms(data);
+          showToast("Data imported successfully!");
         } catch (error) {
-          alert("Error parsing file. Please check the format.");
+          showToast("Error: Invalid file format", "error");
           console.error(error);
+        } finally {
+          e.target.value = ''; // Reset input
         }
       });
 
@@ -344,10 +505,10 @@
         return XLSX.utils.sheet_to_json(firstSheet);
       }
 
-      // Create UI from parsed data
+      // Create UI from parsed data (FIXED: No empty inputs)
       function populateRooms(data) {
         if (!data.length) {
-          alert("No valid data found in the file.");
+          showToast("No valid data found in the file", "error");
           return;
         }
 
@@ -357,7 +518,7 @@
         const guestCol = columns.find(col => col.toLowerCase() === 'mainguest');
 
         if (!roomCol || !guestCol) {
-          alert("Required columns (roomName and mainGuest) not found in the file.");
+          showToast("Required columns (roomName and mainGuest) not found", "error");
           return;
         }
 
@@ -378,12 +539,18 @@
 
         // Create UI blocks
         roomsMap.forEach((guests, room) => {
-          const roomDiv = createRoomBlock();
-          const roomInput = roomDiv.querySelector(".room-number");
-          roomInput.value = room;
+          // Check if room already exists
+          let roomDiv = [...document.querySelectorAll(".room-block")].find(
+            el => el.querySelector(".room-number").value.trim() === room
+          );
+
+          if (!roomDiv) {
+            roomDiv = createRoomBlock();
+            roomDiv.querySelector(".room-number").value = room;
+          }
 
           const namesContainer = roomDiv.querySelector(".names-container");
-          namesContainer.innerHTML = ""; // Clear default input
+          namesContainer.innerHTML = ""; // Clear default empty input
 
           guests.forEach(guest => {
             const nameInput = document.createElement("div");
@@ -410,20 +577,20 @@
 
       function createRoomBlock() {
         const roomDiv = document.createElement("div");
-        roomDiv.className = "room-block p-5 mb-4 rounded-xl slide-in";
+        roomDiv.className = "room-block p-4 md:p-5 mb-3 md:mb-4 rounded-lg md:rounded-xl slide-in";
         roomDiv.innerHTML = `
-          <div class="flex justify-between items-center mb-4">
-            <label class="font-semibold text-gray-700">Room Number:</label>
-            <input type="text" placeholder="e.g. 101" class="room-number input-field border rounded-lg px-3 py-2 w-32 text-center font-semibold" />
-            <button class="remove-room text-gray-400 hover:text-red-500 transition-colors p-1.5 rounded-full hover:bg-red-100">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+          <div class="flex justify-between items-center mb-3 md:mb-4">
+            <label class="font-semibold text-gray-700 text-sm md:text-base">Room Number:</label>
+            <input type="text" placeholder="e.g. 101" class="room-number input-field border rounded-lg px-3 py-2 w-24 md:w-32 text-center font-semibold" />
+            <button class="remove-room text-gray-400 hover:text-red-500 transition-colors p-1 md:p-1.5 rounded-full hover:bg-red-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 md:h-6 w-5 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
             </button>
           </div>
-          <div class="names-container space-y-3">
+          <div class="names-container space-y-2 md:space-y-3">
             ${createNameInputHTML()}
           </div>
-          <button class="add-name mt-4 px-3 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-colors flex items-center justify-center w-full font-medium text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
+          <button class="add-name mt-3 md:mt-4 px-3 py-1.5 md:py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-colors flex items-center justify-center w-full font-medium text-xs md:text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 md:h-4 w-3.5 md:w-4 mr-1 md:mr-1.5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
             </svg>
             Add Another Guest
@@ -471,9 +638,25 @@
         const pdf = new jsPDF({ orientation: "landscape", unit: "pt", format: [width, height] });
         pdf.setFont("helvetica");
 
-        const rooms = document.querySelectorAll("#roomsContainer > .room-block");
-        if (rooms.length === 0) {
-          alert("Please add at least one room to generate a PDF.");
+        // Group rooms by room number in case there are duplicates
+        const roomGroups = {};
+        document.querySelectorAll("#roomsContainer > .room-block").forEach(roomEl => {
+          const roomNumber = roomEl.querySelector(".room-number").value.trim();
+          if (!roomNumber) return;
+          
+          if (!roomGroups[roomNumber]) {
+            roomGroups[roomNumber] = [];
+          }
+          
+          const guestNames = [...roomEl.querySelectorAll(".guest-name")]
+            .map(input => input.value.trim())
+            .filter(name => name);
+            
+          roomGroups[roomNumber].push(...guestNames);
+        });
+
+        if (Object.keys(roomGroups).length === 0) {
+          showToast("Please add at least one room", "error");
           return;
         }
 
@@ -483,16 +666,10 @@
         btn.disabled = true;
 
         try {
-          for (let i = 0; i < rooms.length; i++) {
-            if (i > 0) pdf.addPage();
-
-            const roomEl = rooms[i];
-            const roomNumber = roomEl.querySelector(".room-number").value.trim();
-            const guestNames = [...roomEl.querySelectorAll(".guest-name")]
-              .map(input => input.value.trim())
-              .filter(name => name);
-
-            if (!roomNumber || guestNames.length === 0) continue;
+          let pageCount = 0;
+          for (const [roomNumber, guestNames] of Object.entries(roomGroups)) {
+            if (pageCount > 0) pdf.addPage();
+            pageCount++;
 
             if (logoImage && logoImage.complete) {
               const scale = 80 / logoImage.height;
@@ -518,9 +695,10 @@
             });
           }
           pdf.save("envelopes.pdf");
+          showToast("PDF generated successfully!");
         } catch (error) {
           console.error("Error generating PDF:", error);
-          alert("An error occurred while generating the PDF. Please check the console for details.");
+          showToast("Error generating PDF", "error");
         } finally {
           btn.innerHTML = originalText;
           btn.disabled = false;
