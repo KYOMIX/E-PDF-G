@@ -497,10 +497,10 @@
         }
       });
 
-      // Parse Excel/CSV file
+      // Parse Excel/CSV file with UTF-8 encoding support
       async function parseExcel(file) {
         const arrayBuffer = await file.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer);
+        const workbook = XLSX.read(arrayBuffer, { type: 'array', codepage: 65001 }); // 65001 is UTF-8
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
         return XLSX.utils.sheet_to_json(firstSheet);
       }
