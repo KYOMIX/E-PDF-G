@@ -712,5 +712,57 @@
       createRoomBlock();
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // --- Globals ---
+      let roomCounter = 0;
+      const roomsContainer = document.getElementById("roomsContainer");
+      const emptyState = document.getElementById("emptyState");
+      const logoInput = document.getElementById("logoInput");
+      const logoPreview = document.getElementById("logoPreview");
+      const logoDropzone = document.getElementById("logoDropzone");
+      const logoPlaceholder = document.getElementById("logoPlaceholder");
+      const excelInput = document.getElementById("excelInput");
+      const excelDropzone = document.getElementById("excelDropzone");
+      const importDialog = document.getElementById("importDialog");
+      let logoDataUrl = "";
+      let logoImage = null;
+      let hasGeneratedPDF = false;
+      let hasInteracted = false; // Track if user has interacted with the page
+
+      // --- Modified beforeunload Event ---
+      function setupBeforeUnload() {
+        window.addEventListener('beforeunload', function(e) {
+          // Only trigger if user has interacted with the page
+          if (hasInteracted) {
+            const hasRooms = document.querySelectorAll(".room-block").length > 0;
+            
+            if (hasRooms && !hasGeneratedPDF) {
+              e.preventDefault();
+              // Modern browsers require returnValue to be set
+              e.returnValue = 'You have unfinished work. Are you sure you want to leave?';
+              return e.returnValue;
+            }
+          }
+        });
+      }
+
+      // Set up the event listener after a small delay to ensure page loads properly
+      setTimeout(setupBeforeUnload, 1000);
+
+      // Track user interaction
+      document.addEventListener('click', function() {
+        hasInteracted = true;
+      }, { once: true });
+
+      // --- PDF Generation ---
+      document.getElementById("downloadPdf").addEventListener("click", async () => {
+        hasGeneratedPDF = true;
+        // Rest of your existing PDF generation code...
+      });
+
+      // --- Rest of your existing code remains exactly the same ---
+    });
+  </script>
 </body>
 </html>
