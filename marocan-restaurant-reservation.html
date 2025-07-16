@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bon de Réservation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px;
+            max-width: 700px;
+            margin: auto;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2em;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            height: 3px;
+            width: 60px;
+            background-color: #e67e22;
+            border-radius: 2px;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        input[type="date"],
+        input[type="text"],
+        input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="date"]:focus,
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #e67e22;
+            box-shadow: 0 0 8px rgba(230, 126, 34, 0.3);
+            outline: none;
+        }
+
+        input[type="number"][min="0"] {
+            width: 80px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        strong {
+            color: #e67e22;
+        }
+
+        button {
+            background-color: #e67e22;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 30px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: #d35400;
+            transform: translateY(-2px);
+        }
+
+        button.secondary {
+            background-color: #3498db;
+            margin-top: 15px;
+        }
+
+        button.secondary:hover {
+            background-color: #2980b9;
+        }
+
+        textarea {
+            width: calc(100% - 22px);
+            height: 250px;
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 0.95em;
+            background-color: #eaf1f0;
+            resize: vertical;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        a#downloadLink {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        a#downloadLink:hover {
+            color: #3498db;
+            text-decoration: underline;
+        }
+
+        label:has(input[id^="menu"]) {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-right: 10px;
+        }
+
+        label:has(input[id^="menu"]) input {
+            margin-left: auto;
+        }
+
+        input:invalid {
+            border-color: #e74c3c;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px;
+            }
+            
+            input[type="number"][min="0"] {
+                width: 60px;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<h2>Réservation Restaurant « LE NARJIS »</h2>
+
+<label>Date :
+    <input type="date" id="date" required>
+</label>
+
+<label>Nom/Name :
+    <input type="text" id="name" required>
+</label>
+
+<label>N° de chambre / ROOM :
+    <input type="text" id="room" required>
+</label>
+
+<label>Nombre de personne : PAX
+    <input type="number" id="pax" min="1" required>
+</label>
+
+<label>
+    <strong>MENU CHOICES</strong>
+</label>
+
+<label>Menu Jardins d'Agadir (250 DH) :
+    <input type="number" id="menu1" min="0" value="0">
+</label>
+
+<label>Menu Pêcheur (250 DH) :
+    <input type="number" id="menu2" min="0" value="0">
+</label>
+
+<label>Menu Berbère (180 DH) :
+    <input type="number" id="menu3" min="0" value="0">
+</label>
+
+<label>Menu Narjis (150 DH) :
+    <input type="number" id="menu4" min="0" value="0">
+</label>
+
+<div id="totalDisplay" style="font-weight: bold; margin: 15px 0; text-align: right;"></div>
+
+<button onclick="if(validateForm()) generateFile()">Générer le bon</button>
+<button onclick="if(validateForm()) generatePDF()" class="secondary">Générer PDF</button>
+<a id="downloadLink" style="display:none;">Télécharger</a>
+
+<br><br>
+<label>Résultat généré :</label>
+<textarea id="output" readonly></textarea>
+
+<script>
+// Set minimum date to today
+document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+// Save data to local storage
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('change', function() {
+        localStorage.setItem(this.id, this.value);
+        calculateTotal();
+    });
+});
+
+// Load data from local storage
+window.addEventListener('load', function() {
+    document.querySelectorAll('input').forEach(input => {
+        const savedValue = localStorage.getItem(input.id);
+        if (savedValue) input.value = savedValue;
+    });
+    calculateTotal();
+});
+
+// Calculate total price
+function calculateTotal() {
+    const menu1 = parseInt(document.getElementById('menu1').value) || 0;
+    const menu2 = parseInt(document.getElementById('menu2').value) || 0;
+    const menu3 = parseInt(document.getElementById('menu3').value) || 0;
+    const menu4 = parseInt(document.getElementById('menu4').value) || 0;
+    
+    const total = (menu1 * 250) + (menu2 * 250) + (menu3 * 180) + (menu4 * 150);
+    document.getElementById('totalDisplay').textContent = `Total: ${total} DH`;
+}
+
+// Form validation
+function validateForm() {
+    const date = document.getElementById('date').value;
+    const name = document.getElementById('name').value;
+    const room = document.getElementById('room').value;
+    const pax = document.getElementById('pax').value;
+    
+    if (!date || !name || !room || !pax) {
+        alert("Veuillez remplir tous les champs obligatoires");
+        return false;
+    }
+    return true;
+}
+
+// Generate text file
+function generateFile() {
+    if (!confirm("Confirmez les détails de votre réservation avant de générer le bon?")) {
+        return;
+    }
+
+    const date = document.getElementById('date').value;
+    const name = document.getElementById('name').value;
+    const room = document.getElementById('room').value;
+    const pax = document.getElementById('pax').value;
+
+    const menu1 = parseInt(document.getElementById('menu1').value);
+    const menu2 = parseInt(document.getElementById('menu2').value);
+    const menu3 = parseInt(document.getElementById('menu3').value);
+    const menu4 = parseInt(document.getElementById('menu4').value);
+
+    let output = "Bon de réservation\n";
+    output += `Date: ${date}\n`;
+    output += `Nom/Name: ${name}\n`;
+    output += `N° de chambre / ROOM: ${room}\n`;
+    output += `Nombre de personne: PAX ${pax}\n`;
+
+    output += "\nMenu restaurant « LE NARJIS » à 19H30\n";
+    if (menu1 > 0) output += `✓ ${menu1} x Menu Jardins d'Agadir\t\t250 DH\n`;
+    if (menu2 > 0) output += `✓ ${menu2} x Menu Pêcheur\t\t\t250 DH\n`;
+    if (menu3 > 0) output += `✓ ${menu3} x Menu Berbère\t\t\t180 DH\n`;
+    if (menu4 > 0) output += `✓ ${menu4} x Menu Narjis\t\t\t150 DH\n`;
+
+    output += "\nRéservation Client\n";
+    output += "Les annulations sont acceptées jusqu'à 14h30 le jour prévu\n";
+    output += "Cancellations are accepted until 2:30 PM on the scheduled day";
+
+    document.getElementById('output').value = output;
+
+    // Create blob and download link
+    const blob = new Blob([output], {type: 'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.getElementById('downloadLink');
+    a.href = url;
+    a.download = 'bon_de_reservation.txt';
+    a.style.display = 'inline-block';
+    a.textContent = 'Télécharger le bon (.txt)';
+}
+
+// Helper function to format date
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('fr-FR', options);
+}
+
+// Helper function for filename date
+function formatDateForFilename(dateString) {
+    const date = new Date(dateString);
+    return `${date.getFullYear()}${(date.getMonth()+1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
+}
+
+// Generate Fancy PDF
+function generatePDF() {
+    if (!confirm("Confirmez les détails de votre réservation avant de générer le PDF?")) {
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Get form values
+    const date = document.getElementById('date').value;
+    const name = document.getElementById('name').value;
+    const room = document.getElementById('room').value;
+    const pax = document.getElementById('pax').value;
+    const menu1 = parseInt(document.getElementById('menu1').value) || 0;
+    const menu2 = parseInt(document.getElementById('menu2').value) || 0;
+    const menu3 = parseInt(document.getElementById('menu3').value) || 0;
+    const menu4 = parseInt(document.getElementById('menu4').value) || 0;
+    
+    // Calculate total
+    const total = (menu1 * 250) + (menu2 * 250) + (menu3 * 180) + (menu4 * 150);
+    
+    // Add header
+    doc.setDrawColor(230, 126, 34);
+    doc.setFillColor(230, 126, 34);
+    doc.rect(0, 0, 220, 30, 'F');
+    
+    // Restaurant name in header
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text("LE NARJIS", 105, 20, { align: 'center' });
+    
+    // Reset text color
+    doc.setTextColor(0, 0, 0);
+    
+    // Title
+    doc.setFontSize(16);
+    doc.text("Bon de Réservation", 105, 45, { align: 'center' });
+    
+    // Decorative line
+    doc.setDrawColor(230, 126, 34);
+    doc.setLineWidth(0.5);
+    doc.line(60, 50, 150, 50);
+    
+    // Client information section
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text("INFORMATIONS CLIENT", 20, 65);
+    
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Date: ${formatDate(date)}`, 20, 75);
+    doc.text(`Nom/Name: ${name}`, 20, 85);
+    doc.text(`N° de chambre: ${room}`, 20, 95);
+    doc.text(`Nombre de personnes: ${pax}`, 20, 105);
+    
+    // Menu section
+    doc.setFont('helvetica', 'bold');
+    doc.text("MENU COMMANDE", 20, 125);
+    
+    doc.setFont('helvetica', 'normal');
+    let y = 135;
+    if (menu1 > 0) {
+        doc.text(`✓ ${menu1} × Menu Jardins d'Agadir`, 25, y);
+        doc.text(`250 DH`, 180, y);
+        y += 10;
+    }
+    if (menu2 > 0) {
+        doc.text(`✓ ${menu2} × Menu Pêcheur`, 25, y);
+        doc.text(`250 DH`, 180, y);
+        y += 10;
+    }
+    if (menu3 > 0) {
+        doc.text(`✓ ${menu3} × Menu Berbère`, 25, y);
+        doc.text(`180 DH`, 180, y);
+        y += 10;
+    }
+    if (menu4 > 0) {
+        doc.text(`✓ ${menu4} × Menu Narjis`, 25, y);
+        doc.text(`150 DH`, 180, y);
+        y += 10;
+    }
+    
+    // Total line
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, y+5, 190, y+5);
+    
+    doc.setFont('helvetica', 'bold');
+    doc.text(`TOTAL:`, 25, y+15);
+    doc.text(`${total} DH`, 180, y+15);
+    
+    // Footer
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text("Les annulations sont acceptées jusqu'à 14h30 le jour prévu", 20, 280);
+    doc.text("Cancellations are accepted until 2:30 PM on the scheduled day", 20, 285);
+    
+    // Save PDF
+    doc.save(`Reservation_${name.replace(/\s+/g, '_')}_${formatDateForFilename(date)}.pdf`);
+}
+</script>
+
+</body>
+</html>

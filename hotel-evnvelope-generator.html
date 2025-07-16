@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Envelope PDF Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SheetJS for Excel/CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+
+    * {
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    body {
+      background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+      animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+    
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .main-title {
+      background: var(--brand-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: textShine 5s linear infinite;
+    }
+
+    @keyframes textShine {
+      to { background-position: 200% center; }
+    }
+    
+    .btn-primary {
+      background: var(--brand-gradient);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    }
+    .btn-primary:active {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.25);
+    }
+
+    .input-field {
+      transition: all 0.3s ease;
+      border: 1px solid #d1d5db;
+      background: rgba(255, 255, 255, 0.7);
+    }
+    .input-field:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      background: white;
+    }
+    
+    .room-block {
+      background: rgba(249, 250, 251, 0.9);
+      border-left: 4px solid #6366f1;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    .room-block.slide-in { animation: slideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+    .room-block.slide-out { animation: slideOut 0.4s ease-out forwards; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideOut {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.95); height: 0; padding: 0; margin: 0; border: none; }
+    }
+
+    .guest-input-group.fade-in { animation: fadeInItem 0.4s ease-out forwards; }
+    @keyframes fadeInItem {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #logoDropzone, #excelDropzone {
+      border: 2px dashed #cbd5e1;
+      transition: all 0.3s ease;
+    }
+    #logoDropzone.dragover, #excelDropzone.dragover {
+      border-color: #6366f1;
+      background-color: rgba(99, 102, 241, 0.05);
+      transform: scale(1.02);
+    }
+    #logoPreview {
+      transition: all 0.3s ease;
+    }
+    #logoPreview.has-image {
+      opacity: 1;
+      transform: scale(1);
+    }
+    #logoPreview:not(.has-image) {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    #devPopup .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    #devPopup .social-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    #devPopup .social-btn svg {
+      transition: transform 0.3s ease;
+    }
+    #devPopup .social-btn:hover svg {
+      transform: rotate(-10deg) scale(1.1);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    #devPopup > div {
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8 flex items-center justify-center min-h-screen">
+  <div class="max-w-4xl w-full mx-auto card p-6 md:p-10 transform -translate-y-4">
+    <h1 class="main-title text-4xl font-bold mb-2 text-center">Envelope Generator</h1>
+    <p class="text-gray-600 text-center mb-10">Crafted with ❤️ by <span class="font-semibold text-indigo-500">THE KYOMIX</span> to generate practical envelopes for your guests.</p>
+
+    <!-- Logo Upload -->
+    <div class="mb-8">
+      <label class="block font-semibold mb-3 text-gray-700 text-lg">Upload Your Logo</label>
+      <div id="logoDropzone" class="relative bg-gray-50 rounded-xl p-6 text-center cursor-pointer">
+        <div id="logoPlaceholder" class="text-gray-500">
+            <svg class="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <p class="mt-2 text-sm">Drag & Drop or <span class="font-semibold text-indigo-600">click to select a file</span></p>
+            <p class="text-xs text-gray-400 mt-1">PNG or JPG supported</p>
+        </div>
+        <img id="logoPreview" src="" alt="Logo Preview" class="absolute inset-0 w-full h-full object-contain rounded-xl bg-white p-2"/>
+        <input type="file" id="logoInput" accept="image/png, image/jpeg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+      </div>
+    </div>
+
+    <!-- Excel/CSV Upload -->
+    <div class="mb-8">
+      <label class="block font-semibold mb-3 text-gray-700 text-lg">Import from Excel/CSV</label>
+      <div id="excelDropzone" class="relative bg-gray-50 rounded-xl p-6 text-center cursor-pointer">
+        <div id="excelPlaceholder" class="text-gray-500">
+          <svg class="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          <p class="mt-2 text-sm">Drag & Drop or <span class="font-semibold text-indigo-600">click to select a file</span></p>
+          <p class="text-xs text-gray-400 mt-1">Supports .xlsx, .xls, or .csv files</p>
+        </div>
+        <input type="file" id="excelInput" accept=".csv,.xlsx,.xls" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+      </div>
+    </div>
+
+    <!-- Rooms Input -->
+    <div id="roomsContainer" class="space-y-4"></div>
+    <div id="emptyState" class="text-center py-10 border-2 border-dashed border-gray-300 rounded-lg hidden">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No rooms added</h3>
+      <p class="mt-1 text-sm text-gray-500">Get started by adding a room for your guests.</p>
+    </div>
+    
+    <button id="addRoom" class="btn-primary mt-6 px-6 py-3 text-white rounded-lg font-semibold w-full md:w-auto flex items-center justify-center mx-auto">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+      </svg>
+      Add Room
+    </button>
+
+    <!-- PDF Download -->
+    <div class="mt-12 text-center border-t pt-8">
+      <button id="downloadPdf" class="btn-primary px-8 py-4 text-white rounded-lg text-lg font-bold flex items-center justify-center mx-auto w-full md:w-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        Generate & Download PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Developer Popup -->
+  <div id="devPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden p-4">
+    <div class="card p-6 max-w-md w-full">
+      <h2 class="text-2xl font-bold mb-4 text-indigo-600">Thank you for using my Web App! ❤️</h2>
+      <p class="text-gray-700 mb-4">Created by <span class="font-semibold">THE KYOMIX</span></p>
+      
+      <div class="social-media-grid grid grid-cols-2 gap-4 mb-6">
+        <a href="https://twitter.com/yourhandle" target="_blank" class="social-btn bg-blue-400 hover:bg-blue-500"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/></svg> <span>Twitter</span></a>
+        <a href="https://instagram.com/yourhandle" target="_blank" class="social-btn" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> <span>Instagram</span></a>
+        <a href="https://github.com/yourhandle" target="_blank" class="social-btn bg-gray-800 hover:bg-gray-900"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg> <span>GitHub</span></a>
+        <a href="https://linkedin.com/in/yourhandle" target="_blank" class="social-btn bg-blue-600 hover:bg-blue-700"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> <span>LinkedIn</span></a>
+      </div>
+      
+      <div class="flex justify-end">
+        <button id="closePopup" class="btn-primary px-4 py-2 text-white rounded-lg text-sm font-semibold">Close & Don't show for a week</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // --- Globals ---
+      let roomCounter = 0;
+      const roomsContainer = document.getElementById("roomsContainer");
+      const emptyState = document.getElementById("emptyState");
+      const logoInput = document.getElementById("logoInput");
+      const logoPreview = document.getElementById("logoPreview");
+      const logoDropzone = document.getElementById("logoDropzone");
+      const logoPlaceholder = document.getElementById("logoPlaceholder");
+      const excelInput = document.getElementById("excelInput");
+      const excelDropzone = document.getElementById("excelDropzone");
+      let logoDataUrl = "";
+      let logoImage = null;
+
+      // --- Weekly Developer Popup ---
+      (() => {
+        const popup = document.getElementById('devPopup');
+        const closeBtn = document.getElementById('closePopup');
+        const storageKey = 'kyomix_envelope_popup_last_shown';
+        const oneWeek = 7 * 24 * 60 * 60 * 1000;
+        const lastShown = localStorage.getItem(storageKey);
+
+        if (!lastShown || (Date.now() - parseInt(lastShown)) > oneWeek) {
+          setTimeout(() => popup.classList.remove('hidden'), 2000);
+        }
+
+        const closeAndStore = () => {
+          popup.classList.add('hidden');
+          localStorage.setItem(storageKey, Date.now().toString());
+        };
+        closeBtn.addEventListener('click', closeAndStore);
+        popup.addEventListener('click', (e) => {
+          if (e.target === popup) closeAndStore();
+        });
+      })();
+
+      // --- UI State Management ---
+      const checkEmptyState = () => {
+        const hasRooms = roomsContainer.children.length > 0;
+        emptyState.classList.toggle('hidden', hasRooms);
+      };
+
+      // --- Logo Handling ---
+      const handleFile = (file) => {
+        if (!file || !file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          logoPreview.src = reader.result;
+          logoPreview.classList.add('has-image');
+          logoPlaceholder.classList.add('hidden');
+          logoDataUrl = reader.result;
+          logoImage = new Image();
+          logoImage.src = logoDataUrl;
+        };
+        reader.readAsDataURL(file);
+      };
+
+      logoInput.addEventListener("change", (e) => handleFile(e.target.files[0]));
+      logoDropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        logoDropzone.classList.add('dragover');
+      });
+      logoDropzone.addEventListener('dragleave', () => logoDropzone.classList.remove('dragover'));
+      logoDropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        logoDropzone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+          logoInput.files = e.dataTransfer.files;
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      // --- Excel/CSV Handling ---
+      excelInput.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Clear existing rooms (optional)
+        document.querySelectorAll(".room-block").forEach(room => room.remove());
+
+        try {
+          const data = await parseExcel(file);
+          populateRooms(data);
+        } catch (error) {
+          alert("Error parsing file. Please check the format.");
+          console.error(error);
+        }
+      });
+
+      // Drag/drop for Excel
+      excelDropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        excelDropzone.classList.add('dragover');
+      });
+      excelDropzone.addEventListener('dragleave', () => excelDropzone.classList.remove('dragover'));
+      excelDropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        excelDropzone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+          excelInput.files = e.dataTransfer.files;
+          excelInput.dispatchEvent(new Event('change'));
+        }
+      });
+
+      // Parse Excel/CSV file
+      async function parseExcel(file) {
+        const arrayBuffer = await file.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer);
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        return XLSX.utils.sheet_to_json(firstSheet);
+      }
+
+      // Create UI from parsed data
+      function populateRooms(data) {
+        if (!data.length) {
+          alert("No valid data found in the file.");
+          return;
+        }
+
+        // Find the actual column names (case-insensitive)
+        const columns = Object.keys(data[0]);
+        const roomCol = columns.find(col => col.toLowerCase() === 'roomname');
+        const guestCol = columns.find(col => col.toLowerCase() === 'mainguest');
+
+        if (!roomCol || !guestCol) {
+          alert("Required columns (roomName and mainGuest) not found in the file.");
+          return;
+        }
+
+        // Group guests by room number
+        const roomsMap = new Map();
+        
+        data.forEach(row => {
+          const room = (row[roomCol] || '').toString().trim();
+          const name = (row[guestCol] || '').toString().trim();
+
+          if (!room || !name) return;
+
+          if (!roomsMap.has(room)) {
+            roomsMap.set(room, []);
+          }
+          roomsMap.get(room).push(name);
+        });
+
+        // Create UI blocks
+        roomsMap.forEach((guests, room) => {
+          const roomDiv = createRoomBlock();
+          const roomInput = roomDiv.querySelector(".room-number");
+          roomInput.value = room;
+
+          const namesContainer = roomDiv.querySelector(".names-container");
+          namesContainer.innerHTML = ""; // Clear default input
+
+          guests.forEach(guest => {
+            const nameInput = document.createElement("div");
+            nameInput.innerHTML = createNameInputHTML();
+            nameInput.querySelector(".guest-name").value = guest;
+            namesContainer.appendChild(nameInput.firstElementChild);
+          });
+        });
+
+        checkEmptyState();
+      }
+
+      // --- Room and Guest Management ---
+      const createNameInputHTML = () => `
+        <div class="guest-input-group flex gap-2 items-center fade-in">
+          <input type="text" class="guest-name input-field border rounded-lg px-3 py-2 w-full" placeholder="Guest Name" />
+          <button class="remove-name text-red-400 hover:text-red-600 transition-colors p-1 rounded-full hover:bg-red-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      `;
+
+      function createRoomBlock() {
+        const roomDiv = document.createElement("div");
+        roomDiv.className = "room-block p-5 mb-4 rounded-xl slide-in";
+        roomDiv.innerHTML = `
+          <div class="flex justify-between items-center mb-4">
+            <label class="font-semibold text-gray-700">Room Number:</label>
+            <input type="text" placeholder="e.g. 101" class="room-number input-field border rounded-lg px-3 py-2 w-32 text-center font-semibold" />
+            <button class="remove-room text-gray-400 hover:text-red-500 transition-colors p-1.5 rounded-full hover:bg-red-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </button>
+          </div>
+          <div class="names-container space-y-3">
+            ${createNameInputHTML()}
+          </div>
+          <button class="add-name mt-4 px-3 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-colors flex items-center justify-center w-full font-medium text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+            </svg>
+            Add Another Guest
+          </button>
+        `;
+        roomsContainer.appendChild(roomDiv);
+        checkEmptyState();
+        return roomDiv;
+      }
+
+      document.getElementById("addRoom").addEventListener("click", createRoomBlock);
+
+      roomsContainer.addEventListener("click", (e) => {
+        const removeRoomBtn = e.target.closest(".remove-room");
+        if (removeRoomBtn) {
+            const roomBlock = removeRoomBtn.closest(".room-block");
+            roomBlock.classList.add('slide-out');
+            roomBlock.addEventListener('animationend', () => {
+                roomBlock.remove();
+                checkEmptyState();
+            }, { once: true });
+            return;
+        }
+
+        const addNameBtn = e.target.closest(".add-name");
+        if (addNameBtn) {
+            const namesContainer = addNameBtn.previousElementSibling;
+            const newNameInput = document.createElement("div");
+            newNameInput.innerHTML = createNameInputHTML();
+            namesContainer.appendChild(newNameInput.firstElementChild);
+            return;
+        }
+
+        const removeNameBtn = e.target.closest(".remove-name");
+        if (removeNameBtn) {
+            removeNameBtn.closest(".guest-input-group").remove();
+            return;
+        }
+      });
+      
+      // --- PDF Generation ---
+      document.getElementById("downloadPdf").addEventListener("click", async () => {
+        const { jsPDF } = window.jspdf;
+        const width = 220 * 2.83465, height = 110 * 2.83465;
+        const pdf = new jsPDF({ orientation: "landscape", unit: "pt", format: [width, height] });
+        pdf.setFont("helvetica");
+
+        const rooms = document.querySelectorAll("#roomsContainer > .room-block");
+        if (rooms.length === 0) {
+          alert("Please add at least one room to generate a PDF.");
+          return;
+        }
+
+        const btn = document.getElementById("downloadPdf");
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Generating...`;
+        btn.disabled = true;
+
+        try {
+          for (let i = 0; i < rooms.length; i++) {
+            if (i > 0) pdf.addPage();
+
+            const roomEl = rooms[i];
+            const roomNumber = roomEl.querySelector(".room-number").value.trim();
+            const guestNames = [...roomEl.querySelectorAll(".guest-name")]
+              .map(input => input.value.trim())
+              .filter(name => name);
+
+            if (!roomNumber || guestNames.length === 0) continue;
+
+            if (logoImage && logoImage.complete) {
+              const scale = 80 / logoImage.height;
+              const logoWidth = logoImage.width * scale;
+              pdf.addImage(logoImage, "PNG", 70, 70, logoWidth, 80);
+            }
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(16);
+            pdf.text(`CHAMBRE: ${roomNumber}`, width - 70, 70, { align: "right" });
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(20);
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const nameSpacing = 30;
+            const totalHeight = (guestNames.length - 1) * nameSpacing;
+            const startY = centerY - totalHeight / 2;
+
+            guestNames.forEach((name, index) => {
+              const nameUpper = name.toUpperCase();
+              pdf.text(nameUpper, centerX, startY + (index * nameSpacing), { align: "center" });
+            });
+          }
+          pdf.save("envelopes.pdf");
+        } catch (error) {
+          console.error("Error generating PDF:", error);
+          alert("An error occurred while generating the PDF. Please check the console for details.");
+        } finally {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      });
+
+      // --- Initial State ---
+      createRoomBlock();
+    });
+  </script>
+</body>
+</html>
