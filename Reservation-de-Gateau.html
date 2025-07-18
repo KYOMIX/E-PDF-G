@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation Gâteau</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f1a2c;
+            --secondary: #d4af37;
+            --light: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--light);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border-top: 4px solid var(--secondary);
+        }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            opacity: 0.9;
+        }
+
+        .form-content {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        label i {
+            margin-right: 8px;
+            color: var(--secondary);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            transition: border 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #c19b2e;
+        }
+
+        #downloadLink {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px;
+            border-radius: 6px;
+            background: rgba(213, 175, 55, 0.1);
+        }
+
+        #output {
+            width: 100%;
+            height: 200px;
+            margin-top: 15px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .logo-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: none;
+            margin: 10px auto;
+            border: 2px solid var(--secondary);
+        }
+
+        .file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: var(--secondary);
+            background: rgba(213, 175, 55, 0.05);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 8px;
+            }
+            .header h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Réservation de Gâteau</h2>
+            <p>Anniversaire / Anniversaire de mariage</p>
+        </div>
+
+        <div class="form-content">
+            <div class="form-group">
+                <label for="logo"><i class="fas fa-camera-retro"></i> Logo (pour PDF)</label>
+                <div class="file-upload">
+                    <i class="fas fa-cloud-upload-alt"></i> Cliquez pour télécharger
+                    <input type="file" id="logo" accept="image/*" style="display: none;">
+                </div>
+                <img id="logoPreview" class="logo-preview" alt="Logo Preview">
+            </div>
+
+            <div class="form-group">
+                <label for="date"><i class="far fa-calendar-alt"></i> Date</label>
+                <input type="date" id="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name"><i class="far fa-user"></i> Nom du client</label>
+                <input type="text" id="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="room"><i class="fas fa-door-open"></i> N° de chambre</label>
+                <input type="text" id="room" required>
+            </div>
+
+            <div class="form-group">
+                <label for="age"><i class="fas fa-cake-candles"></i> Âge (pour anniversaire)</label>
+                <input type="number" id="age" min="1">
+            </div>
+
+            <div class="form-group">
+                <label for="pax"><i class="fas fa-users"></i> Nombre de personnes (PAX)</label>
+                <input type="number" id="pax" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="time"><i class="far fa-clock"></i> Heure de livraison</label>
+                <input type="time" id="time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="occasion"><i class="fas fa-glass-cheers"></i> Occasion</label>
+                <select id="occasion">
+                    <option value="Anniversaire">Anniversaire</option>
+                    <option value="Anniversaire de mariage">Anniversaire de mariage</option>
+                    <option value="Autre">Autre célébration</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message"><i class="far fa-comment-dots"></i> Message sur le gâteau (optionnel)</label>
+                <textarea id="message" rows="3" maxlength="50"></textarea>
+            </div>
+
+            <button class="btn" onclick="if(validateForm()) generateFile()">
+                <i class="fas fa-file-alt"></i> Générer le bon
+            </button>
+            <button class="btn" onclick="if(validateForm()) generatePDF()">
+                <i class="fas fa-file-pdf"></i> Générer PDF (5 copies)
+            </button>
+            <a id="downloadLink" style="display:none;">
+                <i class="fas fa-download"></i> Télécharger le bon (.txt)
+            </a>
+
+            <div class="form-group">
+                <label for="output"><i class="fas fa-file-signature"></i> Résultat généré :</label>
+                <textarea id="output" readonly></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set minimum date to today
+        document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+        // Logo preview
+        document.querySelector('.file-upload').addEventListener('click', function() {
+            document.getElementById('logo').click();
+        });
+
+        document.getElementById('logo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const logoPreview = document.getElementById('logoPreview');
+                    logoPreview.src = event.target.result;
+                    logoPreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form validation
+        function validateForm() {
+            const requiredFields = ['date', 'name', 'room', 'pax', 'time'];
+            for (const fieldId of requiredFields) {
+                if (!document.getElementById(fieldId).value) {
+                    alert("Veuillez remplir tous les champs obligatoires");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Generate text file (unchanged)
+        function generateFile() {
+            if (!confirm("Confirmez les détails de votre réservation avant de générer le bon?")) return;
+
+            const date = document.getElementById('date').value;
+            const name = document.getElementById('name').value;
+            const room = document.getElementById('room').value;
+            const age = document.getElementById('age').value;
+            const pax = document.getElementById('pax').value;
+            const time = document.getElementById('time').value;
+            const occasion = document.getElementById('occasion').value;
+            const message = document.getElementById('message').value;
+
+            let output = "╔════════════════════════════════╗\n";
+            output += "║      BON DE RÉSERVATION       ║\n";
+            output += "║        GÂTEAU SPECIAL        ║\n";
+            output += "╚════════════════════════════════╝\n\n";
+            output += `📅 Date: ${formatDate(date)}\n`;
+            output += `🕒 Heure: ${time}\n`;
+            output += `👤 Nom du client: ${name}\n`;
+            output += `🚪 N° de chambre: ${room}\n`;
+            if (age) output += `🎂 Âge: ${age} ans\n`;
+            output += `👥 Nombre de personnes: ${pax}\n`;
+            output += `🎉 Occasion: ${occasion}\n`;
+            if (message) output += `💌 Message: "${message}"\n\n`;
+
+            output += "════════════════════════════════\n";
+            output += "ℹ️ Réservation Client\n";
+            output += "Les modifications sont acceptées jusqu'à 12h00 le jour prévu\n";
+            output += "Changes are accepted until 12:00 PM on the scheduled day\n";
+            output += "════════════════════════════════\n";
+
+            document.getElementById('output').value = output;
+
+            // Create download link
+            const blob = new Blob([output], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.getElementById('downloadLink');
+            a.href = url;
+            a.download = `Reservation_Gateau_${name.replace(/\s+/g, '_')}_${formatDateForFilename(date)}.txt`;
+            a.style.display = 'inline-block';
+        }
+
+        // Generate PDF (EXACTLY as in your original code)
+        function generatePDF() {
+            if (!confirm("Confirmez les détails de votre réservation avant de générer le PDF?")) return;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const date = document.getElementById('date').value;
+            const name = document.getElementById('name').value;
+            const room = document.getElementById('room').value;
+            const age = document.getElementById('age').value;
+            const pax = document.getElementById('pax').value;
+            const time = document.getElementById('time').value;
+            const logo = document.getElementById('logoPreview');
+            
+            const couponHeight = 40;
+            const margin = 10;
+            const spacing = 12;
+            
+            for (let i = 0; i < 5; i++) {
+                const yPos = margin + (i * (couponHeight + spacing));
+                
+                if (i > 0) {
+                    doc.setDrawColor(150, 150, 150);
+                    doc.setLineWidth(0.5);
+                    doc.setLineDashPattern([2, 3], 0);
+                    doc.line(10, yPos - 5, 200, yPos - 5);
+                    
+                    doc.setFontSize(10);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text("✄", 10, yPos - 8);
+                    doc.text("✄", 190, yPos - 8);
+                    doc.setTextColor(0, 0, 0);
+                }
+                
+                doc.setDrawColor(0, 0, 0);
+                doc.setLineWidth(0.5);
+                doc.setLineDashPattern([], 0);
+                doc.rect(10, yPos, 190, couponHeight);
+                
+                if (logo.style.display === 'block') {
+                    try {
+                        doc.addImage(logo.src, 'JPEG', 15, yPos + 5, 15, 15);
+                    } catch (e) {
+                        console.error("Error adding logo:", e);
+                    }
+                }
+                
+                doc.setFontSize(12);
+                doc.text("GATEAU D'ANNIVERSAIRE", 105, yPos + 10, { align: 'center' });
+                
+                doc.setFontSize(10);
+                const col1X = 35;
+                const col2X = 105;
+                const lineHeight = 7;
+                
+                doc.text(`Date: ${formatDate(date)}`, col1X, yPos + 20);
+                doc.text(`Heure: ${time}`, col2X, yPos + 20);
+                
+                doc.text(`Nom: ${name}`, col1X, yPos + 20 + lineHeight);
+                doc.text(`Chambre: ${room}`, col2X, yPos + 20 + lineHeight);
+                
+                doc.text(`Âge: ${age || 'N/A'}`, col1X, yPos + 20 + 2*lineHeight);
+                doc.text(`Personnes: ${pax}`, col2X, yPos + 20 + 2*lineHeight);
+            }
+            
+            doc.setFontSize(8);
+            doc.setTextColor(100, 100, 100);
+            doc.text("", 105, 285, { align: 'center' });
+            
+            doc.save(`GATEAU_ANNIVERSAIRE_${name.replace(/\s+/g, '_')}.pdf`);
+        }
+
+        // Helper functions (unchanged)
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        function formatDateForFilename(dateString) {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}${(date.getMonth()+1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
