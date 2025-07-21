@@ -276,7 +276,7 @@
             return true;
         }
 
-        // Generate text file (unchanged)
+        // Generate text file
         function generateFile() {
             if (!confirm("Confirmez les détails de votre réservation avant de générer le bon?")) return;
 
@@ -319,7 +319,7 @@
             a.style.display = 'inline-block';
         }
 
-        // Generate PDF (EXACTLY as in your original code)
+        // Generate PDF with compact signature line
         function generatePDF() {
             if (!confirm("Confirmez les détails de votre réservation avant de générer le PDF?")) return;
 
@@ -333,10 +333,13 @@
             const pax = document.getElementById('pax').value;
             const time = document.getElementById('time').value;
             const logo = document.getElementById('logoPreview');
+            const occasion = document.getElementById('occasion').value;
+            const message = document.getElementById('message').value;
             
-            const couponHeight = 40;
+            const couponHeight = 42; // Compact height
             const margin = 10;
-            const spacing = 12;
+            const spacing = 10;
+            const lineHeight = 5.5; // Compact line height
             
             for (let i = 0; i < 5; i++) {
                 const yPos = margin + (i * (couponHeight + spacing));
@@ -368,12 +371,11 @@
                 }
                 
                 doc.setFontSize(12);
-                doc.text("GATEAU D'ANNIVERSAIRE", 105, yPos + 10, { align: 'center' });
+                doc.text(`GATEAU ${occasion.toUpperCase()}`, 105, yPos + 10, { align: 'center' });
                 
                 doc.setFontSize(10);
                 const col1X = 35;
                 const col2X = 105;
-                const lineHeight = 7;
                 
                 doc.text(`Date: ${formatDate(date)}`, col1X, yPos + 20);
                 doc.text(`Heure: ${time}`, col2X, yPos + 20);
@@ -383,16 +385,26 @@
                 
                 doc.text(`Âge: ${age || 'N/A'}`, col1X, yPos + 20 + 2*lineHeight);
                 doc.text(`Personnes: ${pax}`, col2X, yPos + 20 + 2*lineHeight);
+
+                // Add message if available
+                if (message) {
+                    doc.text(`Message: ${message}`, col1X, yPos + 20 + 3*lineHeight);
+                    // Add compact signature line
+                    doc.text("Signature: ___________", col1X, yPos + 20 + 4*lineHeight);
+                } else {
+                    // Add compact signature line slightly higher when no message
+                    doc.text("Signature: ___________", col1X, yPos + 20 + 3.2*lineHeight);
+                }
             }
             
             doc.setFontSize(8);
             doc.setTextColor(100, 100, 100);
             doc.text("", 105, 285, { align: 'center' });
             
-            doc.save(`GATEAU_ANNIVERSAIRE_${name.replace(/\s+/g, '_')}.pdf`);
+            doc.save(`GATEAU_${occasion.toUpperCase()}_${name.replace(/\s+/g, '_')}.pdf`);
         }
 
-        // Helper functions (unchanged)
+        // Helper functions
         function formatDate(dateString) {
             const date = new Date(dateString);
             const day = date.getDate().toString().padStart(2, '0');
