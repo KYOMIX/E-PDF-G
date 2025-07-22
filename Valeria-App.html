@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download Our Amazing App</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
@@ -365,7 +366,7 @@
         <header>
             <div class="logo">
                 <!-- Replace with your actual logo image -->
-                <img src="https://kyomix.github.io/E-PDF-G/Valeria-logo-tranceparent.png/?text=Your+Logo" alt="App Logo">
+                <img src="https://via.placeholder.com/150x50?text=Your+Logo" alt="App Logo">
             </div>
             <div class="language-selector">
                 <button class="language-btn" id="languageBtn">
@@ -374,15 +375,15 @@
                 </button>
                 <div class="language-dropdown" id="languageDropdown">
                     <div class="language-option" data-lang="en">
-                        <i class="fas fa-check" style="visibility: hidden;"></i>
+                        <i class="fas fa-check" id="enCheck"></i>
                         <span>English</span>
                     </div>
                     <div class="language-option" data-lang="fr">
-                        <i class="fas fa-check" style="visibility: hidden;"></i>
+                        <i class="fas fa-check" id="frCheck"></i>
                         <span>Français</span>
                     </div>
                     <div class="language-option" data-lang="ar">
-                        <i class="fas fa-check" style="visibility: hidden;"></i>
+                        <i class="fas fa-check" id="arCheck"></i>
                         <span>العربية</span>
                     </div>
                 </div>
@@ -510,49 +511,43 @@
         const languageDropdown = document.getElementById('languageDropdown');
         const languageOptions = document.querySelectorAll('.language-option');
         
-        // Detect browser language
-        const browserLang = navigator.language.split('-')[0];
-        let currentLang = localStorage.getItem('appLanguage') || (['en', 'fr', 'ar'].includes(browserLang) ? browserLang : 'en');
+        // Function to get user's preferred language
+        function getPreferredLanguage() {
+            // Check localStorage first
+            const storedLang = localStorage.getItem('appLanguage');
+            if (storedLang) return storedLang;
+            
+            // Check browser language
+            const browserLang = navigator.language || navigator.userLanguage;
+            
+            // Simplified language detection (checks first part of language code)
+            if (browserLang.startsWith('fr')) return 'fr';
+            if (browserLang.startsWith('ar')) return 'ar';
+            return 'en'; // default to English
+        }
         
-        // Set initial language
-        setLanguage(currentLang);
+        // Set initial language based on user preference
+        let currentLang = getPreferredLanguage();
         
-        // Language dropdown toggle
-        languageBtn.addEventListener('click', () => {
-            languageDropdown.classList.toggle('show');
-        });
+        // Function to update UI based on selected language
+        function updateLanguageUI(lang) {
+            // Update checkmarks
+            document.getElementById('enCheck').style.visibility = lang === 'en' ? 'visible' : 'hidden';
+            document.getElementById('frCheck').style.visibility = lang === 'fr' ? 'visible' : 'hidden';
+            document.getElementById('arCheck').style.visibility = lang === 'ar' ? 'visible' : 'hidden';
+            
+            // Update current language display
+            currentLanguage.textContent = 
+                lang === 'en' ? 'English' : 
+                lang === 'fr' ? 'Français' : 'العربية';
+        }
         
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!languageBtn.contains(e.target) {
-                languageDropdown.classList.remove('show');
-            }
-        });
-        
-        // Language selection
-        languageOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                const lang = option.getAttribute('data-lang');
-                setLanguage(lang);
-                languageDropdown.classList.remove('show');
-                localStorage.setItem('appLanguage', lang);
-            });
-        });
-        
-        // Set language function
+        // Function to set language and update content
         function setLanguage(lang) {
             currentLang = lang;
-            currentLanguage.textContent = lang === 'en' ? 'English' : 
-                                        lang === 'fr' ? 'Français' : 'العربية';
-            
-            // Update checkmarks
-            languageOptions.forEach(option => {
-                const icon = option.querySelector('i');
-                icon.style.visibility = option.getAttribute('data-lang') === lang ? 'visible' : 'hidden';
-            });
-            
-            // Update content
             const content = translations[lang];
+            
+            // Update all text content
             document.getElementById('mainHeading').textContent = content.heading;
             document.getElementById('mainDescription').textContent = content.description;
             document.getElementById('appStoreText').textContent = content.appStore;
@@ -570,15 +565,40 @@
             // Set RTL for Arabic
             if (lang === 'ar') {
                 document.body.setAttribute('dir', 'rtl');
-                // Load Arabic font if needed
-                const link = document.createElement('link');
-                link.href = 'https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap';
-                link.rel = 'stylesheet';
-                document.head.appendChild(link);
             } else {
                 document.body.removeAttribute('dir');
             }
+            
+            // Update UI
+            updateLanguageUI(lang);
+            
+            // Store preference
+            localStorage.setItem('appLanguage', lang);
         }
+        
+        // Initialize with detected language
+        setLanguage(currentLang);
+        
+        // Language dropdown toggle
+        languageBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            languageDropdown.classList.remove('show');
+        });
+        
+        // Language selection
+        languageOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const lang = option.getAttribute('data-lang');
+                setLanguage(lang);
+                languageDropdown.classList.remove('show');
+            });
+        });
     </script>
 </body>
 </html>
