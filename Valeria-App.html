@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valeria Resort App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" /> <!-- Updated FA version -->
     <style>
         :root {
             --primary-color: #6c5ce7;
@@ -14,14 +13,18 @@
             --accent-color: #fd79a8;
             --dark-color: #2d3436;
             --light-color: #f5f6fa;
+            --transition-speed: 0.3s;
+            --shadow-default: 0 5px 15px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 25px rgba(0,0,0,0.2);
+            --shadow-card-hover: 0 10px 20px rgba(0,0,0,0.1);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, var(--light-color), var(--secondary-color));
@@ -30,19 +33,33 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            position: relative; /* For pseudo-element positioning */
         }
-        
+
         body[dir="rtl"] {
             font-family: 'Tajawal', sans-serif;
         }
-        
+
+        /* Enhanced Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 20%),
+                        radial-gradient(circle at 90% 80%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 15%);
+            pointer-events: none; /* Allows interaction with content underneath */
+            z-index: 0;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
             flex: 1;
+            position: relative;
+            z-index: 2; /* Ensure content is above background effects */
         }
-        
+
         header {
             padding: 20px 0;
             position: relative;
@@ -50,22 +67,31 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            backdrop-filter: blur(5px); /* Slight blur for header */
+            background-color: rgba(255, 255, 255, 0.1); /* Slightly opaque background */
+            border-radius: 20px;
+            padding: 15px 25px;
+            margin-bottom: 20px; /* Add space below header */
         }
-        
+
         .logo img {
             height: 40px;
             width: auto;
+            transition: transform var(--transition-speed);
         }
-        
+        .logo img:hover {
+            transform: scale(1.05); /* Subtle logo hover effect */
+        }
+
         .language-selector {
             position: relative;
         }
-        
+
         .language-btn {
-            background: rgba(255,255,255,0.3);
-            border: none;
+            background: rgba(255,255,255,0.5); /* Slightly more opaque */
+            border: 1px solid rgba(255,255,255,0.7); /* Add subtle border */
             padding: 8px 15px;
-            border-radius: 20px;
+            border-radius: 25px; /* Slightly rounder */
             display: flex;
             align-items: center;
             gap: 8px;
@@ -73,43 +99,65 @@
             color: var(--dark-color);
             cursor: pointer;
             backdrop-filter: blur(5px);
+            transition: all var(--transition-speed) ease, transform 0.1s ease;
+            box-shadow: var(--shadow-default);
         }
-        
+        .language-btn:hover {
+            background: rgba(255,255,255,0.7);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+        .language-btn:active {
+             transform: translateY(0); /* Reset on click */
+        }
+
         .language-dropdown {
             position: absolute;
             right: 0;
-            top: 100%;
+            top: calc(100% + 5px); /* Slightly below button */
             background: white;
-            border-radius: 10px;
-            padding: 10px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 12px; /* Slightly rounder corners */
+            padding: 8px 0; /* Adjusted padding */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15); /* Slightly stronger shadow */
             display: none;
-            width: 120px;
+            width: 130px; /* Slightly wider */
             z-index: 100;
+            overflow: hidden; /* Ensures rounded corners for options */
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
         }
-        
         body[dir="rtl"] .language-dropdown {
             right: auto;
             left: 0;
         }
-        
         .language-dropdown.show {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
-        
+
         .language-option {
-            padding: 8px 15px;
+            padding: 10px 15px; /* Increased padding */
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
+            gap: 10px; /* Increased gap */
+            transition: all var(--transition-speed);
+            font-weight: 500; /* Slightly bolder text */
         }
-        
         .language-option:hover {
-            background: #f5f5f5;
+            background: #f0f0f0; /* Softer hover color */
         }
-        
+        .language-option i {
+            width: 16px; /* Consistent icon width */
+            text-align: center;
+            transition: transform var(--transition-speed);
+        }
+        .language-option:hover i {
+            transform: scale(1.2); /* Icon scale on hover */
+        }
+
         .hero {
             display: flex;
             flex-direction: column;
@@ -117,251 +165,381 @@
             padding: 30px 0;
             position: relative;
             text-align: center;
+            z-index: 2;
         }
-        
+
         .hero-content {
             width: 100%;
             padding: 0 15px;
             z-index: 2;
             margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out forwards; /* Entrance animation */
+            opacity: 0;
         }
-        
+
         .hero-image {
             width: 100%;
-            max-width: 300px;
+            max-width: 320px; /* Slightly larger */
             position: relative;
             z-index: 1;
             margin: 0 auto;
+            perspective: 1000px; /* For 3D effect */
         }
-        
+
         .hero-image img {
             max-width: 100%;
             height: auto;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.2));
-            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 25px 35px rgba(0,0,0,0.25)); /* Stronger shadow */
+            animation: float 6s ease-in-out infinite, glow 4s ease-in-out infinite alternate;
+            border-radius: 20px; /* Rounded corners for image */
+            transition: transform 0.5s ease, filter 0.3s ease;
         }
-        
+        .hero-image:hover img {
+            transform: translateY(-15px) rotateY(5deg); /* 3D tilt and lift on hover */
+            filter: drop-shadow(0 30px 40px rgba(0,0,0,0.3));
+        }
+
         h1 {
-            font-size: 32px;
+            font-size: clamp(28px, 8vw, 42px); /* Responsive font size */
             margin-bottom: 15px;
             line-height: 1.3;
-            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            animation: textPopIn 0.8s ease-out 0.2s both; /* Delayed entrance */
         }
-        
+
         p {
-            font-size: 16px;
+            font-size: clamp(16px, 4vw, 18px); /* Responsive font size */
             line-height: 1.6;
             margin-bottom: 25px;
             color: var(--dark-color);
-            opacity: 0.9;
+            opacity: 0.95; /* Slightly higher opacity */
+            animation: fadeIn 1s ease-out 0.4s both; /* Delayed fade in */
         }
-        
+
         .download-buttons {
             display: flex;
             flex-direction: column;
             gap: 15px;
             margin-bottom: 30px;
             align-items: center;
+            animation: fadeIn 1s ease-out 0.6s both; /* Delayed fade in */
         }
-        
+
         .download-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 25px;
+            padding: 14px 28px; /* Increased padding */
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            width: 220px;
+            transition: all var(--transition-speed) ease, transform 0.1s ease;
+            box-shadow: var(--shadow-default);
+            width: 230px; /* Slightly wider */
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
-        
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+            z-index: -1;
+        }
+        .download-btn:hover::before {
+            transform: translateX(100%);
+        }
+        .download-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        .download-btn:active {
+             transform: translateY(0); /* Reset on click */
+        }
+
         .app-store {
             background-color: #000;
             color: #fff;
         }
-        
         .google-play {
             background-color: #fff;
             color: #000;
+            border: 1px solid #ddd; /* Subtle border for light button */
         }
-        
-        .download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-        
+
         .download-btn i {
-            font-size: 24px;
-            margin-right: 10px;
+            font-size: 26px; /* Slightly larger icon */
+            margin-right: 12px; /* Increased margin */
+            transition: transform var(--transition-speed);
         }
-        
+        .download-btn:hover i {
+            transform: scale(1.15); /* Icon scale on button hover */
+        }
+
         body[dir="rtl"] .download-btn i {
             margin-right: 0;
-            margin-left: 10px;
+            margin-left: 12px;
         }
-        
+
+
         .features {
-            padding: 40px 0;
-            background-color: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            margin: 20px 0;
+            padding: 50px 20px; /* Increased padding */
+            background-color: rgba(255,255,255,0.25); /* Slightly more opaque */
+            backdrop-filter: blur(12px); /* Stronger blur */
+            border-radius: 25px; /* Rounder corners */
+            margin: 30px 0 40px; /* Increased margins */
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.3); /* Inner glow */
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
         }
-        
+        .features::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%);
+            opacity: 0.3;
+            pointer-events: none;
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
         .features-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 20px;
-            margin-top: 30px;
-            padding: 0 15px;
+            gap: 30px; /* Increased gap */
+            margin-top: 40px; /* Increased margin */
+            padding: 0 10px; /* Adjusted padding */
         }
-        
+
         .feature-card {
-            background-color: rgba(255,255,255,0.8);
-            padding: 25px;
-            border-radius: 15px;
-            transition: all 0.3s ease;
+            background-color: rgba(255,255,255,0.9); /* Slightly more opaque */
+            padding: 30px; /* Increased padding */
+            border-radius: 20px; /* Rounder corners */
+            transition: all var(--transition-speed) ease, transform 0.1s ease;
             text-align: center;
+            box-shadow: var(--shadow-default);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
-        
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .feature-card:hover::after {
+            transform: translateX(100%);
+        }
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translateY(-8px) scale(1.02); /* Lift and slight scale */
+            box-shadow: var(--shadow-card-hover);
         }
-        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(10deg); /* Icon animation on card hover */
+            color: var(--accent-color); /* Change icon color on hover */
+        }
+
         .feature-icon {
-            font-size: 35px;
-            margin-bottom: 15px;
+            font-size: 40px; /* Larger icon */
+            margin-bottom: 20px; /* Increased margin */
             color: var(--primary-color);
+            transition: transform var(--transition-speed) ease, color var(--transition-speed) ease;
         }
-        
+
         .feature-card h3 {
-            font-size: 20px;
-            margin-bottom: 12px;
+            font-size: 22px; /* Slightly larger */
+            margin-bottom: 15px; /* Increased margin */
+            color: var(--dark-color);
         }
-        
+        .feature-card p {
+             font-size: 16px; /* Standard paragraph size */
+             color: #555; /* Slightly darker gray for body text */
+        }
+
+
         footer {
             text-align: center;
-            padding: 25px 0;
+            padding: 30px 0; /* Increased padding */
             margin-top: auto;
-            background-color: rgba(255,255,255,0.3);
+            background-color: rgba(255,255,255,0.4); /* Slightly more opaque */
+            backdrop-filter: blur(5px); /* Blur effect */
+            border-top: 1px solid rgba(255,255,255,0.5); /* Top border */
+            position: relative;
+            z-index: 2;
         }
-        
+
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 20px; /* Increased gap */
+            margin-top: 20px; /* Increased margin */
         }
-        
+
         .social-links a {
             color: var(--dark-color);
-            font-size: 18px;
-            transition: all 0.3s ease;
+            font-size: 22px; /* Larger icons */
+            transition: all var(--transition-speed) ease, transform 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px; height: 50px; /* Square container */
+            border-radius: 50%; /* Circle shape */
+            background-color: rgba(255,255,255,0.6); /* Background for icons */
+            box-shadow: var(--shadow-default);
         }
-        
         .social-links a:hover {
             color: var(--primary-color);
-            transform: translateY(-3px);
+            transform: translateY(-5px) scale(1.1); /* Lift and scale */
+            background-color: rgba(255,255,255,0.9);
+            box-shadow: var(--shadow-hover);
         }
-        
+
+        /* Animations */
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-12px); }
             100% { transform: translateY(0px); }
         }
-        
+
+        @keyframes glow {
+             0% { filter: drop-shadow(0 20px 30px rgba(0,0,0,0.2)) brightness(1); }
+             100% { filter: drop-shadow(0 20px 35px rgba(108, 92, 231, 0.4)) brightness(1.05); }
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                 opacity: 0.7;
+            }
+            50% {
+                transform: translateX(100px) scale(1);
+            }
+            100% {
+                bottom: 1080px;
+                transform: translateX(-200px) scale(1.1);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes textPopIn {
+             0% { opacity: 0; transform: scale(0.9); }
+             70% { opacity: 1; transform: scale(1.02); }
+             100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Bubbles */
         .bubbles {
             position: absolute;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            z-index: 0;
+            z-index: 1;
             overflow: hidden;
         }
-        
+
         .bubble {
             position: absolute;
             bottom: -100px;
-            background: rgba(255,255,255,0.2);
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 70%);
             border-radius: 50%;
-            animation: rise 10s infinite ease-in;
+            animation: rise 12s infinite ease-in;
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.5); /* Inner glow for bubbles */
         }
-        
+
+        /* Responsive Adjustments */
         @media (min-width: 768px) {
             .hero {
                 flex-direction: row;
                 text-align: left;
-                padding: 50px 0;
+                padding: 60px 0; /* Increased padding */
+                align-items: center;
             }
-            
             body[dir="rtl"] .hero {
                 text-align: right;
             }
-            
             .hero-content {
-                padding-right: 40px;
+                padding-right: 50px; /* Increased padding */
                 margin-bottom: 0;
                 text-align: left;
+                flex: 1;
             }
-            
             body[dir="rtl"] .hero-content {
                 padding-right: 0;
-                padding-left: 40px;
+                padding-left: 50px;
                 text-align: right;
             }
-            
             .download-buttons {
                 flex-direction: row;
                 justify-content: flex-start;
             }
-            
             .features-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted min width */
                 padding: 0;
             }
-            
             h1 {
-                font-size: 42px;
+                font-size: 48px; /* Slightly larger on desktop */
             }
-            
             p {
-                font-size: 18px;
+                font-size: 19px; /* Slightly larger on desktop */
+            }
+            .hero-image {
+                 max-width: 400px; /* Larger image on desktop */
+                 flex-shrink: 0; /* Prevent image from shrinking */
             }
         }
-        
-        @keyframes rise {
-            0% {
-                bottom: -100px;
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(100px);
-            }
-            100% {
-                bottom: 1080px;
-                transform: translateX(-200px);
-            }
-        }
+
     </style>
 </head>
 <body>
     <div class="bubbles">
-        <div class="bubble" style="width: 30px; height: 30px; left: 10%; animation-duration: 8s;"></div>
-        <div class="bubble" style="width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s;"></div>
-        <div class="bubble" style="width: 40px; height: 40px; left: 35%; animation-duration: 7s; animation-delay: 2s;"></div>
-        <div class="bubble" style="width: 60px; height: 60px; left: 50%; animation-duration: 11s; animation-delay: 0s;"></div>
-        <div class="bubble" style="width: 25px; height: 25px; left: 55%; animation-duration: 6s; animation-delay: 1s;"></div>
-        <div class="bubble" style="width: 35px; height: 35px; left: 65%; animation-duration: 8s; animation-delay: 3s;"></div>
-        <div class="bubble" style="width: 20px; height: 20px; left: 75%; animation-duration: 7s; animation-delay: 2s;"></div>
-        <div class="bubble" style="width: 50px; height: 50px; left: 80%; animation-duration: 6s; animation-delay: 1s;"></div>
+        <div class="bubble" style="width: 40px; height: 40px; left: 5%; animation-duration: 9s;"></div>
+        <div class="bubble" style="width: 25px; height: 25px; left: 15%; animation-duration: 6s; animation-delay: 1s;"></div>
+        <div class="bubble" style="width: 50px; height: 50px; left: 30%; animation-duration: 8s; animation-delay: 2s;"></div>
+        <div class="bubble" style="width: 70px; height: 70px; left: 55%; animation-duration: 12s; animation-delay: 0s;"></div>
+        <div class="bubble" style="width: 30px; height: 30px; left: 65%; animation-duration: 7s; animation-delay: 1s;"></div>
+        <div class="bubble" style="width: 45px; height: 45px; left: 75%; animation-duration: 9s; animation-delay: 3s;"></div>
+        <div class="bubble" style="width: 25px; height: 25px; left: 85%; animation-duration: 8s; animation-delay: 2s;"></div>
+        <div class="bubble" style="width: 60px; height: 60px; left: 90%; animation-duration: 7s; animation-delay: 1s;"></div>
     </div>
-    
     <div class="container">
         <header>
             <div class="logo">
@@ -388,33 +566,28 @@
                 </div>
             </div>
         </header>
-        
         <section class="hero">
             <div class="hero-content">
                 <h1 id="mainHeading">Your Gateway to Valeria Les Jardins d'Agadir</h1>
                 <p id="mainDescription">Discover the ultimate resort experience with our official mobile application. Book services, explore amenities, and enhance your stay with just a tap.</p>
-                
                 <div class="download-buttons">
-                    <a href="https://apps.apple.com/ma/app/valeria-les-jardins-dagadir/id6738272028" class="download-btn app-store">
+                    <a href="https://apps.apple.com/ma/app/valeria-les-jardins-dagadir/id6738272028" class="download-btn app-store" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-apple"></i>
                         <span id="appStoreText">App Store</span>
                     </a>
-                    <a href="https://play.google.com/store/apps/details?id=com.fractalite.jac&pcampaignid=web_share&pli=1" class="download-btn google-play">
+                    <a href="https://play.google.com/store/apps/details?id=com.fractalite.jac&pcampaignid=web_share&pli=1" class="download-btn google-play" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-google-play"></i>
                         <span id="googlePlayText">Google Play</span>
                     </a>
                 </div>
             </div>
-            
             <div class="hero-image">
                 <img src="https://kyomix.github.io/E-PDF-G/1024.png" alt="Valeria Resort App Screenshot">
             </div>
         </section>
-        
         <section class="features">
-            <h2 style="text-align: center; margin-bottom: 15px; font-size: 28px;" id="featuresHeading">Enhance Your Resort Experience</h2>
-            <p style="text-align: center; margin: 0 auto 30px; max-width: 500px;" id="featuresSubheading">Discover how our app makes your stay more enjoyable</p>
-            
+            <h2 style="text-align: center; margin-bottom: 20px; font-size: 32px;" id="featuresHeading">Enhance Your Resort Experience</h2>
+            <p style="text-align: center; margin: 0 auto 40px; max-width: 550px;" id="featuresSubheading">Discover how our app makes your stay more enjoyable</p>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -423,7 +596,6 @@
                     <h3 id="feature1Title">Seamless Service</h3>
                     <p id="feature1Desc">Request room service, book spa treatments, or reserve restaurant tables instantly from your phone. Our staff is ready to fulfill your requests.</p>
                 </div>
-                
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-map-marked-alt"></i>
@@ -431,7 +603,6 @@
                     <h3 id="feature2Title">Resort Navigation</h3>
                     <p id="feature2Desc">Explore our beautiful resort with interactive maps. Find all amenities, pools, and facilities with turn-by-turn directions.</p>
                 </div>
-                
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-calendar-check"></i>
@@ -442,19 +613,17 @@
             </div>
         </section>
     </div>
-    
     <footer>
         <p id="footerText">© 2023 Valeria Les Jardins d'Agadir Resort. All rights reserved.</p>
         <div class="social-links">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
         </div>
     </footer>
-
     <script>
-        // Language detection and content
+       // Language detection and content
         const translations = {
             en: {
                 heading: "Your Gateway to Valeria Les Jardins d'Agadir",
@@ -502,49 +671,40 @@
                 footer: "© 2025 منتجع فاليريا حدائق أكادير. جميع الحقوق محفوظة."
             }
         };
-
         // DOM elements
         const languageBtn = document.getElementById('languageBtn');
         const currentLanguage = document.getElementById('currentLanguage');
         const languageDropdown = document.getElementById('languageDropdown');
         const languageOptions = document.querySelectorAll('.language-option');
-        
         // Function to get user's preferred language
         function getPreferredLanguage() {
             // Check localStorage first
             const storedLang = localStorage.getItem('appLanguage');
             if (storedLang) return storedLang;
-            
             // Check browser language
             const browserLang = navigator.language || navigator.userLanguage;
-            
             // Simplified language detection (checks first part of language code)
             if (browserLang.startsWith('fr')) return 'fr';
             if (browserLang.startsWith('ar')) return 'ar';
             return 'en'; // default to English
         }
-        
         // Set initial language based on user preference
         let currentLang = getPreferredLanguage();
-        
         // Function to update UI based on selected language
         function updateLanguageUI(lang) {
             // Update checkmarks
             document.getElementById('enCheck').style.visibility = lang === 'en' ? 'visible' : 'hidden';
             document.getElementById('frCheck').style.visibility = lang === 'fr' ? 'visible' : 'hidden';
             document.getElementById('arCheck').style.visibility = lang === 'ar' ? 'visible' : 'hidden';
-            
             // Update current language display
-            currentLanguage.textContent = 
-                lang === 'en' ? 'English' : 
+            currentLanguage.textContent =
+                lang === 'en' ? 'English' :
                 lang === 'fr' ? 'Français' : 'العربية';
         }
-        
         // Function to set language and update content
         function setLanguage(lang) {
             currentLang = lang;
             const content = translations[lang];
-            
             // Update all text content
             document.getElementById('mainHeading').textContent = content.heading;
             document.getElementById('mainDescription').textContent = content.description;
@@ -559,35 +719,31 @@
             document.getElementById('feature3Title').textContent = content.feature3;
             document.getElementById('feature3Desc').textContent = content.feature3Desc;
             document.getElementById('footerText').textContent = content.footer;
-            
             // Set RTL for Arabic
             if (lang === 'ar') {
                 document.body.setAttribute('dir', 'rtl');
             } else {
                 document.body.removeAttribute('dir');
             }
-            
             // Update UI
             updateLanguageUI(lang);
-            
             // Store preference
             localStorage.setItem('appLanguage', lang);
         }
-        
         // Initialize with detected language
         setLanguage(currentLang);
-        
         // Language dropdown toggle
         languageBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             languageDropdown.classList.toggle('show');
         });
-        
         // Close dropdown when clicking outside
-        document.addEventListener('click', () => {
-            languageDropdown.classList.remove('show');
+        document.addEventListener('click', (e) => {
+            // Check if the click was outside the language selector
+            if (!languageBtn.contains(e.target) && !languageDropdown.contains(e.target)) {
+                languageDropdown.classList.remove('show');
+            }
         });
-        
         // Language selection
         languageOptions.forEach(option => {
             option.addEventListener('click', (e) => {
@@ -597,6 +753,52 @@
                 languageDropdown.classList.remove('show');
             });
         });
+
+        // --- New JavaScript for Enhanced Interactions ---
+
+        // Add ripple effect to buttons (optional, requires CSS for .ripple)
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement("span");
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+            circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+            circle.classList.add("ripple");
+
+            const ripple = button.getElementsByClassName("ripple")[0];
+            if (ripple) {
+                ripple.remove();
+            }
+            button.appendChild(circle);
+        }
+
+        // Apply ripple to download buttons and language button
+        document.querySelectorAll('.download-btn, .language-btn').forEach(button => {
+            button.addEventListener('click', createRipple);
+        });
+
+        // Optional: Add CSS for ripple effect in a <style> tag or your main CSS
+        const rippleStyle = document.createElement('style');
+        rippleStyle.innerHTML = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.7);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            }
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(rippleStyle);
+
     </script>
 </body>
 </html>
