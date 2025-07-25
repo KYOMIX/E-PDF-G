@@ -364,6 +364,8 @@
       const importDialog = document.getElementById("importDialog");
       let logoDataUrl = "";
       let logoImage = null;
+      let hasGeneratedPDF = false;
+      let hasInteracted = false;
 
       // --- Helper Functions ---
       function showToast(message, type = "success") {
@@ -636,6 +638,7 @@
       
       // --- PDF Generation ---
       document.getElementById("downloadPdf").addEventListener("click", async () => {
+        hasGeneratedPDF = true;
         const { jsPDF } = window.jspdf;
         const width = 220 * 2.83465, height = 110 * 2.83465;
         const pdf = new jsPDF({ orientation: "landscape", unit: "pt", format: [width, height] });
@@ -674,10 +677,13 @@
             if (pageCount > 0) pdf.addPage();
             pageCount++;
 
+            // Add logo (very big and positioned top left)
             if (logoImage && logoImage.complete) {
-              const scale = 80 / logoImage.height;
+              const maxLogoHeight = 140; // Increased from 120 to 140
+              const scale = maxLogoHeight / logoImage.height;
               const logoWidth = logoImage.width * scale;
-              pdf.addImage(logoImage, "PNG", 70, 70, logoWidth, 80);
+              // Positioned at 20,20 (very top left) with increased size
+              pdf.addImage(logoImage, "PNG", 20, 20, logoWidth, maxLogoHeight);
             }
 
             pdf.setFont("helvetica", "bold");
@@ -708,28 +714,6 @@
         }
       });
 
-      // --- Initial State ---
-      createRoomBlock();
-    });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // --- Globals ---
-      let roomCounter = 0;
-      const roomsContainer = document.getElementById("roomsContainer");
-      const emptyState = document.getElementById("emptyState");
-      const logoInput = document.getElementById("logoInput");
-      const logoPreview = document.getElementById("logoPreview");
-      const logoDropzone = document.getElementById("logoDropzone");
-      const logoPlaceholder = document.getElementById("logoPlaceholder");
-      const excelInput = document.getElementById("excelInput");
-      const excelDropzone = document.getElementById("excelDropzone");
-      const importDialog = document.getElementById("importDialog");
-      let logoDataUrl = "";
-      let logoImage = null;
-      let hasGeneratedPDF = false;
-      let hasInteracted = false; // Track if user has interacted with the page
-
       // --- Modified beforeunload Event ---
       function setupBeforeUnload() {
         window.addEventListener('beforeunload', function(e) {
@@ -755,13 +739,8 @@
         hasInteracted = true;
       }, { once: true });
 
-      // --- PDF Generation ---
-      document.getElementById("downloadPdf").addEventListener("click", async () => {
-        hasGeneratedPDF = true;
-        // Rest of your existing PDF generation code...
-      });
-
-      // --- Rest of your existing code remains exactly the same ---
+      // --- Initial State ---
+      createRoomBlock();
     });
   </script>
 </body>
