@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Hotel Message Generator | Valeria Jardins</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Montserrat:wght@300;400;500&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8B6B4A;
+            --primary-dark: #6B4F32;
+            --primary-light: #B99D7F;
+            --secondary: #5A7D7E;
+            --light: #F8F5F2;
+            --dark: #333333;
+            --gold: #D4AF37;
+            --silver: #C0C0C0;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f5f2eb 0%, #e8e1d5 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(139, 107, 74, 0.2);
+        }
+        
+        .form-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
+        }
+        
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin: 20px 0 30px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-top: 10px;
+            letter-spacing: 1px;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .logo small {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: var(--secondary);
+            letter-spacing: 2px;
+            display: block;
+            margin-top: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--dark);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(139, 107, 74, 0.3);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: var(--light);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(139, 107, 74, 0.1);
+            background-color: white;
+        }
+        
+        textarea {
+            height: 150px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: block;
+            margin: 40px auto 0;
+            transition: all 0.3s ease;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(139, 107, 74, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 107, 74, 0.4);
+        }
+        
+        button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        button:hover::after {
+            left: 100%;
+        }
+        
+        /* PDF Output Styling */
+        #pdf-output {
+            position: absolute;
+            left: -9999px;
+            background: white;
+            padding: 40px 50px 60px; /* Increased bottom padding */
+            width: 700px; /* Reduced width to fit A4 better */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(139, 107, 74, 0.2);
+        }
+        
+        .template-style {
+            font-family: 'Cormorant Garamond', serif;
+            line-height: 1.6; /* Slightly reduced line height */
+            color: var(--dark);
+        }
+        
+        .field-label {
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 1px solid rgba(139, 107, 74, 0.3);
+            display: inline-block;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .field-value {
+            font-size: 1.1rem;
+            margin-left: 20px;
+            padding-left: 20px;
+            border-left: 2px solid var(--primary);
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .signature {
+            margin-top: 40px; /* Reduced margin */
+            text-align: right;
+            font-style: italic;
+            color: var(--secondary);
+            font-family: 'Playfair Display', serif;
+            position: relative;
+            padding-bottom: 20px; /* Added padding */
+        }
+        
+        .signature::before {
+            content: "";
+            position: absolute;
+            top: -20px;
+            right: 0;
+            width: 150px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        
+        /* Decorative Elements */
+        .corner-decoration {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            opacity: 0.1;
+        }
+        
+        .corner-decoration.tl {
+            top: 20px;
+            left: 20px;
+            border-top: 2px solid var(--primary);
+            border-left: 2px solid var(--primary);
+        }
+        
+        .corner-decoration.tr {
+            top: 20px;
+            right: 20px;
+            border-top: 2px solid var(--primary);
+            border-right: 2px solid var(--primary);
+        }
+        
+        .corner-decoration.bl {
+            bottom: 20px;
+            left: 20px;
+            border-bottom: 2px solid var(--primary);
+            border-left: 2px solid var(--primary);
+        }
+        
+        .corner-decoration.br {
+            bottom: 20px;
+            right: 20px;
+            border-bottom: 2px solid var(--primary);
+            border-right: 2px solid var(--primary);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .logo-text {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-container {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        /* Loading Indicator */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(139, 107, 74, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        .loading-text {
+            margin-top: 20px;
+            color: var(--primary);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Logo styling for PDF */
+        .pdf-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pdf-logo img {
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .pdf-logo .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-top: 5px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .pdf-logo small {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            letter-spacing: 2px;
+            display: block;
+            margin-top: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Creating your elegant message...</div>
+    </div>
+    
+    <div class="container">
+        <div class="form-container">
+            <div class="corner-decoration tl"></div>
+            <div class="corner-decoration tr"></div>
+            <div class="corner-decoration bl"></div>
+            <div class="corner-decoration br"></div>
+            
+            <div class="logo">
+                <div class="logo-text">Valeria Jardins Agadir Resort</div>
+                <small>Where Timeless Elegance Meets Modern Luxury</small>
+            </div>
+            
+            <h1>
+                <i class="fas fa-pen-fancy" style="margin-right: 15px;"></i>
+                Guest Message Generator
+                <i class="fas fa-envelope" style="margin-left: 15px;"></i>
+            </h1>
+            
+            <div class="form-group">
+                <label for="date"><i class="fas fa-calendar-alt" style="margin-right: 8px;"></i>Date:</label>
+                <input type="date" id="date" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="room"><i class="fas fa-door-open" style="margin-right: 8px;"></i>Room / Chambre:</label>
+                <input type="text" id="room" required placeholder="e.g., Suite 302">
+            </div>
+            
+            <div class="form-group">
+                <label for="message"><i class="fas fa-comment-alt" style="margin-right: 8px;"></i>MESSAGE:</label>
+                <textarea id="message" required placeholder="Your personalized message for the guest..."></textarea>
+            </div>
+            
+            <button id="generate-btn">
+                <i class="fas fa-magic" style="margin-right: 10px;"></i>
+                Generate Elegant Message
+            </button>
+        </div>
+    </div>
+
+    <div id="pdf-output" class="template-style">
+        <div class="pdf-logo">
+            <!-- Replace with your actual logo image URL -->
+            <img src="https://kyomix.github.io/E-PDF-G/logo-QR-code.jpg" alt="Valeria Jardins Logo">
+            <div class="logo-text">Valeria Jardins Agadir Resort</div>
+            <small>Where Timeless Elegance Meets Modern Luxury</small>
+        </div>
+        
+        <div style="margin-top: 30px; min-height: 400px;">
+            <div class="field-label">DATE:</div>
+            <div class="field-value" id="output-date"></div>
+            
+            <div style="margin-top: 20px;" class="field-label">ROOM / CHAMBRE:</div>
+            <div class="field-value" id="output-room"></div>
+            
+            <div style="margin-top: 20px;" class="field-label">MESSAGE:</div>
+            <div class="field-value" id="output-message" style="white-space: pre-line;"></div>
+        </div>
+        
+        <div class="signature">
+            <p>Thank you </p>
+            <p>Merci </p>
+            <p style="margin-top: 15px;">The Valeria Jardins Agadir Resort Team</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default date to today
+            const today = new Date();
+            const formattedDate = today.toISOString().substr(0, 10);
+            document.getElementById('date').value = formattedDate;
+            
+            // Add event listener to the generate button
+            document.getElementById('generate-btn').addEventListener('click', generatePDF);
+        });
+
+        function generatePDF() {
+            // Show loading indicator
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
+            
+            // Get form values
+            const dateInput = document.getElementById('date').value;
+            const room = document.getElementById('room').value;
+            const message = document.getElementById('message').value;
+
+            // Basic validation: ensure all fields are filled
+            if (!dateInput || !room || !message) {
+                alert('Please fill in all fields before generating the message.');
+                loading.style.display = 'none';
+                return;
+            }
+
+            // Format date as dd/mm/yyyy
+            const date = new Date(dateInput);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const formattedDate = `${day}/${month}/${year}`;
+
+            // Update the output div
+            const outputDate = document.getElementById('output-date');
+            const outputRoom = document.getElementById('output-room');
+            const outputMessage = document.getElementById('output-message');
+            const pdfOutputDiv = document.getElementById('pdf-output');
+
+            outputDate.textContent = formattedDate;
+            outputRoom.textContent = room;
+            outputMessage.textContent = message;
+
+            // Make the output div visible temporarily for html2pdf to render it
+            pdfOutputDiv.style.position = 'static';
+            pdfOutputDiv.style.left = 'auto';
+
+            // Generate PDF with perfectly adjusted A4 margins
+            const opt = {
+                margin: [20, 20, 20, 20], // Equal margins all around
+                filename: `Valeria_Jardins_Message_${room.replace(/\s+/g, '_')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 3, // Slightly reduced scale for better fit
+                    logging: true,
+                    useCORS: true,
+                    letterRendering: true,
+                    scrollY: 0,
+                    width: 794, // A4 width in pixels (210mm at 96dpi)
+                    height: 1123 // A4 height in pixels (297mm at 96dpi)
+                },
+                jsPDF: { 
+                    unit: 'mm',
+                    format: 'a4', 
+                    orientation: 'portrait',
+                    hotfixes: ["px_scaling"]
+                },
+                pagebreak: { mode: 'css', avoid: '.signature' } // Prevents signature from breaking
+            };
+
+            html2pdf().set(opt).from(pdfOutputDiv).save().then(() => {
+                // Hide the output div again after PDF generation
+                pdfOutputDiv.style.position = 'absolute';
+                pdfOutputDiv.style.left = '-9999px';
+                loading.style.display = 'none';
+                
+                // Reset form
+                document.getElementById('message').value = '';
+            }).catch(error => {
+                console.error("Error generating PDF:", error);
+                alert("An error occurred while generating the PDF. Please try again.");
+                // Ensure the div is hidden even if there's an error
+                pdfOutputDiv.style.position = 'absolute';
+                pdfOutputDiv.style.left = '-9999px';
+                loading.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
