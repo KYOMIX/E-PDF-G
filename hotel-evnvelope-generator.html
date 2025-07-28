@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Envelope PDF Generator</title>
@@ -363,8 +361,6 @@
       const importDialog = document.getElementById("importDialog");
       let logoDataUrl = "";
       let logoImage = null;
-      let hasGeneratedPDF = false;
-      let hasInteracted = false;
 
       // --- Helper Functions ---
       function showToast(message, type = "success") {
@@ -637,7 +633,6 @@
       
       // --- PDF Generation ---
       document.getElementById("downloadPdf").addEventListener("click", async () => {
-        hasGeneratedPDF = true;
         const { jsPDF } = window.jspdf;
         const width = 220 * 2.83465, height = 110 * 2.83465;
         const pdf = new jsPDF({ orientation: "landscape", unit: "pt", format: [width, height] });
@@ -676,13 +671,10 @@
             if (pageCount > 0) pdf.addPage();
             pageCount++;
 
-            // Add logo (very big and positioned top left)
             if (logoImage && logoImage.complete) {
-              const maxLogoHeight = 140; // Increased from 120 to 140
-              const scale = maxLogoHeight / logoImage.height;
+              const scale = 80 / logoImage.height;
               const logoWidth = logoImage.width * scale;
-              // Positioned at 20,20 (very top left) with increased size
-              pdf.addImage(logoImage, "PNG", 20, 20, logoWidth, maxLogoHeight);
+              pdf.addImage(logoImage, "PNG", 70, 70, logoWidth, 80);
             }
 
             pdf.setFont("helvetica", "bold");
@@ -712,31 +704,6 @@
           btn.disabled = false;
         }
       });
-
-      // --- Modified beforeunload Event ---
-      function setupBeforeUnload() {
-        window.addEventListener('beforeunload', function(e) {
-          // Only trigger if user has interacted with the page
-          if (hasInteracted) {
-            const hasRooms = document.querySelectorAll(".room-block").length > 0;
-            
-            if (hasRooms && !hasGeneratedPDF) {
-              e.preventDefault();
-              // Modern browsers require returnValue to be set
-              e.returnValue = 'You have unfinished work. Are you sure you want to leave?';
-              return e.returnValue;
-            }
-          }
-        });
-      }
-
-      // Set up the event listener after a small delay to ensure page loads properly
-      setTimeout(setupBeforeUnload, 1000);
-
-      // Track user interaction
-      document.addEventListener('click', function() {
-        hasInteracted = true;
-      }, { once: true });
 
       // --- Initial State ---
       createRoomBlock();
