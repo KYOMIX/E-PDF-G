@@ -361,6 +361,8 @@
       const importDialog = document.getElementById("importDialog");
       let logoDataUrl = "";
       let logoImage = null;
+      let hasGeneratedPDF = false; // Track if PDF has been generated
+      let hasInteracted = false; // Track if user has interacted with the page
 
       // --- Helper Functions ---
       function showToast(message, type = "success") {
@@ -633,6 +635,7 @@
       
       // --- PDF Generation ---
       document.getElementById("downloadPdf").addEventListener("click", async () => {
+        hasGeneratedPDF = true; // Set flag when PDF is generated
         const { jsPDF } = window.jspdf;
         const width = 220 * 2.83465, height = 110 * 2.83465;
         const pdf = new jsPDF({ orientation: "landscape", unit: "pt", format: [width, height] });
@@ -704,6 +707,31 @@
           btn.disabled = false;
         }
       });
+
+      // --- Beforeunload Event Handling ---
+      function setupBeforeUnload() {
+        window.addEventListener('beforeunload', function(e) {
+          // Only trigger if user has interacted with the page
+          if (hasInteracted) {
+            const hasRooms = document.querySelectorAll(".room-block").length > 0;
+            
+            if (hasRooms && !hasGeneratedPDF) {
+              e.preventDefault();
+              // Modern browsers require returnValue to be set
+              e.returnValue = 'You have unfinished work. Are you sure you want to leave?';
+              return e.returnValue;
+            }
+          }
+        });
+      }
+
+      // Set up the event listener after a small delay to ensure page loads properly
+      setTimeout(setupBeforeUnload, 1000);
+
+      // Track user interaction
+      document.addEventListener('click', function() {
+        hasInteracted = true;
+      }, { once: true });
 
       // --- Initial State ---
       createRoomBlock();
