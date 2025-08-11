@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home / Tools Overview -->
   <url>
     <loc>https://kyomix.github.io/E-PDF-G/</loc>
-    <lastmod>2025-08-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <priority>1.00</priority>
   </url>
+  
+  <!-- Luxury Envelope Suite -->
   <url>
     <loc>https://kyomix.github.io/E-PDF-G/hotel-evnvelope-generator.html</loc>
-    <lastmod>2025-08-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
+
+  <!-- Moroccan Restaurant Reservation -->
   <url>
     <loc>https://kyomix.github.io/E-PDF-G/marocan-restaurant-reservation.html</loc>
-    <lastmod>2025-08-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
+
+  <!-- Cake Reservation (Réservation de Gâteau) -->
   <url>
     <loc>https://kyomix.github.io/E-PDF-G/Reservation-de-Gateau.html</loc>
-    <lastmod>2025-08-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.80</priority>
   </url>
+
+  <!-- Guest Message Generator -->
   <url>
     <loc>https://kyomix.github.io/E-PDF-G/Guest-msg.html</loc>
-    <lastmod>2025-08-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.80</priority>
   </url>
 </urlset>
