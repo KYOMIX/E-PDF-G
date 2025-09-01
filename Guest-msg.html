@@ -242,11 +242,15 @@
         }
         
         .field-value {
-            font-size: 1.1rem;
+            font-size: 1.6rem; /* Increased font size significantly */
             margin-left: 20px;
             padding-left: 20px;
             border-left: 2px solid var(--primary);
             font-family: 'Cormorant Garamond', serif;
+            color: #000000; /* Changed to black */
+            margin-top: 15px;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
         
         .signature {
@@ -397,6 +401,25 @@
             display: block;
             margin-top: 3px;
         }
+        
+        /* Message styling for larger black text */
+        .message-content {
+            font-size: 1.6rem; /* Increased font size significantly */
+            color: #000000; /* Changed to black */
+            line-height: 1.5;
+            margin-top: 15px;
+        }
+        
+        .room-number {
+            font-size: 1.7rem; /* Increased font size significantly */
+            color: #000000; /* Changed to black */
+            font-weight: 600;
+        }
+        
+        .date-value {
+            font-size: 1.5rem; /* Increased font size */
+            color: #000000; /* Changed to black */
+        }
     </style>
 </head>
 <body>
@@ -455,13 +478,13 @@
         
         <div style="margin-top: 30px; min-height: 400px;">
             <div class="field-label">DATE:</div>
-            <div class="field-value" id="output-date"></div>
+            <div class="field-value date-value" id="output-date"></div>
             
             <div style="margin-top: 20px;" class="field-label">ROOM / CHAMBRE:</div>
-            <div class="field-value" id="output-room"></div>
+            <div class="field-value room-number" id="output-room"></div>
             
             <div style="margin-top: 20px;" class="field-label">MESSAGE:</div>
-            <div class="field-value" id="output-message" style="white-space: pre-line;"></div>
+            <div class="field-value message-content" id="output-message" style="white-space: pre-line;"></div>
         </div>
         
         <div class="signature">
