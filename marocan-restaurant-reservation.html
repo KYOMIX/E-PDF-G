@@ -2,38 +2,40 @@
 <html lang="fr">
 <head>
     <!-- META TAGS FOR marocan-restaurant-reservation.html -->
-<title>Moroccan Restaurant Reservation | Fine Dining Vouchers | KYOMIX</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Generate refined Moroccan restaurant reservation vouchers for luxury guests with elegant design and automatic PDF formatting.">
-<meta name="keywords" content="restaurant reservation PDF, Moroccan dining, hotel restaurant tool, fine dining voucher, hospitality print tool, KYOMIX">
-<meta name="author" content="Khalid Laasri">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://kyomix.github.io/E-PDF-G/marocan-restaurant-reservation.html">
+    <title>Moroccan Restaurant Reservation | Fine Dining Vouchers | KYOMIX</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate refined Moroccan restaurant reservation vouchers for luxury guests with elegant design and automatic PDF formatting.">
+    <meta name="keywords" content="restaurant reservation PDF, Moroccan dining, hotel restaurant tool, fine dining voucher, hospitality print tool, KYOMIX">
+    <meta name="author" content="Khalid Laasri">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://kyomix.github.io/E-PDF-G/marocan-restaurant-reservation.html">
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="Moroccan Restaurant Reservation | KYOMIX">
-<meta property="og:description" content="Create luxury restaurant vouchers for hotel guests with print-ready PDF output.">
-<meta property="og:image" content="https://kyomix.github.io/E-PDF-G/my-logo-org.png">
-<meta property="og:url" content="https://kyomix.github.io/E-PDF-G/marocan-restaurant-reservation.html">
-<meta property="og:site_name" content="KYOMIX Restaurant Tool">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Moroccan Restaurant Reservation | KYOMIX">
+    <meta property="og:description" content="Create luxury restaurant vouchers for hotel guests with print-ready PDF output.">
+    <meta property="og:image" content="https://kyomix.github.io/E-PDF-G/my-logo-org.png">
+    <meta property="og:url" content="https://kyomix.github.io/E-PDF-G/marocan-restaurant-reservation.html">
+    <meta property="og:site_name" content="KYOMIX Restaurant Tool">
 
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Moroccan Restaurant Reservation | KYOMIX">
-<meta name="twitter:description" content="Elegant PDF vouchers for Moroccan hotel dining reservations.">
-<meta name="twitter:image" content="https://kyomix.github.io/E-PDF-G/my-logo-org.png">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Moroccan Restaurant Reservation | KYOMIX">
+    <meta name="twitter:description" content="Elegant PDF vouchers for Moroccan hotel dining reservations.">
+    <meta name="twitter:image" content="https://kyomix.github.io/E-PDF-G/my-logo-org.png">
 
-<!-- Favicon -->
-<link rel="icon" type="image/png" href="https://kyomix.github.io/E-PDF-G/my-logo-org.png" sizes="32x32">
-<link rel="apple-touch-icon" href="https://kyomix.github.io/E-PDF-G/my-logo-org.png">
-<link rel="shortcut icon" href="https://kyomix.github.io/E-PDF-G/my-logo-org.png">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://kyomix.github.io/E-PDF-G/my-logo-org.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="https://kyomix.github.io/E-PDF-G/my-logo-org.png">
+    <link rel="shortcut icon" href="https://kyomix.github.io/E-PDF-G/my-logo-org.png">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réservation Premium - LE NARJIS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --gold: #d4af37;
@@ -42,11 +44,6 @@
             --light-cream: #f8f4e9;
             --rich-red: #8b0000;
             --soft-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        @font-face {
-            font-family: 'Playfair';
-            src: url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
         }
 
         body {
@@ -392,7 +389,6 @@
         .form-group:nth-child(4) { animation-delay: 0.4s; }
         .form-group:nth-child(5) { animation-delay: 0.5s; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -620,7 +616,7 @@
             });
         }
 
-        // Generate Fancy PDF
+        // Generate PDF with proper font encoding
         async function generatePDF() {
             if (!confirm("Confirmez les détails de votre réservation avant de générer le PDF?")) {
                 return;
@@ -628,10 +624,6 @@
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
-            // Register fonts properly to fix encoding issues
-            doc.addFont('Helvetica', 'Helvetica', 'normal');
-            doc.addFont('Helvetica-Bold', 'Helvetica', 'bold');
             
             // Get form values
             const date = document.getElementById('date').value;
@@ -667,7 +659,7 @@
             // Restaurant name in header
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(20);
-            doc.setFont('Helvetica', 'bold');
+            doc.setFont("helvetica", "bold");
             doc.text("LE NARJIS", 105, 20, { align: 'center' });
             
             // Reset text color
@@ -676,58 +668,60 @@
             // Title with decorative elements
             doc.setFontSize(16);
             doc.setTextColor(139, 0, 0);
-            doc.text("BON DE RÉSERVATION", 105, 45, { align: 'center' });
+            doc.setFont("helvetica", "bold");
+            doc.text("BON DE RESERVATION", 105, 45, { align: 'center' });
             
             // Add restaurant info below title
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
-            doc.text("Restaurant « LE NARJIS » • 19H30", 105, 55, { align: 'center' });
+            doc.setFont("helvetica", "normal");
+            doc.text("Restaurant LE NARJIS • 19H30", 105, 55, { align: 'center' });
             
             // Decorative gold line
             doc.setDrawColor(212, 175, 55);
             doc.setLineWidth(0.8);
             doc.line(60, 60, 150, 60);
             
-            // Client information section - FIXED SYMBOLS ISSUE HERE
+            // Client information section
             doc.setFontSize(12);
             doc.setTextColor(139, 0, 0);
-            doc.setFont('Helvetica', 'bold');
+            doc.setFont("helvetica", "bold");
             doc.text("INFORMATIONS CLIENT", 20, 75);
             
-            doc.setFont('Helvetica', 'normal');
+            doc.setFont("helvetica", "normal");
             doc.setTextColor(0, 0, 0);
             
-            // Fixed text display - no more strange symbols
+            // Fixed text display - using simple characters to avoid encoding issues
             doc.text(`Date: ${formatDate(date)}`, 20, 85);
             doc.text(`Nom/Name: ${name}`, 20, 95);
             doc.text(`N° de chambre: ${room}`, 20, 105);
             doc.text(`Nombre de personnes: ${pax}`, 20, 115);
             
             // Menu section with stylish formatting
-            doc.setFont('Helvetica', 'bold');
+            doc.setFont("helvetica", "bold");
             doc.setTextColor(139, 0, 0);
             doc.text("MENU COMMANDE", 20, 135);
             
-            doc.setFont('Helvetica', 'normal');
+            doc.setFont("helvetica", "normal");
             doc.setTextColor(0, 0, 0);
             let y = 145;
             if (menu1 > 0) {
-                doc.text(`✓ ${menu1} × Menu Jardins d'Agadir`, 25, y);
+                doc.text(`${menu1} x Menu Jardins d'Agadir`, 25, y);
                 doc.text(`250 DH`, 180, y, { align: 'right' });
                 y += 10;
             }
             if (menu2 > 0) {
-                doc.text(`✓ ${menu2} × Menu Pêcheur`, 25, y);
+                doc.text(`${menu2} x Menu Pecheur`, 25, y);
                 doc.text(`250 DH`, 180, y, { align: 'right' });
                 y += 10;
             }
             if (menu3 > 0) {
-                doc.text(`✓ ${menu3} × Menu Berbère`, 25, y);
+                doc.text(`${menu3} x Menu Berbere`, 25, y);
                 doc.text(`180 DH`, 180, y, { align: 'right' });
                 y += 10;
             }
             if (menu4 > 0) {
-                doc.text(`✓ ${menu4} × Menu Narjis`, 25, y);
+                doc.text(`${menu4} x Menu Narjis`, 25, y);
                 doc.text(`150 DH`, 180, y, { align: 'right' });
                 y += 10;
             }
@@ -737,29 +731,28 @@
             doc.setLineWidth(0.5);
             doc.line(20, y+5, 190, y+5);
             
-            doc.setFont('Helvetica', 'bold');
+            doc.setFont("helvetica", "bold");
             doc.text(`TOTAL:`, 25, y+15);
             doc.text(`${total} DH`, 180, y+15, { align: 'right' });
             
             // Footer with small text
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
-            doc.text("Les annulations sont acceptées jusqu'à 14h30 le jour prévu", 20, 280);
+            doc.setFont("helvetica", "normal");
+            doc.text("Les annulations sont acceptees jusqu'a 14h30 le jour prevu", 20, 280);
             doc.text("Cancellations are accepted until 2:30 PM on the scheduled day", 20, 285);
             
             // Add watermark if no logo was added
             if (!logoAdded) {
                 doc.setFontSize(60);
                 doc.setTextColor(230, 230, 230);
-                doc.setFont('Helvetica', 'bold');
+                doc.setFont("helvetica", "bold");
                 doc.text("LE NARJIS", 105, 150, { angle: 45, align: 'center' });
             }
             
             // Save PDF with elegant filename
             doc.save(`Reservation_${name.replace(/\s+/g, '_')}_${formatDateForFilename(date)}.pdf`);
         }
-   
-
     </script>
 </body>
 </html>
