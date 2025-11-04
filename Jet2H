@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    
+    <title>Booking - Restaurant Le Narjis</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* UPDATED FONT */
+            font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            /* UPDATED GRADIENT */
+            background: linear-gradient(135deg, #fdfaf6 0%, #f7f3ed 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 21cm;
+            background: white;
+            /* UPDATED SHADOW, PADDING, AND ANIMATION */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08), 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            padding: 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 20px;
+        }
+        
+        .restaurant-name {
+            /* UPDATED FONT & STYLING */
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #8b4513;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            /* UPDATED FONT & STYLING */
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            color: #a0522d;
+            font-style: italic;
+            font-weight: 500;
+        }
+        
+        .logo-section {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        /* NEW: Style for the fake upload button */
+        #logo-upload-label {
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .logo-preview {
+            max-width: 200px;
+            max-height: 100px;
+            margin: 10px auto;
+            display: none;
+        }
+        
+        .booking-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #5d4037;
+        }
+        
+        /* UPDATED: Form input styling */
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #fdfdfd;
+            transition: all 0.3s ease;
+        }
+        
+        /* NEW: Focus effect for inputs */
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #d4af37;
+            background: white;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); /* Gold glow */
+        }
+        
+        .tajine-selection {
+            grid-column: 1 / -1;
+            /* UPDATED: Softer styling */
+            background: #fdfaf6;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #f0e9e0;
+        }
+        
+        .tajine-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #f0e9e0;
+            /* UPDATED: Add transition */
+            transition: all 0.3s ease;
+        }
+        
+        /* NEW: Hover effect for tajine options */
+        .tajine-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tajine-name {
+            /* UPDATED: Font weight */
+            font-weight: 600;
+            color: #5d4037;
+        }
+        
+        .tajine-quantity {
+            display: flex;
+            align-items: center;
+        }
+        
+        .tajine-quantity input {
+            width: 60px;
+            text-align: center;
+            margin: 0 10px;
+        }
+        
+        .quantity-btn {
+            background: #d4af37;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            /* UPDATED: Add transition */
+            transition: all 0.2s ease;
+        }
+        
+        /* NEW: Hover effect for quantity buttons */
+        .quantity-btn:hover {
+            background: #8b4513; /* Darken on hover */
+            transform: scale(1.1);
+        }
+        
+        .summary {
+            background: #f9f5f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #d4af37;
+        }
+        
+        .summary h3 {
+            color: #8b4513;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #d4af37;
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            /* UPDATED: Styling */
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+        }
+        
+        .btn-primary {
+            background: #d4af37;
+            color: white;
+            /* NEW: Shadow */
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+        }
+        
+        .btn-secondary {
+            background: #8b4513;
+            color: white;
+            /* NEW: Shadow */
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
+        }
+        
+        .btn:hover {
+            /* UPDATED: Hover effect */
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .language-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .language-btn {
+            background: none;
+            border: 1px solid #d4af37;
+            padding: 5px 15px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .language-btn.active {
+            background: #d4af37;
+            color: white;
+        }
+        
+        .cancellation-policy {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #8b4513;
+            font-style: italic;
+        }
+        
+        .pdf-preview {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #d4af37;
+            border-radius: 10px;
+            background: white;
+        }
+        
+        .confirmation-number {
+            text-align: center;
+            font-weight: bold;
+            color: #8b4513;
+            margin: 10px 0;
+        }
+        
+        /* NEW: Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .shake-warning {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="restaurant-name">Restaurant Le Narjis</h1>
+            <p class="subtitle">Réservation / Booking</p>
+        </div>
+        
+        <div class="language-toggle">
+            <button class="language-btn active" id="btn-fr">Français</button>
+            <button class="language-btn" id="btn-en">English</button>
+        </div>
+        
+        <div class="logo-section">
+            <input type="file" id="logo-upload" accept="image/*" style="display: none;">
+            
+            <label for="logo-upload" class="btn btn-secondary" id="logo-upload-label"
+                   data-fr="Télécharger un Logo" data-en="Upload Logo">
+                   Télécharger un Logo
+            </label>
+            
+            <img id="logo-preview" class="logo-preview" alt="Logo Preview">
+        </div>
+        
+        <form id="booking-form" class="booking-form">
+            <div class="form-group">
+                <label for="booking-date" data-fr="Date de réservation" data-en="Booking Date">Date de réservation</label>
+                <input type="date" id="booking-date" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="guest-name" data-fr="Nom du client" data-en="Guest Name">Nom du client</label>
+                <input type="text" id="guest-name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="room-number" data-fr="Numéro de chambre" data-en="Room Number">Numéro de chambre</label>
+                <input type="text" id="room-number" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="num-people" data-fr="Nombre de personnes" data-en="Number of People">Nombre de personnes</label>
+                <input type="number" id="num-people" min="1" required>
+            </div>
+            
+            <div class="tajine-selection">
+                <h3 data-fr="Sélection des Tajines" data-en="Tajine Selection">Sélection des Tajines</h3>
+                <p data-fr="Veuillez sélectionner un tajine par personne" data-en="Please select one tajine per person">
+                    Veuillez sélectionner un tajine par personne
+                </p>
+                
+                <div class="tajine-option">
+                    <div class="tajine-name" data-fr="Tajine de Poulet au Citron Confit" data-en="Chicken Tagine with Preserved Lemon">
+                        Tajine de Poulet au Citron Confit
+                    </div>
+                    <div class="tajine-quantity">
+                        <button type="button" class="quantity-btn minus" data-tajine="chicken">-</button>
+                        <input type="number" id="chicken-qty" min="0" value="0" readonly>
+                        <button type="button" class="quantity-btn plus" data-tajine="chicken">+</button>
+                    </div>
+                </div>
+                
+                <div class="tajine-option">
+                    <div class="tajine-name" data-fr="Tajine d'Agneau aux Pruneaux" data-en="Lamb Tagine with Prunes">
+                        Tajine d'Agneau aux Pruneaux
+                    </div>
+                    <div class="tajine-quantity">
+                        <button type="button" class="quantity-btn minus" data-tajine="lamb">-</button>
+                        <input type="number" id="lamb-qty" min="0" value="0" readonly>
+                        <button type="button" class="quantity-btn plus" data-tajine="lamb">+</button>
+                    </div>
+                </div>
+                
+                <div class="tajine-option">
+                    <div class="tajine-name" data-fr="Tajine de Poisson à la Charmoula" data-en="Fish Tagine with Charmoula">
+                        Tajine de Poisson à la Charmoula
+                    </div>
+                    <div class="tajine-quantity">
+                        <button type="button" class="quantity-btn minus" data-tajine="fish">-</button>
+                        <input type="number" id="fish-qty" min="0" value="0" readonly>
+                        <button type="button" class="quantity-btn plus" data-tajine="fish">+</button>
+                    </div>
+                </div>
+                
+                <div class="summary">
+                    <h3 data-fr="Résumé de la commande" data-en="Order Summary">Résumé de la commande</h3>
+                    <div class="summary-item">
+                        <span data-fr="Total Tajines sélectionnés:" data-en="Total Tajines selected:">Total Tajines sélectionnés:</span>
+                        <span id="total-tajines">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span data-fr="Nombre de personnes:" data-en="Number of people:">Nombre de personnes:</span>
+                        <span id="summary-people">0</span>
+                    </div>
+                    <div id="validation-message" style="color: red; text-align: center; font-weight: bold;"></div>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button type="button" id="generate-pdf" class="btn btn-primary" data-fr="Générer PDF" data-en="Generate PDF">
+                    Générer PDF
+                </button>
+                <button type="reset" class="btn btn-secondary" data-fr="Réinitialiser" data-en="Reset">
+                    Réinitialiser
+                </button>
+            </div>
+        </form>
+        
+        <div class="cancellation-policy">
+            <p data-fr="Les annulations sont acceptées jusqu'à 14h30 le jour prévu au restaurant principal" 
+               data-en="Cancellations are accepted until 2:30 PM on the scheduled day at the main restaurant">
+                Les annulations sont acceptées jusqu'à 14h30 le jour prévu au restaurant principal
+            </p>
+            <p data-fr="Ouvert tous les jours sauf le Jeudi • Réservation recommandée" 
+               data-en="Open every day except Thursday • Reservation recommended">
+                Ouvert tous les jours sauf le Jeudi • Réservation recommandée
+            </p>
+        </div>
+        
+        <div id="pdf-preview" class="pdf-preview">
+            </div>
+    </div>
+
+    <script>
+        // Language toggle functionality
+        document.getElementById('btn-fr').addEventListener('click', function() {
+            setLanguage('fr');
+            document.getElementById('btn-fr').classList.add('active');
+            document.getElementById('btn-en').classList.remove('active');
+        });
+        
+        document.getElementById('btn-en').addEventListener('click', function() {
+            setLanguage('en');
+            document.getElementById('btn-en').classList.add('active');
+            document.getElementById('btn-fr').classList.remove('active');
+        });
+        
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-fr]').forEach(element => {
+                // Check if the element is NOT the logo-upload-label before changing textContent
+                if (element.id !== 'logo-upload-label') {
+                    if (lang === 'fr') {
+                        element.textContent = element.getAttribute('data-fr');
+                    } else {
+                        element.textContent = element.getAttribute('data-en');
+                    }
+                }
+            });
+            
+            // UPDATED: Update the new button's text
+            document.getElementById('logo-upload-label').textContent = document.getElementById('logo-upload-label').getAttribute(lang === 'fr' ? 'data-fr' : 'data-en');
+        }
+        
+        // Logo upload functionality
+        document.getElementById('logo-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const logoPreview = document.getElementById('logo-preview');
+                    logoPreview.src = e.target.result;
+                    logoPreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Tajine quantity controls
+        document.querySelectorAll('.quantity-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const tajineType = this.getAttribute('data-tajine');
+                const input = document.getElementById(`${tajineType}-qty`);
+                let value = parseInt(input.value);
+                
+                if (this.classList.contains('plus')) {
+                    value++;
+                } else if (this.classList.contains('minus') && value > 0) {
+                    value--;
+                }
+                
+                input.value = value;
+                updateSummary();
+            });
+        });
+        
+        // Update number of people
+        document.getElementById('num-people').addEventListener('input', updateSummary);
+        
+        function updateSummary() {
+            const numPeople = parseInt(document.getElementById('num-people').value) || 0;
+            const chickenQty = parseInt(document.getElementById('chicken-qty').value) || 0;
+            const lambQty = parseInt(document.getElementById('lamb-qty').value) || 0;
+            const fishQty = parseInt(document.getElementById('fish-qty').value) || 0;
+            
+            const totalTajines = chickenQty + lambQty + fishQty;
+            
+            document.getElementById('total-tajines').textContent = totalTajines;
+            document.getElementById('summary-people').textContent = numPeople;
+            
+            // UPDATED: Validation message with shake animation
+            const validationMessage = document.getElementById('validation-message');
+            const summaryBox = document.querySelector('.summary');
+            
+            if (totalTajines !== numPeople && numPeople > 0) {
+                if (document.getElementById('btn-fr').classList.contains('active')) {
+                    validationMessage.textContent = `Attention: Vous avez sélectionné ${totalTajines} tajines pour ${numPeople} personnes.`;
+                } else {
+                    validationMessage.textContent = `Warning: You have selected ${totalTajines} tajines for ${numPeople} people.`;
+                }
+                // Add the shake class and remove it after the animation
+                summaryBox.classList.add('shake-warning');
+                setTimeout(() => {
+                    summaryBox.classList.remove('shake-warning');
+                }, 500);
+                
+            } else {
+                validationMessage.textContent = '';
+            }
+        }
+        
+        // Generate PDF
+        document.getElementById('generate-pdf').addEventListener('click', function() {
+            // Validate form
+            const numPeople = parseInt(document.getElementById('num-people').value) || 0;
+            const chickenQty = parseInt(document.getElementById('chicken-qty').value) || 0;
+            const lambQty = parseInt(document.getElementById('lamb-qty').value) || 0;
+            const fishQty = parseInt(document.getElementById('fish-qty').value) || 0;
+            const totalTajines = chickenQty + lambQty + fishQty;
+            
+            if (totalTajines !== numPeople) {
+                alert(document.getElementById('validation-message').textContent);
+                return;
+            }
+            
+            // Generate confirmation number
+            const confirmationNumber = 'LN-' + Date.now().toString().slice(-6);
+            
+            // Create PDF content
+            const pdfPreview = document.getElementById('pdf-preview');
+            pdfPreview.innerHTML = '';
+            pdfPreview.style.display = 'block';
+            
+            // Format date
+            const bookingDate = new Date(document.getElementById('booking-date').value);
+            const options = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' };
+            const formattedDate = bookingDate.toLocaleDateString('fr-FR', options);
+            
+            // Create PDF content HTML
+            const pdfContent = document.createElement('div');
+            pdfContent.style.padding = '20px';
+            pdfContent.style.fontFamily = 'Arial, sans-serif';
+            pdfContent.style.color = '#333';
+            
+            // Logo
+            if (document.getElementById('logo-preview').style.display !== 'none') {
+                const logoImg = document.createElement('img');
+                logoImg.src = document.getElementById('logo-preview').src;
+                logoImg.style.maxWidth = '150px';
+                logoImg.style.display = 'block';
+                logoImg.style.margin = '0 auto 20px';
+                pdfContent.appendChild(logoImg);
+            }
+            
+            // Title
+            const title = document.createElement('h1');
+            title.textContent = 'Restaurant Le Narjis - Confirmation de Réservation';
+            title.style.textAlign = 'center';
+            title.style.color = '#8b4513';
+            title.style.marginBottom = '20px';
+            pdfContent.appendChild(title);
+            
+            // Confirmation number
+            const confNumber = document.createElement('div');
+            confNumber.className = 'confirmation-number';
+            confNumber.textContent = `Numéro de confirmation: ${confirmationNumber}`;
+            confNumber.style.fontSize = '18px';
+            confNumber.style.marginBottom = '20px';
+            pdfContent.appendChild(confNumber);
+            
+            // Booking details
+            const details = document.createElement('div');
+            details.style.marginBottom = '30px';
+            
+            const dateLine = document.createElement('p');
+            dateLine.innerHTML = `<strong>Date:</strong> ${formattedDate}`;
+            details.appendChild(dateLine);
+            
+            const nameLine = document.createElement('p');
+            nameLine.innerHTML = `<strong>Nom du client:</strong> ${document.getElementById('guest-name').value}`;
+            details.appendChild(nameLine);
+            
+            const roomLine = document.createElement('p');
+            roomLine.innerHTML = `<strong>Numéro de chambre:</strong> ${document.getElementById('room-number').value}`;
+            details.appendChild(roomLine);
+            
+            const peopleLine = document.createElement('p');
+            peopleLine.innerHTML = `<strong>Nombre de personnes:</strong> ${numPeople}`;
+            details.appendChild(peopleLine);
+            
+            pdfContent.appendChild(details);
+            
+            // Tajine selection
+            const tajineSection = document.createElement('div');
+            tajineSection.style.marginBottom = '30px';
+            
+            const tajineTitle = document.createElement('h3');
+            tajineTitle.textContent = 'Sélection des Tajines';
+            tajineTitle.style.color = '#8b4513';
+            tajineTitle.style.borderBottom = '2px solid #d4af37';
+            tajineTitle.style.paddingBottom = '5px';
+            tajineSection.appendChild(tajineTitle);
+            
+            if (chickenQty > 0) {
+                const chickenLine = document.createElement('p');
+                chickenLine.innerHTML = `<strong>Tajine de Poulet au Citron Confit:</strong> ${chickenQty}`;
+                tajineSection.appendChild(chickenLine);
+            }
+            
+            if (lambQty > 0) {
+                const lambLine = document.createElement('p');
+                lambLine.innerHTML = `<strong>Tajine d'Agneau aux Pruneaux:</strong> ${lambQty}`;
+                tajineSection.appendChild(lambLine);
+            }
+            
+            if (fishQty > 0) {
+                const fishLine = document.createElement('p');
+                fishLine.innerHTML = `<strong>Tajine de Poisson à la Charmoula:</strong> ${fishQty}`;
+                tajineSection.appendChild(fishLine);
+            }
+            
+            pdfContent.appendChild(tajineSection);
+            
+            // Menu items
+            const menuSection = document.createElement('div');
+            menuSection.style.marginBottom = '30px';
+            
+            const menuTitle = document.createElement('h3');
+            menuTitle.textContent = 'Menu Sélectionné';
+            menuTitle.style.color = '#8b4513';
+            menuTitle.style.borderBottom = '2px solid #d4af37';
+            menuTitle.style.paddingBottom = '5px';
+            menuSection.appendChild(menuTitle);
+            
+            const menuList = document.createElement('ul');
+            menuList.style.paddingLeft = '20px';
+            
+            const starter = document.createElement('li');
+            starter.innerHTML = '<strong>Entrée:</strong> Harira - Une soupe marocaine riche et épicée';
+            menuList.appendChild(starter);
+            
+            const main = document.createElement('li');
+            main.innerHTML = '<strong>Plat Principal:</strong> Tajine (selon sélection ci-dessus)';
+            menuList.appendChild(main);
+            
+            const dessert = document.createElement('li');
+            dessert.innerHTML = '<strong>Dessert:</strong> Pâtisserie Marocaine';
+            menuList.appendChild(dessert);
+            
+            menuSection.appendChild(menuList);
+            pdfContent.appendChild(menuSection);
+            
+            // Cancellation policy
+            const policy = document.createElement('div');
+            policy.style.fontSize = '12px';
+            policy.style.fontStyle = 'italic';
+            policy.style.textAlign = 'center';
+            policy.style.borderTop = '1px solid #d4af37';
+            policy.style.paddingTop = '10px';
+            policy.innerHTML = `
+                <p>Les annulations sont acceptées jusqu'à 14h30 le jour prévu au restaurant principal</p>
+                <p>Ouvert tous les jours sauf le Jeudi • Réservation recommandée</p>
+            `;
+            pdfContent.appendChild(policy);
+            
+            pdfPreview.appendChild(pdfContent);
+            
+            // Generate PDF using jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add content to PDF
+            doc.html(pdfContent, {
+                callback: function(doc) {
+                    doc.save(`reservation-le-narjis-${confirmationNumber}.pdf`);
+                },
+                x: 10,
+                y: 10,
+                width: 190,
+                windowWidth: 800
+            });
+        });
+        
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('booking-date').setAttribute('min', today);
+        
+        // Initialize with French language
+        setLanguage('fr');
+    </script>
+</body>
+</html>
