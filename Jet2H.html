@@ -6,22 +6,21 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <title>Booking - Restaurant Le Narjis</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* UPDATED FONT */
             font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            /* UPDATED GRADIENT */
             background: linear-gradient(135deg, #fdfaf6 0%, #f7f3ed 100%);
             display: flex;
             justify-content: center;
@@ -31,9 +30,9 @@
         }
         
         .container {
-            width: 21cm;
+            width: 100%;
+            max-width: 21cm;
             background: white;
-            /* UPDATED SHADOW, PADDING, AND ANIMATION */
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08), 0 5px 15px rgba(0, 0, 0, 0.05);
             border-radius: 10px;
             overflow: hidden;
@@ -49,7 +48,6 @@
         }
         
         .restaurant-name {
-            /* UPDATED FONT & STYLING */
             font-family: 'Cormorant Garamond', serif;
             font-size: 48px;
             font-weight: 700;
@@ -59,7 +57,6 @@
         }
         
         .subtitle {
-            /* UPDATED FONT & STYLING */
             font-family: 'Montserrat', sans-serif;
             font-size: 18px;
             color: #a0522d;
@@ -72,7 +69,6 @@
             text-align: center;
         }
         
-        /* NEW: Style for the fake upload button */
         #logo-upload-label {
             display: inline-block;
             margin-bottom: 15px;
@@ -83,6 +79,8 @@
             max-height: 100px;
             margin: 10px auto;
             display: none;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
         
         .booking-form {
@@ -103,7 +101,6 @@
             color: #5d4037;
         }
         
-        /* UPDATED: Form input styling */
         .form-group input, .form-group select {
             width: 100%;
             padding: 12px;
@@ -114,17 +111,15 @@
             transition: all 0.3s ease;
         }
         
-        /* NEW: Focus effect for inputs */
         .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: #d4af37;
             background: white;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); /* Gold glow */
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
         }
         
         .tajine-selection {
             grid-column: 1 / -1;
-            /* UPDATED: Softer styling */
             background: #fdfaf6;
             padding: 20px;
             border-radius: 10px;
@@ -140,18 +135,15 @@
             background: white;
             border-radius: 8px;
             border: 1px solid #f0e9e0;
-            /* UPDATED: Add transition */
             transition: all 0.3s ease;
         }
         
-        /* NEW: Hover effect for tajine options */
         .tajine-option:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
         .tajine-name {
-            /* UPDATED: Font weight */
             font-weight: 600;
             color: #5d4037;
         }
@@ -176,13 +168,11 @@
             border-radius: 50%;
             cursor: pointer;
             font-weight: bold;
-            /* UPDATED: Add transition */
             transition: all 0.2s ease;
         }
         
-        /* NEW: Hover effect for quantity buttons */
         .quantity-btn:hover {
-            background: #8b4513; /* Darken on hover */
+            background: #8b4513;
             transform: scale(1.1);
         }
         
@@ -216,7 +206,6 @@
         }
         
         .btn {
-            /* UPDATED: Styling */
             padding: 14px 30px;
             border: none;
             border-radius: 8px;
@@ -224,24 +213,25 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .btn-primary {
             background: #d4af37;
             color: white;
-            /* NEW: Shadow */
             box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
         }
         
         .btn-secondary {
             background: #8b4513;
             color: white;
-            /* NEW: Shadow */
             box-shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
         }
         
         .btn:hover {
-            /* UPDATED: Hover effect */
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
@@ -258,11 +248,16 @@
             margin: 0 5px;
             border-radius: 20px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
         
         .language-btn.active {
             background: #d4af37;
             color: white;
+        }
+        
+        .language-btn:hover:not(.active) {
+            background: rgba(212, 175, 55, 0.1);
         }
         
         .cancellation-policy {
@@ -289,6 +284,125 @@
             margin: 10px 0;
         }
         
+        /* NEW: Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .progress-bar {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 2px;
+            background: #d4af37;
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .step-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active .step-icon {
+            background: #d4af37;
+        }
+        
+        .step-label {
+            font-size: 12px;
+            color: #777;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active .step-label {
+            color: #8b4513;
+            font-weight: 600;
+        }
+        
+        /* NEW: Form Sections */
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        /* NEW: Form Navigation */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        /* NEW: Success Message */
+        .success-message {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        
+        /* NEW: Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .booking-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .restaurant-name {
+                font-size: 36px;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
         /* NEW: Animations */
         @keyframes fadeInUp {
             from {
@@ -298,6 +412,15 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
             }
         }
 
@@ -311,6 +434,80 @@
             animation: shake 0.5s ease-in-out;
         }
         
+        /* NEW: Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* NEW: Error Styling */
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-group.error input, .form-group.error select {
+            border-color: #e74c3c;
+        }
+        
+        /* NEW: Time Selection */
+        .time-selection {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .time-option {
+            padding: 10px;
+            text-align: center;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .time-option:hover {
+            background: #f9f5f0;
+        }
+        
+        .time-option.selected {
+            background: #d4af37;
+            color: white;
+            border-color: #d4af37;
+        }
+        
+        /* NEW: Special Requests */
+        .special-requests textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #fdfdfd;
+            transition: all 0.3s ease;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .special-requests textarea:focus {
+            outline: none;
+            border-color: #d4af37;
+            background: white;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -320,105 +517,238 @@
             <p class="subtitle">Réservation / Booking</p>
         </div>
         
+        <!-- NEW: Progress Steps -->
+        <div class="progress-steps">
+            <div class="progress-bar" id="progress-bar"></div>
+            <div class="step active" data-step="1">
+                <div class="step-icon">1</div>
+                <div class="step-label" data-fr="Informations" data-en="Information">Informations</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-icon">2</div>
+                <div class="step-label" data-fr="Menu" data-en="Menu">Menu</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-icon">3</div>
+                <div class="step-label" data-fr="Confirmation" data-en="Confirmation">Confirmation</div>
+            </div>
+        </div>
+        
         <div class="language-toggle">
             <button class="language-btn active" id="btn-fr">Français</button>
             <button class="language-btn" id="btn-en">English</button>
         </div>
         
-        <div class="logo-section">
-            <input type="file" id="logo-upload" accept="image/*" style="display: none;">
-            
-            <label for="logo-upload" class="btn btn-secondary" id="logo-upload-label"
-                   data-fr="Télécharger un Logo" data-en="Upload Logo">
-                   Télécharger un Logo
-            </label>
-            
-            <img id="logo-preview" class="logo-preview" alt="Logo Preview">
-        </div>
-        
-        <form id="booking-form" class="booking-form">
-            <div class="form-group">
-                <label for="booking-date" data-fr="Date de réservation" data-en="Booking Date">Date de réservation</label>
-                <input type="date" id="booking-date" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="guest-name" data-fr="Nom du client" data-en="Guest Name">Nom du client</label>
-                <input type="text" id="guest-name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="room-number" data-fr="Numéro de chambre" data-en="Room Number">Numéro de chambre</label>
-                <input type="text" id="room-number" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="num-people" data-fr="Nombre de personnes" data-en="Number of People">Nombre de personnes</label>
-                <input type="number" id="num-people" min="1" required>
-            </div>
-            
-            <div class="tajine-selection">
-                <h3 data-fr="Sélection des Tajines" data-en="Tajine Selection">Sélection des Tajines</h3>
-                <p data-fr="Veuillez sélectionner un tajine par personne" data-en="Please select one tajine per person">
-                    Veuillez sélectionner un tajine par personne
-                </p>
+        <!-- NEW: Form Sections -->
+        <form id="booking-form">
+            <!-- Section 1: Personal Information -->
+            <div class="form-section active" id="section-1">
+                <div class="logo-section">
+                    <input type="file" id="logo-upload" accept="image/*" style="display: none;">
+                    
+                    <label for="logo-upload" class="btn btn-secondary" id="logo-upload-label"
+                           data-fr="Télécharger un Logo" data-en="Upload Logo">
+                           <i class="fas fa-upload"></i> Télécharger un Logo
+                    </label>
+                    
+                    <img id="logo-preview" class="logo-preview" alt="Logo Preview">
+                </div>
                 
-                <div class="tajine-option">
-                    <div class="tajine-name" data-fr="Tajine de Poulet au Citron Confit" data-en="Chicken Tagine with Preserved Lemon">
-                        Tajine de Poulet au Citron Confit
+                <div class="booking-form">
+                    <div class="form-group">
+                        <label for="booking-date" data-fr="Date de réservation" data-en="Booking Date">Date de réservation</label>
+                        <input type="date" id="booking-date" required>
+                        <div class="error" id="date-error" data-fr="Veuillez sélectionner une date" data-en="Please select a date"></div>
                     </div>
-                    <div class="tajine-quantity">
-                        <button type="button" class="quantity-btn minus" data-tajine="chicken">-</button>
-                        <input type="number" id="chicken-qty" min="0" value="0" readonly>
-                        <button type="button" class="quantity-btn plus" data-tajine="chicken">+</button>
+                    
+                    <div class="form-group">
+                        <label for="booking-time" data-fr="Heure de réservation" data-en="Booking Time">Heure de réservation</label>
+                        <div class="time-selection">
+                            <div class="time-option" data-time="18:00">18:00</div>
+                            <div class="time-option" data-time="18:30">18:30</div>
+                            <div class="time-option" data-time="19:00">19:00</div>
+                            <div class="time-option" data-time="19:30">19:30</div>
+                            <div class="time-option" data-time="20:00">20:00</div>
+                            <div class="time-option" data-time="20:30">20:30</div>
+                            <div class="time-option" data-time="21:00">21:00</div>
+                            <div class="time-option" data-time="21:30">21:30</div>
+                        </div>
+                        <input type="hidden" id="booking-time" required>
+                        <div class="error" id="time-error" data-fr="Veuillez sélectionner une heure" data-en="Please select a time"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="guest-name" data-fr="Nom du client" data-en="Guest Name">Nom du client</label>
+                        <input type="text" id="guest-name" required>
+                        <div class="error" id="name-error" data-fr="Veuillez saisir votre nom" data-en="Please enter your name"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="guest-email" data-fr="Email" data-en="Email">Email</label>
+                        <input type="email" id="guest-email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="room-number" data-fr="Numéro de chambre" data-en="Room Number">Numéro de chambre</label>
+                        <input type="text" id="room-number" required>
+                        <div class="error" id="room-error" data-fr="Veuillez saisir votre numéro de chambre" data-en="Please enter your room number"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="num-people" data-fr="Nombre de personnes" data-en="Number of People">Nombre de personnes</label>
+                        <input type="number" id="num-people" min="1" max="20" required>
+                        <div class="error" id="people-error" data-fr="Veuillez saisir le nombre de personnes" data-en="Please enter the number of people"></div>
+                    </div>
+                    
+                    <div class="form-group special-requests">
+                        <label for="special-requests" data-fr="Demandes spéciales" data-en="Special Requests">Demandes spéciales</label>
+                        <textarea id="special-requests" placeholder="Allergies, préférences alimentaires, etc."></textarea>
                     </div>
                 </div>
                 
-                <div class="tajine-option">
-                    <div class="tajine-name" data-fr="Tajine d'Agneau aux Pruneaux" data-en="Lamb Tagine with Prunes">
-                        Tajine d'Agneau aux Pruneaux
+                <div class="form-navigation">
+                    <div></div> <!-- Empty div for spacing -->
+                    <button type="button" class="btn btn-primary next-btn" data-next="2">
+                        <span data-fr="Suivant" data-en="Next">Suivant</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Section 2: Menu Selection -->
+            <div class="form-section" id="section-2">
+                <div class="tajine-selection">
+                    <h3 data-fr="Sélection des Tajines" data-en="Tajine Selection">Sélection des Tajines</h3>
+                    <p data-fr="Veuillez sélectionner un tajine par personne" data-en="Please select one tajine per person">
+                        Veuillez sélectionner un tajine par personne
+                    </p>
+                    
+                    <div class="tajine-option">
+                        <div class="tajine-name" data-fr="Tajine de Poulet au Citron Confit" data-en="Chicken Tagine with Preserved Lemon">
+                            Tajine de Poulet au Citron Confit
+                        </div>
+                        <div class="tajine-quantity">
+                            <button type="button" class="quantity-btn minus" data-tajine="chicken">-</button>
+                            <input type="number" id="chicken-qty" min="0" value="0" readonly>
+                            <button type="button" class="quantity-btn plus" data-tajine="chicken">+</button>
+                        </div>
                     </div>
-                    <div class="tajine-quantity">
-                        <button type="button" class="quantity-btn minus" data-tajine="lamb">-</button>
-                        <input type="number" id="lamb-qty" min="0" value="0" readonly>
-                        <button type="button" class="quantity-btn plus" data-tajine="lamb">+</button>
+                    
+                    <div class="tajine-option">
+                        <div class="tajine-name" data-fr="Tajine d'Agneau aux Pruneaux" data-en="Lamb Tagine with Prunes">
+                            Tajine d'Agneau aux Pruneaux
+                        </div>
+                        <div class="tajine-quantity">
+                            <button type="button" class="quantity-btn minus" data-tajine="lamb">-</button>
+                            <input type="number" id="lamb-qty" min="0" value="0" readonly>
+                            <button type="button" class="quantity-btn plus" data-tajine="lamb">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tajine-option">
+                        <div class="tajine-name" data-fr="Tajine de Poisson à la Charmoula" data-en="Fish Tagine with Charmoula">
+                            Tajine de Poisson à la Charmoula
+                        </div>
+                        <div class="tajine-quantity">
+                            <button type="button" class="quantity-btn minus" data-tajine="fish">-</button>
+                            <input type="number" id="fish-qty" min="0" value="0" readonly>
+                            <button type="button" class="quantity-btn plus" data-tajine="fish">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="summary">
+                        <h3 data-fr="Résumé de la commande" data-en="Order Summary">Résumé de la commande</h3>
+                        <div class="summary-item">
+                            <span data-fr="Total Tajines sélectionnés:" data-en="Total Tajines selected:">Total Tajines sélectionnés:</span>
+                            <span id="total-tajines">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span data-fr="Nombre de personnes:" data-en="Number of people:">Nombre de personnes:</span>
+                            <span id="summary-people">0</span>
+                        </div>
+                        <div id="validation-message" style="color: red; text-align: center; font-weight: bold;"></div>
                     </div>
                 </div>
                 
-                <div class="tajine-option">
-                    <div class="tajine-name" data-fr="Tajine de Poisson à la Charmoula" data-en="Fish Tagine with Charmoula">
-                        Tajine de Poisson à la Charmoula
-                    </div>
-                    <div class="tajine-quantity">
-                        <button type="button" class="quantity-btn minus" data-tajine="fish">-</button>
-                        <input type="number" id="fish-qty" min="0" value="0" readonly>
-                        <button type="button" class="quantity-btn plus" data-tajine="fish">+</button>
-                    </div>
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="1">
+                        <i class="fas fa-arrow-left"></i>
+                        <span data-fr="Précédent" data-en="Previous">Précédent</span>
+                    </button>
+                    <button type="button" class="btn btn-primary next-btn" data-next="3">
+                        <span data-fr="Suivant" data-en="Next">Suivant</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
                 </div>
-                
+            </div>
+            
+            <!-- Section 3: Confirmation -->
+            <div class="form-section" id="section-3">
                 <div class="summary">
-                    <h3 data-fr="Résumé de la commande" data-en="Order Summary">Résumé de la commande</h3>
+                    <h3 data-fr="Récapitulatif de la réservation" data-en="Booking Summary">Récapitulatif de la réservation</h3>
                     <div class="summary-item">
-                        <span data-fr="Total Tajines sélectionnés:" data-en="Total Tajines selected:">Total Tajines sélectionnés:</span>
-                        <span id="total-tajines">0</span>
+                        <span data-fr="Date:" data-en="Date:">Date:</span>
+                        <span id="summary-date"></span>
                     </div>
                     <div class="summary-item">
-                        <span data-fr="Nombre de personnes:" data-en="Number of people:">Nombre de personnes:</span>
-                        <span id="summary-people">0</span>
+                        <span data-fr="Heure:" data-en="Time:">Heure:</span>
+                        <span id="summary-time"></span>
                     </div>
-                    <div id="validation-message" style="color: red; text-align: center; font-weight: bold;"></div>
+                    <div class="summary-item">
+                        <span data-fr="Nom:" data-en="Name:">Nom:</span>
+                        <span id="summary-name"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span data-fr="Email:" data-en="Email:">Email:</span>
+                        <span id="summary-email"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span data-fr="Chambre:" data-en="Room:">Chambre:</span>
+                        <span id="summary-room"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span data-fr="Personnes:" data-en="People:">Personnes:</span>
+                        <span id="summary-people-final"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span data-fr="Tajines:" data-en="Tajines:">Tajines:</span>
+                        <span id="summary-tajines"></span>
+                    </div>
+                    <div class="summary-item" id="summary-requests-container" style="display: none;">
+                        <span data-fr="Demandes spéciales:" data-en="Special Requests:">Demandes spéciales:</span>
+                        <span id="summary-requests"></span>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="actions">
-                <button type="button" id="generate-pdf" class="btn btn-primary" data-fr="Générer PDF" data-en="Generate PDF">
-                    Générer PDF
-                </button>
-                <button type="reset" class="btn btn-secondary" data-fr="Réinitialiser" data-en="Reset">
-                    Réinitialiser
-                </button>
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="2">
+                        <i class="fas fa-arrow-left"></i>
+                        <span data-fr="Précédent" data-en="Previous">Précédent</span>
+                    </button>
+                    <button type="button" id="generate-pdf" class="btn btn-primary">
+                        <i class="fas fa-file-pdf"></i>
+                        <span data-fr="Générer PDF" data-en="Generate PDF">Générer PDF</span>
+                    </button>
+                </div>
             </div>
         </form>
+        
+        <!-- NEW: Success Message -->
+        <div class="success-message" id="success-message">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 data-fr="Réservation confirmée!" data-en="Booking Confirmed!">Réservation confirmée!</h3>
+            <p data-fr="Votre réservation a été enregistrée avec succès. Un email de confirmation a été envoyé." 
+               data-en="Your booking has been successfully recorded. A confirmation email has been sent.">
+                Votre réservation a été enregistrée avec succès. Un email de confirmation a été envoyé.
+            </p>
+            <div class="confirmation-number" id="confirmation-number-display"></div>
+            <button type="button" class="btn btn-primary" id="new-booking-btn" style="margin-top: 20px;">
+                <i class="fas fa-plus"></i>
+                <span data-fr="Nouvelle réservation" data-en="New Booking">Nouvelle réservation</span>
+            </button>
+        </div>
         
         <div class="cancellation-policy">
             <p data-fr="Les annulations sont acceptées jusqu'à 14h30 le jour prévu au restaurant principal" 
@@ -432,11 +762,13 @@
         </div>
         
         <div id="pdf-preview" class="pdf-preview">
-            </div>
+        </div>
     </div>
 
     <script>
         // Language toggle functionality
+        let currentLanguage = 'fr';
+        
         document.getElementById('btn-fr').addEventListener('click', function() {
             setLanguage('fr');
             document.getElementById('btn-fr').classList.add('active');
@@ -450,8 +782,8 @@
         });
         
         function setLanguage(lang) {
+            currentLanguage = lang;
             document.querySelectorAll('[data-fr]').forEach(element => {
-                // Check if the element is NOT the logo-upload-label before changing textContent
                 if (element.id !== 'logo-upload-label') {
                     if (lang === 'fr') {
                         element.textContent = element.getAttribute('data-fr');
@@ -461,7 +793,6 @@
                 }
             });
             
-            // UPDATED: Update the new button's text
             document.getElementById('logo-upload-label').textContent = document.getElementById('logo-upload-label').getAttribute(lang === 'fr' ? 'data-fr' : 'data-en');
         }
         
@@ -511,12 +842,12 @@
             document.getElementById('total-tajines').textContent = totalTajines;
             document.getElementById('summary-people').textContent = numPeople;
             
-            // UPDATED: Validation message with shake animation
+            // Validation message with shake animation
             const validationMessage = document.getElementById('validation-message');
             const summaryBox = document.querySelector('.summary');
             
             if (totalTajines !== numPeople && numPeople > 0) {
-                if (document.getElementById('btn-fr').classList.contains('active')) {
+                if (currentLanguage === 'fr') {
                     validationMessage.textContent = `Attention: Vous avez sélectionné ${totalTajines} tajines pour ${numPeople} personnes.`;
                 } else {
                     validationMessage.textContent = `Warning: You have selected ${totalTajines} tajines for ${numPeople} people.`;
@@ -532,8 +863,210 @@
             }
         }
         
-        // Generate PDF
+        // NEW: Form Navigation
+        document.querySelectorAll('.next-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const nextSection = this.getAttribute('data-next');
+                const currentSection = document.querySelector('.form-section.active').id.split('-')[1];
+                
+                // Validate current section before proceeding
+                if (validateSection(currentSection)) {
+                    navigateToSection(nextSection);
+                }
+            });
+        });
+        
+        document.querySelectorAll('.prev-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const prevSection = this.getAttribute('data-prev');
+                navigateToSection(prevSection);
+            });
+        });
+        
+        function navigateToSection(sectionNumber) {
+            // Hide all sections
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show target section
+            document.getElementById(`section-${sectionNumber}`).classList.add('active');
+            
+            // Update progress steps
+            updateProgressSteps(sectionNumber);
+            
+            // If navigating to confirmation section, update summary
+            if (sectionNumber === '3') {
+                updateConfirmationSummary();
+            }
+        }
+        
+        function updateProgressSteps(activeStep) {
+            // Update progress bar
+            const progressPercentage = ((activeStep - 1) / 2) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercentage}%`;
+            
+            // Update step icons
+            document.querySelectorAll('.step').forEach(step => {
+                const stepNumber = step.getAttribute('data-step');
+                if (stepNumber <= activeStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        }
+        
+        function validateSection(sectionNumber) {
+            let isValid = true;
+            
+            if (sectionNumber === '1') {
+                // Validate personal information
+                const date = document.getElementById('booking-date').value;
+                const time = document.getElementById('booking-time').value;
+                const name = document.getElementById('guest-name').value;
+                const room = document.getElementById('room-number').value;
+                const people = document.getElementById('num-people').value;
+                
+                // Reset errors
+                document.querySelectorAll('.error').forEach(error => {
+                    error.style.display = 'none';
+                    error.parentElement.classList.remove('error');
+                });
+                
+                // Validate date
+                if (!date) {
+                    document.getElementById('date-error').style.display = 'block';
+                    document.getElementById('booking-date').parentElement.classList.add('error');
+                    isValid = false;
+                }
+                
+                // Validate time
+                if (!time) {
+                    document.getElementById('time-error').style.display = 'block';
+                    document.getElementById('booking-time').parentElement.classList.add('error');
+                    isValid = false;
+                }
+                
+                // Validate name
+                if (!name) {
+                    document.getElementById('name-error').style.display = 'block';
+                    document.getElementById('guest-name').parentElement.classList.add('error');
+                    isValid = false;
+                }
+                
+                // Validate room
+                if (!room) {
+                    document.getElementById('room-error').style.display = 'block';
+                    document.getElementById('room-number').parentElement.classList.add('error');
+                    isValid = false;
+                }
+                
+                // Validate people
+                if (!people || people < 1) {
+                    document.getElementById('people-error').style.display = 'block';
+                    document.getElementById('num-people').parentElement.classList.add('error');
+                    isValid = false;
+                }
+            } else if (sectionNumber === '2') {
+                // Validate menu selection
+                const numPeople = parseInt(document.getElementById('num-people').value) || 0;
+                const chickenQty = parseInt(document.getElementById('chicken-qty').value) || 0;
+                const lambQty = parseInt(document.getElementById('lamb-qty').value) || 0;
+                const fishQty = parseInt(document.getElementById('fish-qty').value) || 0;
+                const totalTajines = chickenQty + lambQty + fishQty;
+                
+                if (totalTajines !== numPeople) {
+                    alert(document.getElementById('validation-message').textContent);
+                    isValid = false;
+                }
+            }
+            
+            return isValid;
+        }
+        
+        function updateConfirmationSummary() {
+            // Format date
+            const bookingDate = new Date(document.getElementById('booking-date').value);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = bookingDate.toLocaleDateString(currentLanguage === 'fr' ? 'fr-FR' : 'en-US', options);
+            
+            // Update summary fields
+            document.getElementById('summary-date').textContent = formattedDate;
+            document.getElementById('summary-time').textContent = document.getElementById('booking-time').value;
+            document.getElementById('summary-name').textContent = document.getElementById('guest-name').value;
+            document.getElementById('summary-email').textContent = document.getElementById('guest-email').value || (currentLanguage === 'fr' ? 'N/A' : 'N/A');
+            document.getElementById('summary-room').textContent = document.getElementById('room-number').value;
+            document.getElementById('summary-people-final').textContent = document.getElementById('num-people').value;
+            
+            // Update tajines summary
+            const chickenQty = parseInt(document.getElementById('chicken-qty').value) || 0;
+            const lambQty = parseInt(document.getElementById('lamb-qty').value) || 0;
+            const fishQty = parseInt(document.getElementById('fish-qty').value) || 0;
+            
+            let tajinesText = '';
+            if (chickenQty > 0) {
+                tajinesText += currentLanguage === 'fr' ? 
+                    `${chickenQty} Poulet, ` : 
+                    `${chickenQty} Chicken, `;
+            }
+            if (lambQty > 0) {
+                tajinesText += currentLanguage === 'fr' ? 
+                    `${lambQty} Agneau, ` : 
+                    `${lambQty} Lamb, `;
+            }
+            if (fishQty > 0) {
+                tajinesText += currentLanguage === 'fr' ? 
+                    `${fishQty} Poisson, ` : 
+                    `${fishQty} Fish, `;
+            }
+            
+            // Remove trailing comma and space
+            if (tajinesText.length > 0) {
+                tajinesText = tajinesText.slice(0, -2);
+            } else {
+                tajinesText = currentLanguage === 'fr' ? 'Aucun' : 'None';
+            }
+            
+            document.getElementById('summary-tajines').textContent = tajinesText;
+            
+            // Update special requests
+            const specialRequests = document.getElementById('special-requests').value;
+            if (specialRequests) {
+                document.getElementById('summary-requests').textContent = specialRequests;
+                document.getElementById('summary-requests-container').style.display = 'flex';
+            } else {
+                document.getElementById('summary-requests-container').style.display = 'none';
+            }
+        }
+        
+        // NEW: Time selection
+        document.querySelectorAll('.time-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                document.querySelectorAll('.time-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                
+                // Update hidden input
+                document.getElementById('booking-time').value = this.getAttribute('data-time');
+                
+                // Clear error if any
+                document.getElementById('time-error').style.display = 'none';
+                document.getElementById('booking-time').parentElement.classList.remove('error');
+            });
+        });
+        
+        // NEW: Generate PDF
         document.getElementById('generate-pdf').addEventListener('click', function() {
+            // Show loading state
+            const originalText = this.innerHTML;
+            this.innerHTML = '<div class="spinner"></div> ' + (currentLanguage === 'fr' ? 'Génération...' : 'Generating...');
+            this.disabled = true;
+            
             // Validate form
             const numPeople = parseInt(document.getElementById('num-people').value) || 0;
             const chickenQty = parseInt(document.getElementById('chicken-qty').value) || 0;
@@ -543,6 +1076,10 @@
             
             if (totalTajines !== numPeople) {
                 alert(document.getElementById('validation-message').textContent);
+                
+                // Reset button state
+                this.innerHTML = originalText;
+                this.disabled = false;
                 return;
             }
             
@@ -556,8 +1093,8 @@
             
             // Format date
             const bookingDate = new Date(document.getElementById('booking-date').value);
-            const options = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' };
-            const formattedDate = bookingDate.toLocaleDateString('fr-FR', options);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = bookingDate.toLocaleDateString(currentLanguage === 'fr' ? 'fr-FR' : 'en-US', options);
             
             // Create PDF content HTML
             const pdfContent = document.createElement('div');
@@ -577,7 +1114,9 @@
             
             // Title
             const title = document.createElement('h1');
-            title.textContent = 'Restaurant Le Narjis - Confirmation de Réservation';
+            title.textContent = currentLanguage === 'fr' ? 
+                'Restaurant Le Narjis - Confirmation de Réservation' : 
+                'Restaurant Le Narjis - Booking Confirmation';
             title.style.textAlign = 'center';
             title.style.color = '#8b4513';
             title.style.marginBottom = '20px';
@@ -586,7 +1125,9 @@
             // Confirmation number
             const confNumber = document.createElement('div');
             confNumber.className = 'confirmation-number';
-            confNumber.textContent = `Numéro de confirmation: ${confirmationNumber}`;
+            confNumber.textContent = currentLanguage === 'fr' ? 
+                `Numéro de confirmation: ${confirmationNumber}` : 
+                `Confirmation Number: ${confirmationNumber}`;
             confNumber.style.fontSize = '18px';
             confNumber.style.marginBottom = '20px';
             pdfContent.appendChild(confNumber);
@@ -596,20 +1137,36 @@
             details.style.marginBottom = '30px';
             
             const dateLine = document.createElement('p');
-            dateLine.innerHTML = `<strong>Date:</strong> ${formattedDate}`;
+            dateLine.innerHTML = `<strong>${currentLanguage === 'fr' ? 'Date:' : 'Date:'}</strong> ${formattedDate}`;
             details.appendChild(dateLine);
             
+            const timeLine = document.createElement('p');
+            timeLine.innerHTML = `<strong>${currentLanguage === 'fr' ? 'Heure:' : 'Time:'}</strong> ${document.getElementById('booking-time').value}`;
+            details.appendChild(timeLine);
+            
             const nameLine = document.createElement('p');
-            nameLine.innerHTML = `<strong>Nom du client:</strong> ${document.getElementById('guest-name').value}`;
+            nameLine.innerHTML = `<strong>${currentLanguage === 'fr' ? 'Nom du client:' : 'Guest Name:'}</strong> ${document.getElementById('guest-name').value}`;
             details.appendChild(nameLine);
             
+            const emailLine = document.createElement('p');
+            emailLine.innerHTML = `<strong>${currentLanguage === 'fr' ? 'Email:' : 'Email:'}</strong> ${document.getElementById('guest-email').value || (currentLanguage === 'fr' ? 'Non fourni' : 'Not provided')}`;
+            details.appendChild(emailLine);
+            
             const roomLine = document.createElement('p');
-            roomLine.innerHTML = `<strong>Numéro de chambre:</strong> ${document.getElementById('room-number').value}`;
+            roomLine.innerHTML = `<strong>${currentLanguage === 'fr' ? 'Numéro de chambre:' : 'Room Number:'}</strong> ${document.getElementById('room-number').value}`;
             details.appendChild(roomLine);
             
             const peopleLine = document.createElement('p');
-            peopleLine.innerHTML = `<strong>Nombre de personnes:</strong> ${numPeople}`;
+            peopleLine.innerHTML = `<strong>${currentLanguage === 'fr' ? 'Nombre de personnes:' : 'Number of People:'}</strong> ${numPeople}`;
             details.appendChild(peopleLine);
+            
+            // Special requests
+            const specialRequests = document.getElementById('special-requests').value;
+            if (specialRequests) {
+                const requestsLine = document.createElement('p');
+                requestsLine.innerHTML = `<strong>${currentLanguage === 'fr' ? 'Demandes spéciales:' : 'Special Requests:'}</strong> ${specialRequests}`;
+                details.appendChild(requestsLine);
+            }
             
             pdfContent.appendChild(details);
             
@@ -618,7 +1175,7 @@
             tajineSection.style.marginBottom = '30px';
             
             const tajineTitle = document.createElement('h3');
-            tajineTitle.textContent = 'Sélection des Tajines';
+            tajineTitle.textContent = currentLanguage === 'fr' ? 'Sélection des Tajines' : 'Tajine Selection';
             tajineTitle.style.color = '#8b4513';
             tajineTitle.style.borderBottom = '2px solid #d4af37';
             tajineTitle.style.paddingBottom = '5px';
@@ -626,19 +1183,19 @@
             
             if (chickenQty > 0) {
                 const chickenLine = document.createElement('p');
-                chickenLine.innerHTML = `<strong>Tajine de Poulet au Citron Confit:</strong> ${chickenQty}`;
+                chickenLine.innerHTML = `<strong>${currentLanguage === 'fr' ? 'Tajine de Poulet au Citron Confit:' : 'Chicken Tagine with Preserved Lemon:'}</strong> ${chickenQty}`;
                 tajineSection.appendChild(chickenLine);
             }
             
             if (lambQty > 0) {
                 const lambLine = document.createElement('p');
-                lambLine.innerHTML = `<strong>Tajine d'Agneau aux Pruneaux:</strong> ${lambQty}`;
+                lambLine.innerHTML = `<strong>${currentLanguage === 'fr' ? 'Tajine d\'Agneau aux Pruneaux:' : 'Lamb Tagine with Prunes:'}</strong> ${lambQty}`;
                 tajineSection.appendChild(lambLine);
             }
             
             if (fishQty > 0) {
                 const fishLine = document.createElement('p');
-                fishLine.innerHTML = `<strong>Tajine de Poisson à la Charmoula:</strong> ${fishQty}`;
+                fishLine.innerHTML = `<strong>${currentLanguage === 'fr' ? 'Tajine de Poisson à la Charmoula:' : 'Fish Tagine with Charmoula:'}</strong> ${fishQty}`;
                 tajineSection.appendChild(fishLine);
             }
             
@@ -649,7 +1206,7 @@
             menuSection.style.marginBottom = '30px';
             
             const menuTitle = document.createElement('h3');
-            menuTitle.textContent = 'Menu Sélectionné';
+            menuTitle.textContent = currentLanguage === 'fr' ? 'Menu Sélectionné' : 'Selected Menu';
             menuTitle.style.color = '#8b4513';
             menuTitle.style.borderBottom = '2px solid #d4af37';
             menuTitle.style.paddingBottom = '5px';
@@ -659,15 +1216,21 @@
             menuList.style.paddingLeft = '20px';
             
             const starter = document.createElement('li');
-            starter.innerHTML = '<strong>Entrée:</strong> Harira - Une soupe marocaine riche et épicée';
+            starter.innerHTML = currentLanguage === 'fr' ? 
+                '<strong>Entrée:</strong> Harira - Une soupe marocaine riche et épicée' : 
+                '<strong>Starter:</strong> Harira - A rich and spicy Moroccan soup';
             menuList.appendChild(starter);
             
             const main = document.createElement('li');
-            main.innerHTML = '<strong>Plat Principal:</strong> Tajine (selon sélection ci-dessus)';
+            main.innerHTML = currentLanguage === 'fr' ? 
+                '<strong>Plat Principal:</strong> Tajine (selon sélection ci-dessus)' : 
+                '<strong>Main Course:</strong> Tajine (according to selection above)';
             menuList.appendChild(main);
             
             const dessert = document.createElement('li');
-            dessert.innerHTML = '<strong>Dessert:</strong> Pâtisserie Marocaine';
+            dessert.innerHTML = currentLanguage === 'fr' ? 
+                '<strong>Dessert:</strong> Pâtisserie Marocaine' : 
+                '<strong>Dessert:</strong> Moroccan Pastry';
             menuList.appendChild(dessert);
             
             menuSection.appendChild(menuList);
@@ -680,10 +1243,19 @@
             policy.style.textAlign = 'center';
             policy.style.borderTop = '1px solid #d4af37';
             policy.style.paddingTop = '10px';
-            policy.innerHTML = `
-                <p>Les annulations sont acceptées jusqu'à 14h30 le jour prévu au restaurant principal</p>
-                <p>Ouvert tous les jours sauf le Jeudi • Réservation recommandée</p>
-            `;
+            
+            if (currentLanguage === 'fr') {
+                policy.innerHTML = `
+                    <p>Les annulations sont acceptées jusqu'à 14h30 le jour prévu au restaurant principal</p>
+                    <p>Ouvert tous les jours sauf le Jeudi • Réservation recommandée</p>
+                `;
+            } else {
+                policy.innerHTML = `
+                    <p>Cancellations are accepted until 2:30 PM on the scheduled day at the main restaurant</p>
+                    <p>Open every day except Thursday • Reservation recommended</p>
+                `;
+            }
+            
             pdfContent.appendChild(policy);
             
             pdfPreview.appendChild(pdfContent);
@@ -696,12 +1268,49 @@
             doc.html(pdfContent, {
                 callback: function(doc) {
                     doc.save(`reservation-le-narjis-${confirmationNumber}.pdf`);
+                    
+                    // Reset button state
+                    document.getElementById('generate-pdf').innerHTML = originalText;
+                    document.getElementById('generate-pdf').disabled = false;
+                    
+                    // Show success message
+                    document.getElementById('confirmation-number-display').textContent = 
+                        currentLanguage === 'fr' ? 
+                        `Numéro de confirmation: ${confirmationNumber}` : 
+                        `Confirmation Number: ${confirmationNumber}`;
+                    document.querySelector('.form-section.active').style.display = 'none';
+                    document.getElementById('success-message').style.display = 'block';
                 },
                 x: 10,
                 y: 10,
                 width: 190,
                 windowWidth: 800
             });
+        });
+        
+        // NEW: New booking button
+        document.getElementById('new-booking-btn').addEventListener('click', function() {
+            // Reset form
+            document.getElementById('booking-form').reset();
+            document.getElementById('logo-preview').style.display = 'none';
+            document.getElementById('success-message').style.display = 'none';
+            
+            // Reset tajine quantities
+            document.getElementById('chicken-qty').value = 0;
+            document.getElementById('lamb-qty').value = 0;
+            document.getElementById('fish-qty').value = 0;
+            
+            // Reset time selection
+            document.querySelectorAll('.time-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById('booking-time').value = '';
+            
+            // Navigate to first section
+            navigateToSection('1');
+            
+            // Update summary
+            updateSummary();
         });
         
         // Set minimum date to today
