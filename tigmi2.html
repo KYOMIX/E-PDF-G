@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tigmino Maison D'or - Traditional Berber Guest House in Tafraout</title>
+    <meta name="description" content="Experience authentic Berber hospitality at Tigmino Maison D'or in Tafraout. Our traditional guest house offers comfortable rooms, panoramic views, and a taste of Moroccan culture.">
+    <meta name="keywords" content="Morocco, Tafraout, Berber guest house, Tigmino Maison D'or, accommodation, traditional, hospitality">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Tigmino Maison D'or - Traditional Berber Guest House in Tafraout">
+    <meta property="og:description" content="Experience authentic Berber hospitality at Tigmino Maison D'or in Tafraout. Our traditional guest house offers comfortable rooms, panoramic views, and a taste of Moroccan culture.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tigminomaisondor.com">
+    <meta property="og:image" content="https://tigminomaisondor.com/media/main-hall.jpg">
+    
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Hotel",
+        "name": "Tigmino Maison D'or",
+        "description": "Traditional Berber guest house in Tafraout, Morocco offering authentic hospitality and comfortable accommodations.",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Tafraout",
+            "addressCountry": "Morocco"
+        },
+        "telephone": "+212 6 62 29 43 10",
+        "email": "amaisondor@gmail.com",
+        "image": "https://tigminomaisondor.com/media/main-hall.jpg",
+        "priceRange": "$$",
+        "amenityFeature": [
+            {
+                "@type": "LocationFeatureSpecification",
+                "name": "Free WiFi"
+            },
+            {
+                "@type": "LocationFeatureSpecification",
+                "name": "Free Parking"
+            },
+            {
+                "@type": "LocationFeatureSpecification",
+                "name": "Terrace"
+            },
+            {
+                "@type": "LocationFeatureSpecification",
+                "name": "Shared Lounge"
+            },
+            {
+                "@type": "LocationFeatureSpecification",
+                "name": "Bike Rental"
+            }
+        ]
+    }
+    </script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏜️</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #c2573a; /* Terracotta */
+            --secondary-color: #2c3e50; /* Deep blue */
+            --accent-color: #d4af37; /* Gold */
+            --light-color: #f5f0e8; /* Sand beige */
+            --dark-color: #333;
+            --text-color: #444;
+            --font-family-en: 'Poppins', sans-serif;
+            --font-family-ar: 'Cairo', sans-serif;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family-en);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #fff;
+            overflow-x: hidden;
+        }
+        
+        body[dir="rtl"] {
+            font-family: var(--font-family-ar);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-left: 10px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .language-switcher {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            background: none;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .lang-btn:hover, .lang-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 22px;
+            width: 30px;
+        }
+        
+        .menu-toggle span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--dark-color);
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('media/panoramic-view000.jpg') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #a64630;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid white;
+            margin-left: 15px;
+        }
+        
+        .btn-outline:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+        
+        /* Sections */
+        section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 20px auto 0;
+        }
+        
+        /* About Section */
+        .about-content {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-image {
+            flex: 1;
+            position: relative;
+        }
+        
+        .about-image img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-text h3 {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+        }
+        
+        /* Rooms Section */
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .room-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .room-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .room-image {
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .room-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .room-card:hover .room-image img {
+            transform: scale(1.1);
+        }
+        
+        .room-info {
+            padding: 25px;
+        }
+        
+        .room-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+        
+        .room-info p {
+            margin-bottom: 15px;
+        }
+        
+        .room-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-tag {
+            background-color: var(--light-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+        
+        .room-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .price {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        /* Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .gallery-item {
+            height: 250px;
+            overflow: hidden;
+            border-radius: 8px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .gallery-overlay i {
+            color: white;
+            font-size: 2rem;
+        }
+        
+        /* Contact Section */
+        .contact-content {
+            display: flex;
+            gap: 50px;
+        }
+        
+        .contact-info {
+            flex: 1;
+        }
+        
+        .contact-form {
+            flex: 1;
+        }
+        
+        .contact-info h3 {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .contact-item i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-right: 15px;
+            margin-top: 5px;
+        }
+        
+        .contact-item div h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .contact-item div p {
+            color: var(--text-color);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+        
+        .map-container {
+            margin-top: 50px;
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-color);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-column p {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        .lightbox-content img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .lightbox-close:hover {
+            transform: rotate(90deg);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .about-content,
+            .contact-content {
+                flex-direction: column;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+            
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background-color: white;
+                z-index: 1001;
+                padding: 80px 30px;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                transition: right 0.3s ease;
+            }
+            
+            nav.active {
+                right: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav ul li {
+                margin: 0 0 20px 0;
+            }
+            
+            .language-switcher {
+                margin-top: 30px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .btn-outline {
+                margin-left: 0;
+                margin-top: 15px;
+                display: block;
+            }
+            
+            .rooms-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#home" class="logo">
+                    🏜️ <span>Tigmino Maison D'or</span>
+                </a>
+                
+                <nav id="nav">
+                    <ul>
+                        <li><a href="#home" data-translate="nav_home">Home</a></li>
+                        <li><a href="#about" data-translate="nav_about">About</a></li>
+                        <li><a href="#rooms" data-translate="nav_rooms">Rooms</a></li>
+                        <li><a href="#gallery" data-translate="nav_gallery">Gallery</a></li>
+                        <li><a href="#contact" data-translate="nav_contact">Contact</a></li>
+                    </ul>
+                    <div class="language-switcher">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="fr">FR</button>
+                        <button class="lang-btn" data-lang="ar">AR</button>
+                    </div>
+                </nav>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 data-translate="hero_title">Experience Authentic Berber Hospitality</h1>
+            <p data-translate="hero_subtitle">Discover the charm of traditional Moroccan living at Tigmino Maison D'or, nestled in the breathtaking landscapes of Tafraout.</p>
+            <div>
+                <a href="#rooms" class="btn" data-translate="hero_btn_rooms">View Rooms</a>
+                <a href="#contact" class="btn btn-outline" data-translate="hero_btn_contact">Book Now</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2 data-translate="about_title">About Tigmino Maison D'or</h2>
+                <p data-translate="about_subtitle">A traditional Berber guest house where ancient hospitality meets modern comfort</p>
+            </div>
+            
+            <div class="about-content fade-in">
+                <div class="about-text">
+                    <h3 data-translate="about_heading">A Taste of Berber Tradition</h3>
+                    <p data-translate="about_paragraph1">Located in the heart of Tafraout, Tigmino Maison D'or is a celebration of Berber culture and Moroccan hospitality. Our guest house is designed to provide you with an authentic experience while ensuring your comfort throughout your stay.</p>
+                    <p data-translate="about_paragraph2">The property features a shared lounge where you can relax with other guests, a beautiful terrace to enjoy the stunning views of the surrounding landscapes, and free WiFi to stay connected. We also offer private parking for your convenience.</p>
+                    <p data-translate="about_paragraph3">The surrounding area is popular for cycling, and we provide bike rental services for those who wish to explore the beautiful scenery of Tafraout. The nearest airport, Agadir–Al Massira, is approximately 86 miles away.</p>
+                </div>
+                <div class="about-image">
+                    <img src="media/main-hall.jpg" alt="Main Hall of Tigmino Maison D'or" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Rooms Section -->
+    <section id="rooms" class="rooms">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2 data-translate="rooms_title">Rooms & Rates</h2>
+                <p data-translate="rooms_subtitle">Comfortable accommodations with traditional Berber charm</p>
+            </div>
+            
+            <div class="rooms-grid">
+                <div class="room-card fade-in">
+                    <div class="room-image">
+                        <img src="media/double-room000.jpg" alt="Double Room" loading="lazy">
+                    </div>
+                    <div class="room-info">
+                        <h3 data-translate="room1_title">Standard Double Room</h3>
+                        <p data-translate="room1_description">A cozy room with a comfortable double bed, traditional Berber decor, and modern amenities for a pleasant stay.</p>
+                        <div class="room-features">
+                            <span class="feature-tag" data-translate="feature_wifi">Free WiFi</span>
+                            <span class="feature-tag" data-translate="feature_private_bathroom">Private Bathroom</span>
+                            <span class="feature-tag" data-translate="feature_mountain_view">Mountain View</span>
+                        </div>
+                        <div class="room-price">
+                            <div class="price">$65<span data-translate="price_night">/night</span></div>
+                            <a href="#contact" class="btn" data-translate="btn_book_now">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="room-card fade-in">
+                    <div class="room-image">
+                        <img src="media/double-room001.jpg" alt="Deluxe Double Room" loading="lazy">
+                    </div>
+                    <div class="room-info">
+                        <h3 data-translate="room2_title">Deluxe Double Room</h3>
+                        <p data-translate="room2_description">A spacious room with elegant furnishings, a comfortable double bed, and a seating area to relax after a day of exploring.</p>
+                        <div class="room-features">
+                            <span class="feature-tag" data-translate="feature_wifi">Free WiFi</span>
+                            <span class="feature-tag" data-translate="feature_private_bathroom">Private Bathroom</span>
+                            <span class="feature-tag" data-translate="feature_terrace">Terrace Access</span>
+                            <span class="feature-tag" data-translate="feature_mountain_view">Mountain View</span>
+                        </div>
+                        <div class="room-price">
+                            <div class="price">$85<span data-translate="price_night">/night</span></div>
+                            <a href="#contact" class="btn" data-translate="btn_book_now">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="room-card fade-in">
+                    <div class="room-image">
+                        <img src="media/double-room-twinbeds000.jpg" alt="Twin Room" loading="lazy">
+                    </div>
+                    <div class="room-info">
+                        <h3 data-translate="room3_title">Twin Room</h3>
+                        <p data-translate="room3_description">Perfect for friends or family, this room features two comfortable single beds with traditional Berber touches.</p>
+                        <div class="room-features">
+                            <span class="feature-tag" data-translate="feature_wifi">Free WiFi</span>
+                            <span class="feature-tag" data-translate="feature_private_bathroom">Private Bathroom</span>
+                            <span class="feature-tag" data-translate="feature_garden_view">Garden View</span>
+                        </div>
+                        <div class="room-price">
+                            <div class="price">$75<span data-translate="price_night">/night</span></div>
+                            <a href="#contact" class="btn" data-translate="btn_book_now">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2 data-translate="gallery_title">Gallery</h2>
+                <p data-translate="gallery_subtitle">Explore the beauty of Tigmino Maison D'or and the surrounding landscapes</p>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item fade-in">
+                    <img src="media/entrance.jpg" alt="Entrance of Tigmino Maison D'or" loading="lazy">
+                    <div class="gallery-overlay">
+                        <i>🔍</i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in">
+                    <img src="media/old-agriculture-tools.jpg" alt="Traditional Berber Decor" loading="lazy">
+                    <div class="gallery-overlay">
+                        <i>🔍</i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in">
+                    <img src="media/double-room002.jpg" alt="Comfortable Room Interior" loading="lazy">
+                    <div class="gallery-overlay">
+                        <i>🔍</i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in">
+                    <img src="media/double-room-twinbeds001.jpg" alt="Twin Room with Traditional Decor" loading="lazy">
+                    <div class="gallery-overlay">
+                        <i>🔍</i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in">
+                    <img src="media/panoramic-view000.jpg" alt="Panoramic View of Tafraout" loading="lazy">
+                    <div class="gallery-overlay">
+                        <i>🔍</i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in">
+                    <img src="media/main-hall.jpg" alt="Main Hall with Traditional Berber Design" loading="lazy">
+                    <div class="gallery-overlay">
+                        <i>🔍</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2 data-translate="contact_title">Contact Us</h2>
+                <p data-translate="contact_subtitle">Get in touch to book your stay or ask any questions</p>
+            </div>
+            
+            <div class="contact-content fade-in">
+                <div class="contact-info">
+                    <h3 data-translate="contact_info_title">Get in Touch</h3>
+                    
+                    <div class="contact-item">
+                        <i>📍</i>
+                        <div>
+                            <h4 data-translate="contact_address_title">Address</h4>
+                            <p>Tafraout, Morocco</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i>📞</i>
+                        <div>
+                            <h4 data-translate="contact_phone_title">Phone</h4>
+                            <p>+212 6 62 29 43 10</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i>✉️</i>
+                        <div>
+                            <h4 data-translate="contact_email_title">Email</h4>
+                            <p>amaisondor@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i>🕐</i>
+                        <div>
+                            <h4 data-translate="contact_hours_title">Check-in/Check-out</h4>
+                            <p data-translate="contact_hours_text">Check-in: 14:00 - 22:00<br>Check-out: 07:00 - 12:00</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3 data-translate="contact_form_title">Send Us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name" data-translate="form_name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" data-translate="form_email">Your Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone" data-translate="form_phone">Your Phone</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message" data-translate="form_message">Your Message</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn" data-translate="form_submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10893.938516298598!2d-9.24490374201255!3d29.723433499941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb3b3b7b3b3b3b3b%3A0x3b3b3b3b3b3b3b3b!2sTafraout%2C%20Morocco!5e0!3m2!1sen!2s!4v1626167815439!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3 data-translate="footer_about_title">About Tigmino Maison D'or</h3>
+                    <p data-translate="footer_about_text">Experience authentic Berber hospitality in the heart of Tafraout. Our traditional guest house offers comfortable accommodations with a touch of Moroccan culture.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i>📘</i></a>
+                        <a href="#" aria-label="Instagram"><i>📷</i></a>
+                        <a href="#" aria-label="Twitter"><i>🐦</i></a>
+                        <a href="#" aria-label="TripAdvisor"><i>✈️</i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 data-translate="footer_links_title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home" data-translate="footer_link_home">Home</a></li>
+                        <li><a href="#about" data-translate="footer_link_about">About</a></li>
+                        <li><a href="#rooms" data-translate="footer_link_rooms">Rooms</a></li>
+                        <li><a href="#gallery" data-translate="footer_link_gallery">Gallery</a></li>
+                        <li><a href="#contact" data-translate="footer_link_contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 data-translate="footer_contact_title">Contact Info</h3>
+                    <p><strong data-translate="footer_contact_address">Address:</strong> Tafraout, Morocco</p>
+                    <p><strong data-translate="footer_contact_phone">Phone:</strong> +212 6 62 29 43 10</p>
+                    <p><strong data-translate="footer_contact_email">Email:</strong> amaisondor@gmail.com</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Tigmino Maison D'or. <span data-translate="footer_rights">All rights reserved.</span></p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close" id="lightboxClose">✕</span>
+            <img src="" alt="" id="lightboxImage">
+        </div>
+    </div>
+    
+    <script>
+        // Translation data
+        const translations = {
+            en: {
+                nav_home: "Home",
+                nav_about: "About",
+                nav_rooms: "Rooms",
+                nav_gallery: "Gallery",
+                nav_contact: "Contact",
+                hero_title: "Experience Authentic Berber Hospitality",
+                hero_subtitle: "Discover the charm of traditional Moroccan living at Tigmino Maison D'or, nestled in the breathtaking landscapes of Tafraout.",
+                hero_btn_rooms: "View Rooms",
+                hero_btn_contact: "Book Now",
+                about_title: "About Tigmino Maison D'or",
+                about_subtitle: "A traditional Berber guest house where ancient hospitality meets modern comfort",
+                about_heading: "A Taste of Berber Tradition",
+                about_paragraph1: "Located in the heart of Tafraout, Tigmino Maison D'or is a celebration of Berber culture and Moroccan hospitality. Our guest house is designed to provide you with an authentic experience while ensuring your comfort throughout your stay.",
+                about_paragraph2: "The property features a shared lounge where you can relax with other guests, a beautiful terrace to enjoy the stunning views of the surrounding landscapes, and free WiFi to stay connected. We also offer private parking for your convenience.",
+                about_paragraph3: "The surrounding area is popular for cycling, and we provide bike rental services for those who wish to explore the beautiful scenery of Tafraout. The nearest airport, Agadir–Al Massira, is approximately 86 miles away.",
+                rooms_title: "Rooms & Rates",
+                rooms_subtitle: "Comfortable accommodations with traditional Berber charm",
+                room1_title: "Standard Double Room",
+                room1_description: "A cozy room with a comfortable double bed, traditional Berber decor, and modern amenities for a pleasant stay.",
+                room2_title: "Deluxe Double Room",
+                room2_description: "A spacious room with elegant furnishings, a comfortable double bed, and a seating area to relax after a day of exploring.",
+                room3_title: "Twin Room",
+                room3_description: "Perfect for friends or family, this room features two comfortable single beds with traditional Berber touches.",
+                feature_wifi: "Free WiFi",
+                feature_private_bathroom: "Private Bathroom",
+                feature_mountain_view: "Mountain View",
+                feature_terrace: "Terrace Access",
+                feature_garden_view: "Garden View",
+                price_night: "/night",
+                btn_book_now: "Book Now",
+                gallery_title: "Gallery",
+                gallery_subtitle: "Explore the beauty of Tigmino Maison D'or and the surrounding landscapes",
+                contact_title: "Contact Us",
+                contact_subtitle: "Get in touch to book your stay or ask any questions",
+                contact_info_title: "Get in Touch",
+                contact_address_title: "Address",
+                contact_phone_title: "Phone",
+                contact_email_title: "Email",
+                contact_hours_title: "Check-in/Check-out",
+                contact_hours_text: "Check-in: 14:00 - 22:00<br>Check-out: 07:00 - 12:00",
+                contact_form_title: "Send Us a Message",
+                form_name: "Your Name",
+                form_email: "Your Email",
+                form_phone: "Your Phone",
+                form_message: "Your Message",
+                form_submit: "Send Message",
+                footer_about_title: "About Tigmino Maison D'or",
+                footer_about_text: "Experience authentic Berber hospitality in the heart of Tafraout. Our traditional guest house offers comfortable accommodations with a touch of Moroccan culture.",
+                footer_links_title: "Quick Links",
+                footer_link_home: "Home",
+                footer_link_about: "About",
+                footer_link_rooms: "Rooms",
+                footer_link_gallery: "Gallery",
+                footer_link_contact: "Contact",
+                footer_contact_title: "Contact Info",
+                footer_contact_address: "Address:",
+                footer_contact_phone: "Phone:",
+                footer_contact_email: "Email:",
+                footer_rights: "All rights reserved."
+            },
+            fr: {
+                nav_home: "Accueil",
+                nav_about: "À Propos",
+                nav_rooms: "Chambres",
+                nav_gallery: "Galerie",
+                nav_contact: "Contact",
+                hero_title: "Découvrez l'Hospitalité Authentique Berbère",
+                hero_subtitle: "Explorez le charme de la vie marocaine traditionnelle à Tigmino Maison D'or, niché dans les paysages à couper le souffle de Tafraout.",
+                hero_btn_rooms: "Voir les Chambres",
+                hero_btn_contact: "Réserver",
+                about_title: "À Propos de Tigmino Maison D'or",
+                about_subtitle: "Une maison d'hôtes berbère traditionnelle où l'hospitalité ancienne rencontre le confort moderne",
+                about_heading: "Un Goût de la Tradition Berbère",
+                about_paragraph1: "Situé au cœur de Tafraout, Tigmino Maison D'or est une célébration de la culture berbère et de l'hospitalité marocaine. Notre maison d'hôtes est conçue pour vous offrir une expérience authentique tout en assurant votre confort tout au long de votre séjour.",
+                about_paragraph2: "La propriété dispose d'un salon commun où vous pouvez vous détendre avec d'autres invités, d'une belle terrasse pour profiter des vues imprenables sur les paysages environnants, et d'un WiFi gratuit pour rester connecté. Nous offrons également un parking privé pour votre commodité.",
+                about_paragraph3: "La région environnante est populaire pour le cyclisme, et nous fournissons des services de location de vélos pour ceux qui souhaitent explorer les magnifiques paysages de Tafraout. L'aéroport le plus proche, Agadir–Al Massira, se trouve à environ 86 miles.",
+                rooms_title: "Chambres & Tarifs",
+                rooms_subtitle: "Hébergements confortables avec le charme traditionnel berbère",
+                room1_title: "Chambre Double Standard",
+                room1_description: "Une chambre confortable avec un lit double, une décoration berbère traditionnelle et des équipements modernes pour un séjour agréable.",
+                room2_title: "Chambre Double Deluxe",
+                room2_description: "Une chambre spacieuse avec des meubles élégants, un lit double confortable et un coin salon pour se détendre après une journée d'exploration.",
+                room3_title: "Chambre Jumelle",
+                room3_description: "Parfaite pour les amis ou la famille, cette chambre dispose de deux lits simples confortables avec des touches berbères traditionnelles.",
+                feature_wifi: "WiFi Gratuit",
+                feature_private_bathroom: "Salle de Bain Privée",
+                feature_mountain_view: "Vue sur la Montagne",
+                feature_terrace: "Accès à la Terrasse",
+                feature_garden_view: "Vue sur le Jardin",
+                price_night: "/nuit",
+                btn_book_now: "Réserver",
+                gallery_title: "Galerie",
+                gallery_subtitle: "Explorez la beauté de Tigmino Maison D'or et des paysages environnants",
+                contact_title: "Contactez-nous",
+                contact_subtitle: "Contactez-nous pour réserver votre séjour ou poser des questions",
+                contact_info_title: "Contactez-nous",
+                contact_address_title: "Adresse",
+                contact_phone_title: "Téléphone",
+                contact_email_title: "Email",
+                contact_hours_title: "Check-in/Check-out",
+                contact_hours_text: "Check-in: 14:00 - 22:00<br>Check-out: 07:00 - 12:00",
+                contact_form_title: "Envoyez-nous un Message",
+                form_name: "Votre Nom",
+                form_email: "Votre Email",
+                form_phone: "Votre Téléphone",
+                form_message: "Votre Message",
+                form_submit: "Envoyer le Message",
+                footer_about_title: "À Propos de Tigmino Maison D'or",
+                footer_about_text: "Découvrez l'hospitalité berbère authentique au cœur de Tafraout. Notre maison d'hôtes traditionnelle offre des hébergements confortables avec une touche de culture marocaine.",
+                footer_links_title: "Liens Rapides",
+                footer_link_home: "Accueil",
+                footer_link_about: "À Propos",
+                footer_link_rooms: "Chambres",
+                footer_link_gallery: "Galerie",
+                footer_link_contact: "Contact",
+                footer_contact_title: "Coordonnées",
+                footer_contact_address: "Adresse:",
+                footer_contact_phone: "Téléphone:",
+                footer_contact_email: "Email:",
+                footer_rights: "Tous droits réservés."
+            },
+            ar: {
+                nav_home: "الرئيسية",
+                nav_about: "من نحن",
+                nav_rooms: "الغرف",
+                nav_gallery: "معرض الصور",
+                nav_contact: "اتصل بنا",
+                hero_title: "استمتع بضيافة الأمازيغ الأصيلة",
+                hero_subtitle: "اكتشف سحر الحياة المغربية التقليدية في تيجمينو ميزون دور، الواقع في المناظر الطبيعية الخلابة لتافراوت.",
+                hero_btn_rooms: "عرض الغرف",
+                hero_btn_contact: "احجز الآن",
+                about_title: "عن تيجمينو ميزون دور",
+                about_subtitle: "بيت ضيافة أمازيغي تقليدي حيث تلتقي الضيافة القديمة بالراحة الحديثة",
+                about_heading: "نكهة التقاليد الأمازيغية",
+                about_paragraph1: "يقع في قلب تافراوت، تيجمينو ميزون دور هو احتفال بثقافة الأمازيغ والضيافة المغربية. تم تصميم بيت الضيافة الخاص بنا لتوفير تجربة أصيلة مع ضمان راحتك طوال إقامتك.",
+                about_paragraph2: "تتميز العقار بصالة مشتركة حيث يمكنك الاسترخاء مع الضيوف الآخرين، وتراس جميل للاستمتاع بالمناظر الخلابة للمناظر الطبيعية المحيطة، وواي فاي مجاني للبقاء على اتصال. كما نقدم مواقف خاصة للسيارات لراحتك.",
+                about_paragraph3: "المنطقة المحيطة شائعة لركوب الدراجات، ونقدم خدمات تأجير الدراجات لأولئك الذين يرغبون في استكشاف المناظر الطبيعية الجميلة لتافراوت. أقرب مطار، أكادير-المسيرة، يبعد حوالي 86 ميلاً.",
+                rooms_title: "الغرف والأسعار",
+                rooms_subtitle: "إقامات مريحة مع سحر الأمازيغ التقليدي",
+                room1_title: "غرفة مزدوجة قياسية",
+                room1_description: "غرفة مريحة مع سرير مزدوج، وديكور أمازيغي تقليدي، ومرافق حديثة لإقامة ممتعة.",
+                room2_title: "غرفة مزدوجة فاخرة",
+                room2_description: "غرفة فسيحة مع أثاث أنيق، وسرير مزدوج مريح، ومنطقة جلوس للاسترخاء بعد يوم من الاستكشاف.",
+                room3_title: "غرفة توأم",
+                room3_description: "مثالية للأصدقاء أو العائلة، هذه الغرفة تحتوي على سريرين فرديين مريحين مع لمسات أمازيغية تقليدية.",
+                feature_wifi: "واي فاي مجاني",
+                feature_private_bathroom: "حمام خاص",
+                feature_mountain_view: "إطلالة على الجبل",
+                feature_terrace: "وصول إلى التراس",
+                feature_garden_view: "إطلالة على الحديقة",
+                price_night: "/ليلة",
+                btn_book_now: "احجز الآن",
+                gallery_title: "معرض الصور",
+                gallery_subtitle: "استكشف جمال تيجمينو ميزون دور والمناظر الطبيعية المحيطة",
+                contact_title: "اتصل بنا",
+                contact_subtitle: "تواصل معنا لحجز إقامتك أو طرح أي أسئلة",
+                contact_info_title: "تواصل معنا",
+                contact_address_title: "العنوان",
+                contact_phone_title: "الهاتف",
+                contact_email_title: "البريد الإلكتروني",
+                contact_hours_title: "تسجيل الوصول/تسجيل المغادرة",
+                contact_hours_text: "تسجيل الوصول: 14:00 - 22:00<br>تسجيل المغادرة: 07:00 - 12:00",
+                contact_form_title: "أرسل لنا رسالة",
+                form_name: "اسمك",
+                form_email: "بريدك الإلكتروني",
+                form_phone: "هاتفك",
+                form_message: "رسالتك",
+                form_submit: "إرسال الرسالة",
+                footer_about_title: "عن تيجمينو ميزون دور",
+                footer_about_text: "استمتع بضيافة الأمازيغ الأصيلة في قلب تافراوت. بيت الضيافة التقليدي الخاص بنا يوفر إقامات مريحة مع لمسة من الثقافة المغربية.",
+                footer_links_title: "روابط سريعة",
+                footer_link_home: "الرئيسية",
+                footer_link_about: "من نحن",
+                footer_link_rooms: "الغرف",
+                footer_link_gallery: "معرض الصور",
+                footer_link_contact: "اتصل بنا",
+                footer_contact_title: "معلومات الاتصال",
+                footer_contact_address: "العنوان:",
+                footer_contact_phone: "الهاتف:",
+                footer_contact_email: "البريد الإلكتروني:",
+                footer_rights: "جميع الحقوق محفوظة."
+            }
+        };
+        
+        // DOM Elements
+        const menuToggle = document.getElementById('menuToggle');
+        const nav = document.getElementById('nav');
+        const langButtons = document.querySelectorAll('.lang-btn');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const lightboxImage = document.getElementById('lightboxImage');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const contactForm = document.getElementById('contactForm');
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        // Current language
+        let currentLang = 'en';
+        
+        // Detect user's language
+        function detectLanguage() {
+            const userLang = navigator.language || navigator.userLanguage;
+            
+            if (userLang.startsWith('ar')) {
+                return 'ar';
+            } else if (userLang.startsWith('fr')) {
+                return 'fr';
+            } else {
+                return 'en';
+            }
+        }
+        
+        // Set initial language
+        currentLang = detectLanguage();
+        document.documentElement.lang = currentLang;
+        document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+        
+        // Update active language button
+        langButtons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.lang === currentLang) {
+                btn.classList.add('active');
+            }
+        });
+        
+        // Translate page
+        function translatePage(lang) {
+            const elements = document.querySelectorAll('[data-translate]');
+            
+            elements.forEach(element => {
+                const key = element.dataset.translate;
+                if (translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+        }
+        
+        // Initial translation
+        translatePage(currentLang);
+        
+        // Language switcher
+        langButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.dataset.lang;
+                currentLang = lang;
+                
+                // Update active button
+                langButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update document attributes
+                document.documentElement.lang = lang;
+                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+                
+                // Translate page
+                translatePage(lang);
+                
+                // Close mobile menu if open
+                nav.classList.remove('active');
+            });
+        });
+        
+        // Mobile menu toggle
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+            });
+        });
+        
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            
+            if (window.scrollY > 100) {
+                header.style.backgroundColor = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+        });
+        
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        fadeElements.forEach(element => {
+            observer.observe(element);
+        });
+        
+        // Gallery lightbox
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                lightboxImage.src = img.src;
+                lightboxImage.alt = img.alt;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+        
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Contact form submission
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(contactForm);
+            const data = Object.fromEntries(formData);
+            
+            // In a real implementation, you would send this data to a server
+            console.log('Form submitted:', data);
+            
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.style.position = 'fixed';
+            successMessage.style.top = '50%';
+            successMessage.style.left = '50%';
+            successMessage.style.transform = 'translate(-50%, -50%)';
+            successMessage.style.backgroundColor = 'rgba(46, 204, 113, 0.9)';
+            successMessage.style.color = 'white';
+            successMessage.style.padding = '20px 30px';
+            successMessage.style.borderRadius = '8px';
+            successMessage.style.zIndex = '3000';
+            successMessage.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+            successMessage.textContent = currentLang === 'en' ? 'Thank you for your message! We will get back to you soon.' : 
+                                     currentLang === 'fr' ? 'Merci pour votre message! Nous vous répondrons bientôt.' : 
+                                     'شكراً لرسالتك! سنتواصل معك قريباً.';
+            
+            document.body.appendChild(successMessage);
+            
+            // Reset form
+            contactForm.reset();
+            
+            // Remove success message after 3 seconds
+            setTimeout(() => {
+                successMessage.style.opacity = '0';
+                successMessage.style.transition = 'opacity 0.5s ease';
+                
+                setTimeout(() => {
+                    document.body.removeChild(successMessage);
+                }, 500);
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
