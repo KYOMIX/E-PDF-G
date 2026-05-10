@@ -89,20 +89,6 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
     }
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--gold);
-      color: var(--gold);
-      padding: 10px 22px;
-      border-radius: 999px;
-      font-weight: 600;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-    .btn-outline:hover {
-      background: var(--gold);
-      color: white;
-    }
     .card {
       background: white;
       border-radius: 16px;
@@ -167,298 +153,291 @@
       color: #4b5563;
     }
 
-    /* Payment Modal Styles */
-    #paymentModal {
-      backdrop-filter: blur(8px);
+    /* Lock Screen Styles */
+    #lockScreen {
+      background: linear-gradient(135deg, #1a1209 0%, #2c1e0f 100%);
     }
-    .modal-content {
-      background: white;
-      border-radius: 20px;
-      border: 2px solid var(--gold);
-      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-      animation: modalSlideIn 0.4s ease-out;
+    .lock-glow {
+      box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
     }
-    @keyframes modalSlideIn {
-      from { opacity: 0; transform: scale(0.95) translateY(20px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .pulse-gold {
-      animation: pulseGold 2s infinite;
-    }
-    @keyframes pulseGold {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
-      50% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
-    }
+    /* Prevent content flash before JS loads */
+    #mainContent, #lockScreen, #graceBanner { display: none; }
   </style>
 </head>
 <body class="leading-relaxed">
 
-  <!-- Payment Due Banner (shows during first 3 days) -->
-  <div id="paymentBanner" class="hidden bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 text-white text-center py-3 px-4 text-sm font-semibold shadow-lg relative z-40">
-    <span class="inline-flex items-center gap-2">
-      <span class="text-lg">💳</span>
-      <span>Monthly Subscription Payment Due — Please settle within the first 3 days of this month.</span>
-      <span id="bannerDaysLeft" class="bg-white text-amber-800 px-2 py-0.5 rounded-full text-xs font-bold ml-2"></span>
+  <!-- GRACE PERIOD BANNER (Days 1-2) -->
+  <div id="graceBanner" class="bg-amber-100 border-b-2 border-amber-500 text-amber-900 text-center py-3 px-4 text-sm font-semibold relative z-40">
+    <span class="inline-flex items-center justify-center gap-2 flex-wrap">
+      <span>⏳</span>
+      <span>Payment Reminder: Your monthly subscription is due by the 3rd. Please contact KYOMIX to avoid service interruption.</span>
     </span>
   </div>
 
-  <!-- Payment Modal Overlay -->
-  <div id="paymentModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-60 px-4">
-    <div class="modal-content max-w-md w-full p-8 text-center relative">
-      <div class="absolute top-4 right-4">
-        <button onclick="closePaymentModal()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+  <!-- LOCK SCREEN (Day 3+ if unpaid) -->
+  <div id="lockScreen" class="fixed inset-0 z-[60] hidden flex-col items-center justify-center text-white p-6">
+    <div class="max-w-md w-full text-center lock-glow bg-white/5 border border-amber-500/20 rounded-2xl p-8 md:p-10 backdrop-blur-sm">
+      <div class="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-amber-500/30">
+        <span class="text-4xl">🔒</span>
       </div>
       
-      <div class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4 pulse-gold">
-        <span class="text-3xl">💳</span>
+      <h2 class="title text-3xl mb-2 text-amber-400">Access Locked</h2>
+      <p class="text-gray-400 mb-8 text-sm">Monthly subscription payment is required to continue using Luxury Suite.</p>
+      
+      <div class="bg-black/20 rounded-xl p-5 mb-6 border border-white/10">
+        <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Current Billing Period</p>
+        <p class="text-lg font-semibold text-white mb-6" id="lockMonthLabel">—</p>
+        
+        <input type="text" id="unlockCode" placeholder="ENTER UNLOCK CODE" 
+          class="w-full px-4 py-3 rounded-lg bg-white/10 border border-amber-500/40 text-white placeholder-gray-500 text-center tracking-[0.2em] uppercase focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition mb-3 font-mono text-lg">
+        
+        <p id="unlockError" class="text-red-400 text-xs mb-3 hidden font-semibold">Invalid code. Please contact KYOMIX.</p>
+        
+        <button onclick="attemptUnlock()" class="w-full bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-amber-900/50 tracking-wide">
+          Unlock Access
+        </button>
       </div>
       
-      <h3 class="title text-2xl mb-2 text-gray-800">Monthly Payment Due</h3>
-      <p class="text-gray-500 text-sm mb-6">Dear Valued Partner,</p>
-      
-      <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-5 mb-6 text-left border border-amber-100">
-        <div class="flex justify-between items-center mb-3 pb-3 border-b border-amber-200">
-          <span class="text-gray-600 text-sm">Billing Period</span>
-          <span class="font-semibold text-amber-900 text-sm" id="billingPeriod">—</span>
-        </div>
-        <div class="flex justify-between items-center mb-3 pb-3 border-b border-amber-200">
-          <span class="text-gray-600 text-sm">Payment Window</span>
-          <span class="font-semibold text-amber-900 text-sm">1st – 3rd of each month</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-gray-600 text-sm">Status</span>
-          <span class="font-bold text-red-600 text-sm uppercase tracking-wide" id="paymentStatusText">Payment Required</span>
-        </div>
-      </div>
-      
-      <p class="text-gray-600 text-sm mb-6">
-        To ensure uninterrupted access to Luxury Suite tools, please arrange your monthly subscription payment.
-      </p>
-      
-      <a href="https://wa.me/212661393441?text=Hello%20KYOMIX%2C%20I%20am%20ready%20to%20process%20the%20monthly%20payment%20for%20Luxury%20Suite." 
-         target="_blank" 
-         class="btn inline-block w-full mb-3">
-        Contact KYOMIX to Pay
+      <a href="https://wa.me/212661393441?text=Hello%20KYOMIX%2C%20I%20need%20the%20monthly%20unlock%20code%20for%20Luxury%20Suite." 
+         target="_blank" class="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 transition text-sm font-medium">
+        <span>💬</span> Contact KYOMIX via WhatsApp
       </a>
       
-      <button onclick="acknowledgePayment()" class="btn-outline inline-block w-full text-sm">
-        I Have Already Paid / Will Pay Today
-      </button>
-      
-      <p class="text-xs text-gray-400 mt-4">
-        Questions? Reach out via WhatsApp or email.
-      </p>
+      <p class="text-xs text-gray-600 mt-8">Your access will be restored immediately upon payment verification.</p>
     </div>
   </div>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="max-w-4xl mx-auto px-6 fade-in">
-      <h1 class="title text-5xl md:text-6xl text-white mb-6">
-        <span class="text-gold">Luxury Suite</span>
-      </h1>
-      <p class="text-xl text-gray-200 mb-8">
-        Elegance. Simplicity. Perfection.  
-        <br>Premium tools for unforgettable guest moments.
+  <!-- MAIN APPLICATION CONTENT -->
+  <div id="mainContent">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="max-w-4xl mx-auto px-6 fade-in">
+        <h1 class="title text-5xl md:text-6xl text-white mb-6">
+          <span class="text-gold">Luxury Suite</span>
+        </h1>
+        <p class="text-xl text-gray-200 mb-8">
+          Elegance. Simplicity. Perfection.  
+          <br>Premium tools for unforgettable guest moments.
+        </p>
+        <a href="#tools" class="btn inline-block">Explore Tools</a>
+      </div>
+    </section>
+
+    <!-- Tools -->
+    <section id="tools" class="py-20 px-6">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="title text-4xl text-center mb-12 text-gray-800">Useful Tools</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-6 gap-8">
+
+          <!-- Envelope -->
+          <div class="card p-6 text-center hover:shadow-xl">
+            <div class="icon">✉️</div>
+            <h3 class="text-xl font-semibold mb-3">Envelope Suite</h3>
+            <p class="text-gray-600 text-sm mb-4">Gold-foil, print-ready guest envelopes.</p>
+            <a href="hotel-evnvelope-generator.html" class="btn text-sm">Create</a>
+          </div>
+
+          <!-- Dining -->
+          <div class="card p-6 text-center hover:shadow-xl">
+            <div class="icon">🍽️</div>
+            <h3 class="text-xl font-semibold mb-3">Gourmet Res.</h3>
+            <p class="text-gray-600 text-sm mb-4">Elegant dining vouchers with wine pairings.</p>
+            <a href="marocan-restaurant-reservation.html" class="btn text-sm">Reserve</a>
+          </div>
+
+          <!-- Cake -->
+          <div class="card p-6 text-center hover:shadow-xl">
+            <div class="icon">🎂</div>
+            <h3 class="text-xl font-semibold mb-3">Cake Res.</h3>
+            <p class="text-gray-600 text-sm mb-4">Personalized birthday & anniversary cakes.</p>
+            <a href="Reservation-de-Gateau.html" class="btn text-sm">Order</a>
+          </div>
+
+          <!-- Guest Message -->
+          <div class="card p-6 text-center hover:shadow-xl">
+            <div class="icon">💌</div>
+            <h3 class="text-xl font-semibold mb-3">Guest Message</h3>
+            <p class="text-gray-600 text-sm mb-4">Handwritten-style notes for VIPs.</p>
+            <a href="Guest-msg.html" class="btn text-sm">Write</a>
+          </div>
+
+          <!-- Lost & Found -->
+          <div class="card p-6 text-center hover:shadow-xl">
+            <div class="icon">🔍</div>
+            <h3 class="text-xl font-semibold mb-3">Lost & Found</h3>
+            <p class="text-gray-600 text-sm mb-4">Professional lost item documentation.</p>
+            <a href="decharge-generator.html" class="btn text-sm">Document</a>
+          </div>
+
+          <!-- Wake-Up Manager -->
+          <div class="card p-6 text-center hover:shadow-xl">
+            <div class="icon">⏰</div>
+            <h3 class="text-xl font-semibold mb-3">Wake-Up Manager</h3>
+            <p class="text-gray-600 text-sm mb-4">Professional wake-up service documentation.</p>
+            <a href="https://kyomix.github.io/E-PDF-G/Wake-up.html" class="btn text-sm">Schedule</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="bg-gray-50 py-16 px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="title text-3xl mb-8 text-gray-800">Why Luxury Suite?</h2>
+        <div class="grid md:grid-cols-3 gap-8 text-sm">
+          <div>
+            <div class="text-2xl mb-2">✨</div>
+            <strong>Timeless Design</strong>
+            <p class="text-gray-600 mt-1">Gold accents, elegant fonts, luxury finishes.</p>
+          </div>
+          <div>
+            <div class="text-2xl mb-2">🔒</div>
+            <strong>Private & Secure</strong>
+            <p class="text-gray-600 mt-1">No data leaves your device.</p>
+          </div>
+          <div>
+            <div class="text-2xl mb-2">🚀</div>
+            <strong>Instant PDFs</strong>
+            <p class="text-gray-600 mt-1">Download and print in seconds.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="kyomix" data-description="Support me on Buy me a coffee!" data-message="Support My Work ☕" data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+    <!-- CTA -->
+    <section class="bg-gradient-to-r from-amber-800 to-amber-900 text-white py-16 text-center px-6">
+      <h2 class="title text-4xl mb-4">Elevate Your Guest Experience</h2>
+      <p class="max-w-xl mx-auto mb-8 text-amber-100">
+        Trusted by luxury hotels worldwide.
       </p>
-      <a href="#tools" class="btn inline-block">Explore Tools</a>
-    </div>
-  </section>
+      <a href="https://wa.me/212661393441?text=Hello%2C%20I%20want%20to%20know%20more%20about%20Luxury%20Suite" class="btn inline-block">Contact KYOMIX</a>
+    </section>
 
-  <!-- Tools -->
-  <section id="tools" class="py-20 px-6">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="title text-4xl text-center mb-12 text-gray-800">Useful Tools</h2>
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <!-- Footer -->
+    <footer>
+      <p>© 2025 LuxurySuite by KYOMIX. Crafted for excellence.</p>
+    </footer>
 
-        <!-- Envelope -->
-        <div class="card p-6 text-center hover:shadow-xl">
-          <div class="icon">✉️</div>
-          <h3 class="text-xl font-semibold mb-3">Envelope Suite</h3>
-          <p class="text-gray-600 text-sm mb-4">Gold-foil, print-ready guest envelopes.</p>
-          <a href="hotel-evnvelope-generator.html" class="btn text-sm">Create</a>
-        </div>
+  </div><!-- /#mainContent -->
 
-        <!-- Dining -->
-        <div class="card p-6 text-center hover:shadow-xl">
-          <div class="icon">🍽️</div>
-          <h3 class="text-xl font-semibold mb-3">Gourmet Res.</h3>
-          <p class="text-gray-600 text-sm mb-4">Elegant dining vouchers with wine pairings.</p>
-          <a href="marocan-restaurant-reservation.html" class="btn text-sm">Reserve</a>
-        </div>
-
-        <!-- Cake -->
-        <div class="card p-6 text-center hover:shadow-xl">
-          <div class="icon">🎂</div>
-          <h3 class="text-xl font-semibold mb-3">Cake Res.</h3>
-          <p class="text-gray-600 text-sm mb-4">Personalized birthday & anniversary cakes.</p>
-          <a href="Reservation-de-Gateau.html" class="btn text-sm">Order</a>
-        </div>
-
-        <!-- Guest Message -->
-        <div class="card p-6 text-center hover:shadow-xl">
-          <div class="icon">💌</div>
-          <h3 class="text-xl font-semibold mb-3">Guest Message</h3>
-          <p class="text-gray-600 text-sm mb-4">Handwritten-style notes for VIPs.</p>
-          <a href="Guest-msg.html" class="btn text-sm">Write</a>
-        </div>
-
-        <!-- Lost & Found -->
-        <div class="card p-6 text-center hover:shadow-xl">
-          <div class="icon">🔍</div>
-          <h3 class="text-xl font-semibold mb-3">Lost & Found</h3>
-          <p class="text-gray-600 text-sm mb-4">Professional lost item documentation.</p>
-          <a href="decharge-generator.html" class="btn text-sm">Document</a>
-        </div>
-
-        <!-- Wake-Up Manager -->
-        <div class="card p-6 text-center hover:shadow-xl">
-          <div class="icon">⏰</div>
-          <h3 class="text-xl font-semibold mb-3">Wake-Up Manager</h3>
-          <p class="text-gray-600 text-sm mb-4">Professional wake-up service documentation.</p>
-          <a href="https://kyomix.github.io/E-PDF-G/Wake-up.html" class="btn text-sm">Schedule</a>
-        </div>
-
-        <!-- Payment Center (NEW) -->
-        <div class="card p-6 text-center hover:shadow-xl border-2 border-amber-100 relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 to-amber-600"></div>
-          <div class="icon">🏛️</div>
-          <h3 class="text-xl font-semibold mb-3">Payment Center</h3>
-          <p class="text-gray-600 text-sm mb-4">View billing status & subscription details.</p>
-          <button onclick="openPaymentModal()" class="btn text-sm">View Status</button>
-        </div>
-
-        <!-- Support -->
-        <div class="card p-6 text-center hover:shadow-xl">
-          <div class="icon">🤝</div>
-          <h3 class="text-xl font-semibold mb-3">Support</h3>
-          <p class="text-gray-600 text-sm mb-4">Need help? Reach out to KYOMIX directly.</p>
-          <a href="https://wa.me/212661393441?text=Hello%20KYOMIX%2C%20I%20need%20support%20with%20Luxury%20Suite." class="btn text-sm">Contact</a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Why Choose Us -->
-  <section class="bg-gray-50 py-16 px-6">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="title text-3xl mb-8 text-gray-800">Why Luxury Suite?</h2>
-      <div class="grid md:grid-cols-3 gap-8 text-sm">
-        <div>
-          <div class="text-2xl mb-2">✨</div>
-          <strong>Timeless Design</strong>
-          <p class="text-gray-600 mt-1">Gold accents, elegant fonts, luxury finishes.</p>
-        </div>
-        <div>
-          <div class="text-2xl mb-2">🔒</div>
-          <strong>Private & Secure</strong>
-          <p class="text-gray-600 mt-1">No data leaves your device.</p>
-        </div>
-        <div>
-          <div class="text-2xl mb-2">🚀</div>
-          <strong>Instant PDFs</strong>
-          <p class="text-gray-600 mt-1">Download and print in seconds.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="kyomix" data-description="Support me on Buy me a coffee!" data-message="Support My Work ☕" data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
-
-  <!-- CTA -->
-  <section class="bg-gradient-to-r from-amber-800 to-amber-900 text-white py-16 text-center px-6">
-    <h2 class="title text-4xl mb-4">Elevate Your Guest Experience</h2>
-    <p class="max-w-xl mx-auto mb-8 text-amber-100">
-      Trusted by luxury hotels worldwide.
-    </p>
-    <a href="https://wa.me/212661393441?text=Hello%2C%20I%20want%20to%20know%20more%20about%20Luxury%20Suite" class="btn inline-block">Contact KYOMIX</a>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 LuxurySuite by KYOMIX. Crafted for excellence.</p>
-    <p class="text-xs mt-2 text-gray-400">Monthly subscription billing · Payment due within the first 3 days of each month</p>
-  </footer>
-
-  <!-- Payment Logic -->
+  <!-- LOCK & BILLING LOGIC -->
   <script>
     (function() {
-      const today = new Date();
-      const day = today.getDate();
-      const month = today.getMonth(); // 0-11
-      const year = today.getFullYear();
+      const now = new Date();
+      const day = now.getDate();
+      const month = now.getMonth() + 1; // 1-12
+      const year = now.getFullYear();
       const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
       
-      const storageKey = `luxurySuite_ack_${year}_${month}`;
-      const banner = document.getElementById('paymentBanner');
-      const modal = document.getElementById('paymentModal');
-      const bannerDaysLeft = document.getElementById('bannerDaysLeft');
-      const billingPeriodEl = document.getElementById('billingPeriod');
-      const paymentStatusText = document.getElementById('paymentStatusText');
+      const storageKey = `ls_unlock_${year}_${month}`;
+      const lockScreen = document.getElementById('lockScreen');
+      const mainContent = document.getElementById('mainContent');
+      const graceBanner = document.getElementById('graceBanner');
+      const codeInput = document.getElementById('unlockCode');
+      const unlockError = document.getElementById('unlockError');
+      const lockMonthLabel = document.getElementById('lockMonthLabel');
       
-      // Update billing period text
-      if (billingPeriodEl) {
-        billingPeriodEl.textContent = `${monthNames[month]} ${year}`;
+      // Display current billing period on lock screen
+      if (lockMonthLabel) {
+        lockMonthLabel.textContent = `${monthNames[month - 1]} ${year}`;
       }
       
-      // Calculate days remaining in payment window
-      const daysRemaining = 3 - day;
-      
-      // Show banner and modal only during days 1-3
-      if (day >= 1 && day <= 3) {
-        // Show banner
-        if (banner) {
-          banner.classList.remove('hidden');
-          if (bannerDaysLeft) {
-            if (daysRemaining > 0) {
-              bannerDaysLeft.textContent = `${daysRemaining} day${daysRemaining > 1 ? 's' : ''} left`;
-            } else {
-              bannerDaysLeft.textContent = "Due today";
-              bannerDaysLeft.classList.add('bg-red-100', 'text-red-700');
-            }
-          }
+      // Deterministic monthly code generator
+      // You can open browser console and type: getUnlockCode(5, 2026)
+      function generateExpectedCode(m, y) {
+        const salt = "KYOMIX_LUXURY_SUITE_v1";
+        let hash = 0;
+        const str = salt + m + y;
+        for (let i = 0; i < str.length; i++) {
+          hash = ((hash << 5) - hash) + str.charCodeAt(i);
+          hash |= 0; // 32-bit int
         }
-        
-        // Show modal only if not acknowledged this month
-        const hasAcknowledged = localStorage.getItem(storageKey) === 'true';
-        if (!hasAcknowledged && modal) {
-          modal.classList.remove('hidden');
-          modal.classList.add('flex');
-        }
-        
-        // Update status text based on urgency
-        if (paymentStatusText) {
-          if (day === 3) {
-            paymentStatusText.textContent = "Due Today";
-            paymentStatusText.className = "font-bold text-red-600 text-sm uppercase tracking-wide animate-pulse";
-          } else {
-            paymentStatusText.textContent = "Payment Required";
-          }
-        }
+        const hex = Math.abs(hash).toString(16).toUpperCase();
+        return `LX-${m.toString().padStart(2, '0')}${y.toString().slice(-2)}-${hex.substring(0, 4)}`;
       }
       
-      // Expose functions globally
-      window.closePaymentModal = function() {
-        if (modal) {
-          modal.classList.add('hidden');
-          modal.classList.remove('flex');
+      // Expose to global scope so YOU can generate codes from console
+      window.getUnlockCode = generateExpectedCode;
+      
+      function isUnlocked() {
+        const stored = localStorage.getItem(storageKey);
+        return stored && stored === generateExpectedCode(month, year);
+      }
+      
+      function showLock() {
+        if (lockScreen) {
+          lockScreen.style.display = 'flex';
+          lockScreen.classList.add('fade-in');
+        }
+        if (mainContent) mainContent.style.display = 'none';
+        if (graceBanner) graceBanner.style.display = 'none';
+        document.body.style.overflow = 'hidden';
+        // Auto-focus input
+        setTimeout(() => { if(codeInput) codeInput.focus(); }, 400);
+      }
+      
+      function showMain() {
+        if (lockScreen) lockScreen.style.display = 'none';
+        if (mainContent) {
+          mainContent.style.display = 'block';
+          mainContent.classList.add('fade-in');
+        }
+        if (graceBanner) graceBanner.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+      
+      function showGrace() {
+        if (lockScreen) lockScreen.style.display = 'none';
+        if (mainContent) {
+          mainContent.style.display = 'block';
+          mainContent.classList.add('fade-in');
+        }
+        if (graceBanner) graceBanner.style.display = 'block';
+        document.body.style.overflow = '';
+      }
+      
+      // DECISION TREE
+      if (isUnlocked()) {
+        showMain();
+      } else if (day >= 3) {
+        showLock();
+      } else {
+        showGrace();
+      }
+      
+      // Unlock handler
+      window.attemptUnlock = function() {
+        if (!codeInput) return;
+        const input = codeInput.value.trim().toUpperCase();
+        const expected = generateExpectedCode(month, year);
+        
+        if (input === expected) {
+          localStorage.setItem(storageKey, expected);
+          showMain();
+        } else {
+          if (unlockError) unlockError.style.display = 'block';
+          if (codeInput) {
+            codeInput.classList.add('border-red-500');
+            codeInput.classList.add('animate-pulse');
+            setTimeout(() => codeInput.classList.remove('animate-pulse'), 500);
+          }
         }
       };
       
-      window.openPaymentModal = function() {
-        if (modal) {
-          modal.classList.remove('hidden');
-          modal.classList.add('flex');
-        }
-      };
-      
-      window.acknowledgePayment = function() {
-        localStorage.setItem(storageKey, 'true');
-        closePaymentModal();
-        // Optional: show a subtle toast or alert
-        // alert("Thank you. Please ensure payment is sent within the agreed timeframe.");
-      };
+      // Enter key support
+      if (codeInput) {
+        codeInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') attemptUnlock();
+        });
+        codeInput.addEventListener('input', function() {
+          if (unlockError) unlockError.style.display = 'none';
+          codeInput.classList.remove('border-red-500');
+        });
+      }
     })();
   </script>
 </body>
