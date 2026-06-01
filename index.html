@@ -10,10 +10,10 @@
   <meta name="author" content="Khalid Laasri">
   <meta name="robots" content="index, follow">
   <meta name="revisit-after" content="7 days">
-  
+
   <!-- Canonical URL -->
   <link rel="canonical" href="https://kyomix.github.io/E-PDF-G/">
-  
+
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kyomix.github.io/E-PDF-G/">
@@ -22,17 +22,17 @@
   <meta property="og:image" content="https://kyomix.github.io/E-PDF-G/my-logo-org.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  
+
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://kyomix.github.io/E-PDF-G/">
   <meta property="twitter:title" content="Luxury Suite | Premium Hotel PDF Tools by KYOMIX">
   <meta property="twitter:description" content="Elegant PDF tools for luxury hotels: envelopes, guest messages, dining reservations, wake-up service. Create print-ready materials for 5-star guest experiences.">
   <meta property="twitter:image" content="https://kyomix.github.io/E-PDF-G/my-logo-org.png">
-  
+
   <!-- Favicon -->
   <link rel="icon" href="https://kyomix.github.io/E-PDF-G/my-logo-org.png" sizes="32x32" type="image/png">
-  
+
   <!-- Structured Data -->
   <script type="application/ld+json">
   {
@@ -57,65 +57,392 @@
   }
   </script>
 
-  <!-- Fonts & Styles -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    /* --- CORE VARIABLES & RESET --- */
     :root {
-      --gold: #D4AF37;
-      --brown: #8B5A2B;
-      --light: #FFFDF9;
+      --glass-bg: rgba(255, 255, 255, 0.14);
+      --glass-bg-hover: rgba(255, 255, 255, 0.22);
+      --glass-border: rgba(255, 255, 255, 0.35);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+      --glass-blur: 20px;
+      --text-main: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.88);
+      --accent-glow: #ffd1d1;
+      --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--light);
-      color: #333;
-    }
-    .title {
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-    }
-    .btn {
-      background: linear-gradient(135deg, var(--gold), #B8860B);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 999px;
-      font-weight: 600;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-      transition: all 0.3s ease;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
-    }
-    .card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-      transition: all 0.4s ease;
-      overflow: hidden;
-    }
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.12);
-    }
-    .hero {
-      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+      font-family: var(--font-stack);
+      color: var(--text-main);
+      background: #1a1a2e;
+      background-image: 
+        radial-gradient(circle at 10% 20%, #302b63 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, #24243e 0%, transparent 50%),
+        url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
       background-size: cover;
+      background-attachment: fixed;
       background-position: center;
-      height: 80vh;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* --- LIQUID GLASS UTILITY --- */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: var(--glass-shadow);
+      transition: transform 0.3s ease, background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(170deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0.3) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .glass:hover {
+      background: var(--glass-bg-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    @supports not (backdrop-filter: blur(16px)) {
+      .glass { background: rgba(30, 30, 55, 0.88); }
+      .glass:hover { background: rgba(40, 40, 70, 0.92); }
+    }
+
+    /* --- TYPOGRAPHY --- */
+    h1, h2, h3 {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      line-height: 1.1;
+      background: linear-gradient(to right, #fff, #ffb3b3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #fff;
+    }
+
+    h3 {
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    p {
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+    }
+
+    /* --- HERO --- */
+    .hero {
+      min-height: 80vh;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      color: white;
+      padding: 120px 20px 60px;
+      position: relative;
     }
-    .icon {
+
+    .hero-content {
+      max-width: 800px;
+      padding: 60px 40px;
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent-glow);
+      margin-bottom: 20px;
+      display: block;
+      font-weight: 700;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+    }
+
+    .hero-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 15px 40px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 700;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-btn:hover {
+      background: white;
+      color: #111;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+      text-shadow: none;
+    }
+
+    /* --- SECTIONS --- */
+    section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .tool-card {
+      padding: 35px 25px;
+      text-align: center;
+    }
+
+    .tool-icon {
       font-size: 2.5rem;
-      color: var(--gold);
+      margin-bottom: 15px;
+      display: block;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .tool-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .tool-card p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 700;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+      font-size: 0.9rem;
+    }
+
+    .btn:hover {
+      background: white;
+      color: #111;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+      text-shadow: none;
+      transform: translateY(-2px);
+    }
+
+    /* Why section */
+    .why-section {
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,0.15);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      max-width: 100%;
+      padding: 80px 20px;
+    }
+
+    .why-section h2 {
+      margin-bottom: 2rem;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .why-item {
+      text-align: center;
+      padding: 25px;
+    }
+
+    .why-item strong {
+      color: #fff;
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .why-item p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* CTA section */
+    .cta-section {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .cta-section h2 {
       margin-bottom: 1rem;
     }
+
+    .cta-section p {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 60px 20px;
+      margin-top: 50px;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+
+    /* Grace Banner */
+    #graceBanner {
+      background: rgba(255, 193, 7, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 193, 7, 0.4);
+      color: #ffe082;
+      text-align: center;
+      padding: 12px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      position: relative;
+      z-index: 40;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+
+    /* Lock Screen */
+    #lockScreen {
+      background: rgba(26, 26, 46, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .lock-glow {
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+    }
+
+    #lockScreen .glass {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    #lockScreen h2 {
+      background: linear-gradient(to right, #fff, #ffb3b3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+    }
+
+    #lockScreen input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+    }
+
+    #lockScreen input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+
+    #lockScreen input:focus {
+      border-color: rgba(255,255,255,0.8);
+      outline: none;
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+
+    #lockScreen button {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    #lockScreen button:hover {
+      background: white;
+      color: #111;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+    }
+
+    #lockScreen a {
+      color: #ffb3b3;
+    }
+
+    #lockScreen a:hover {
+      color: #fff;
+    }
+
+    /* Animations */
     .fade-in {
       animation: fadeIn 1s ease-out;
     }
@@ -123,51 +450,23 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    footer {
-      text-align: center;
-      padding: 2rem 0;
-      color: #777;
-      font-size: 0.9rem;
-    }
-    .meta-info {
-      max-width: 1000px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    .meta-info h2 {
-      color: var(--brown);
-      border-bottom: 2px solid var(--gold);
-      padding-bottom: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .keyword-pill {
-      display: inline-block;
-      background: #f3f4f6;
-      padding: 0.3rem 0.8rem;
-      margin: 0.3rem;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      color: #4b5563;
-    }
 
-    /* Lock Screen Styles */
-    #lockScreen {
-      background: linear-gradient(135deg, #1a1209 0%, #2c1e0f 100%);
+    /* --- MOBILE --- */
+    @media (max-width: 768px) {
+      h1 { font-size: 2.2rem; }
+      h2 { font-size: 2rem; }
+      .hero-content { padding: 30px 15px; }
+      .tools-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .hero { min-height: 60vh; padding-top: 80px; }
     }
-    .lock-glow {
-      box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
-    }
-    /* Prevent content flash before JS loads */
-    #mainContent, #lockScreen, #graceBanner { display: none; }
   </style>
+<base target="_blank">
 </head>
 <body class="leading-relaxed">
 
   <!-- GRACE PERIOD BANNER (Days 1-2) -->
-  <div id="graceBanner" class="bg-amber-100 border-b-2 border-amber-500 text-amber-900 text-center py-3 px-4 text-sm font-semibold relative z-40">
+  <div id="graceBanner" class="hidden">
     <span class="inline-flex items-center justify-center gap-2 flex-wrap">
       <span>⏳</span>
       <span>Payment Reminder: Your monthly subscription is due by the 3rd. Please contact KYOMIX to avoid service interruption.</span>
@@ -176,34 +475,34 @@
 
   <!-- LOCK SCREEN (Day 3+ if unpaid) -->
   <div id="lockScreen" class="fixed inset-0 z-[60] hidden flex-col items-center justify-center text-white p-6">
-    <div class="max-w-md w-full text-center lock-glow bg-white/5 border border-amber-500/20 rounded-2xl p-8 md:p-10 backdrop-blur-sm">
-      <div class="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-amber-500/30">
+    <div class="max-w-md w-full text-center glass lock-glow p-8 md:p-10">
+      <div class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/30">
         <span class="text-4xl">🔒</span>
       </div>
-      
-      <h2 class="title text-3xl mb-2 text-amber-400">Access Locked</h2>
-      <p class="text-gray-400 mb-8 text-sm">Monthly subscription payment is required to continue using Luxury Suite.</p>
-      
-      <div class="bg-black/20 rounded-xl p-5 mb-6 border border-white/10">
+
+      <h2 class="text-3xl mb-2">Access Locked</h2>
+      <p class="text-gray-300 mb-8 text-sm">Monthly subscription payment is required to continue using Luxury Suite.</p>
+
+      <div class="glass rounded-xl p-5 mb-6">
         <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Current Billing Period</p>
         <p class="text-lg font-semibold text-white mb-6" id="lockMonthLabel">—</p>
-        
+
         <input type="text" id="unlockCode" placeholder="ENTER UNLOCK CODE" 
-          class="w-full px-4 py-3 rounded-lg bg-white/10 border border-amber-500/40 text-white placeholder-gray-500 text-center tracking-[0.2em] uppercase focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition mb-3 font-mono text-lg">
-        
+          class="w-full px-4 py-3 rounded-lg text-center tracking-[0.2em] uppercase mb-3 font-mono text-lg">
+
         <p id="unlockError" class="text-red-400 text-xs mb-3 hidden font-semibold">Invalid code. Please contact KYOMIX.</p>
-        
-        <button onclick="attemptUnlock()" class="w-full bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-amber-900/50 tracking-wide">
+
+        <button onclick="attemptUnlock()" class="w-full font-bold py-3 rounded-lg transition tracking-wide">
           Unlock Access
         </button>
       </div>
-      
+
       <a href="https://wa.me/212661393441?text=Hello%20KYOMIX%2C%20I%20need%20the%20monthly%20unlock%20code%20for%20Luxury%20Suite." 
-         target="_blank" class="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 transition text-sm font-medium">
+         target="_blank" class="inline-flex items-center gap-2 transition text-sm font-medium">
         <span>💬</span> Contact KYOMIX via WhatsApp
       </a>
-      
-      <p class="text-xs text-gray-600 mt-8">Your access will be restored immediately upon payment verification.</p>
+
+      <p class="text-xs text-gray-500 mt-8">Your access will be restored immediately upon payment verification.</p>
     </div>
   </div>
 
@@ -212,95 +511,86 @@
 
     <!-- Hero -->
     <section class="hero">
-      <div class="max-w-4xl mx-auto px-6 fade-in">
-        <h1 class="title text-5xl md:text-6xl text-white mb-6">
-          <span class="text-gold">Luxury Suite</span>
-        </h1>
-        <p class="text-xl text-gray-200 mb-8">
-          Elegance. Simplicity. Perfection.  
-          <br>Premium tools for unforgettable guest moments.
-        </p>
-        <a href="#tools" class="btn inline-block">Explore Tools</a>
+      <div class="hero-content glass fade-in">
+        <span class="tagline">✨ Premium Hotel PDF Tools</span>
+        <h1>Luxury Suite<br><span style="font-weight:300; font-size:0.6em; opacity:0.95; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));">Elegance. Simplicity. Perfection.</span></h1>
+        <p style="margin-top:25px; max-width:600px; margin-left:auto; margin-right:auto;">Premium tools for unforgettable guest moments. Create print-ready materials for 5-star guest experiences.</p>
+
+        <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+          <a href="#tools" class="hero-btn">Explore Tools</a>
+        </div>
       </div>
     </section>
 
     <!-- Tools -->
-    <section id="tools" class="py-20 px-6">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="title text-4xl text-center mb-12 text-gray-800">Useful Tools</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-6 gap-8">
+    <section id="tools">
+      <h2>Useful Tools</h2>
+      <p style="text-align:center; margin-bottom:10px;">Crafted for luxury hospitality</p>
 
-          <!-- Envelope -->
-          <div class="card p-6 text-center hover:shadow-xl">
-            <div class="icon">✉️</div>
-            <h3 class="text-xl font-semibold mb-3">Envelope Suite</h3>
-            <p class="text-gray-600 text-sm mb-4">Gold-foil, print-ready guest envelopes.</p>
-            <a href="hotel-evnvelope-generator.html" class="btn text-sm">Create</a>
-          </div>
+      <div class="tools-grid">
+        <div class="glass tool-card">
+          <span class="tool-icon">✉️</span>
+          <h3>Envelope Suite</h3>
+          <p>Gold-foil, print-ready guest envelopes.</p>
+          <a href="hotel-evnvelope-generator.html" class="btn">Create</a>
+        </div>
 
-          <!-- Dining -->
-          <div class="card p-6 text-center hover:shadow-xl">
-            <div class="icon">🍽️</div>
-            <h3 class="text-xl font-semibold mb-3">Gourmet Res.</h3>
-            <p class="text-gray-600 text-sm mb-4">Elegant dining vouchers with wine pairings.</p>
-            <a href="marocan-restaurant-reservation.html" class="btn text-sm">Reserve</a>
-          </div>
+        <div class="glass tool-card">
+          <span class="tool-icon">🍽️</span>
+          <h3>Gourmet Res.</h3>
+          <p>Elegant dining vouchers with wine pairings.</p>
+          <a href="marocan-restaurant-reservation.html" class="btn">Reserve</a>
+        </div>
 
-          <!-- Cake -->
-          <div class="card p-6 text-center hover:shadow-xl">
-            <div class="icon">🎂</div>
-            <h3 class="text-xl font-semibold mb-3">Cake Res.</h3>
-            <p class="text-gray-600 text-sm mb-4">Personalized birthday & anniversary cakes.</p>
-            <a href="Reservation-de-Gateau.html" class="btn text-sm">Order</a>
-          </div>
+        <div class="glass tool-card">
+          <span class="tool-icon">🎂</span>
+          <h3>Cake Res.</h3>
+          <p>Personalized birthday & anniversary cakes.</p>
+          <a href="Reservation-de-Gateau.html" class="btn">Order</a>
+        </div>
 
-          <!-- Guest Message -->
-          <div class="card p-6 text-center hover:shadow-xl">
-            <div class="icon">💌</div>
-            <h3 class="text-xl font-semibold mb-3">Guest Message</h3>
-            <p class="text-gray-600 text-sm mb-4">Handwritten-style notes for VIPs.</p>
-            <a href="Guest-msg.html" class="btn text-sm">Write</a>
-          </div>
+        <div class="glass tool-card">
+          <span class="tool-icon">💌</span>
+          <h3>Guest Message</h3>
+          <p>Handwritten-style notes for VIPs.</p>
+          <a href="Guest-msg.html" class="btn">Write</a>
+        </div>
 
-          <!-- Lost & Found -->
-          <div class="card p-6 text-center hover:shadow-xl">
-            <div class="icon">🔍</div>
-            <h3 class="text-xl font-semibold mb-3">Lost & Found</h3>
-            <p class="text-gray-600 text-sm mb-4">Professional lost item documentation.</p>
-            <a href="decharge-generator.html" class="btn text-sm">Document</a>
-          </div>
+        <div class="glass tool-card">
+          <span class="tool-icon">🔍</span>
+          <h3>Lost & Found</h3>
+          <p>Professional lost item documentation.</p>
+          <a href="decharge-generator.html" class="btn">Document</a>
+        </div>
 
-          <!-- Wake-Up Manager -->
-          <div class="card p-6 text-center hover:shadow-xl">
-            <div class="icon">⏰</div>
-            <h3 class="text-xl font-semibold mb-3">Wake-Up Manager</h3>
-            <p class="text-gray-600 text-sm mb-4">Professional wake-up service documentation.</p>
-            <a href="https://kyomix.github.io/E-PDF-G/Wake-up.html" class="btn text-sm">Schedule</a>
-          </div>
-
+        <div class="glass tool-card">
+          <span class="tool-icon">⏰</span>
+          <h3>Wake-Up Manager</h3>
+          <p>Professional wake-up service documentation.</p>
+          <a href="https://kyomix.github.io/E-PDF-G/Wake-up.html" class="btn">Schedule</a>
         </div>
       </div>
     </section>
 
     <!-- Why Choose Us -->
-    <section class="bg-gray-50 py-16 px-6">
+    <section class="why-section">
       <div class="max-w-4xl mx-auto text-center">
-        <h2 class="title text-3xl mb-8 text-gray-800">Why Luxury Suite?</h2>
-        <div class="grid md:grid-cols-3 gap-8 text-sm">
-          <div>
-            <div class="text-2xl mb-2">✨</div>
+        <h2>Why Luxury Suite?</h2>
+        <div class="why-grid">
+          <div class="glass why-item">
+            <div class="tool-icon">✨</div>
             <strong>Timeless Design</strong>
-            <p class="text-gray-600 mt-1">Gold accents, elegant fonts, luxury finishes.</p>
+            <p>Gold accents, elegant fonts, luxury finishes.</p>
           </div>
-          <div>
-            <div class="text-2xl mb-2">🔒</div>
+          <div class="glass why-item">
+            <div class="tool-icon">🔒</div>
             <strong>Private & Secure</strong>
-            <p class="text-gray-600 mt-1">No data leaves your device.</p>
+            <p>No data leaves your device.</p>
           </div>
-          <div>
-            <div class="text-2xl mb-2">🚀</div>
+          <div class="glass why-item">
+            <div class="tool-icon">🚀</div>
             <strong>Instant PDFs</strong>
-            <p class="text-gray-600 mt-1">Download and print in seconds.</p>
+            <p>Download and print in seconds.</p>
           </div>
         </div>
       </div>
@@ -309,12 +599,12 @@
     <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="kyomix" data-description="Support me on Buy me a coffee!" data-message="Support My Work ☕" data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 
     <!-- CTA -->
-    <section class="bg-gradient-to-r from-amber-800 to-amber-900 text-white py-16 text-center px-6">
-      <h2 class="title text-4xl mb-4">Elevate Your Guest Experience</h2>
-      <p class="max-w-xl mx-auto mb-8 text-amber-100">
-        Trusted by luxury hotels worldwide.
-      </p>
-      <a href="https://wa.me/212661393441?text=Hello%2C%20I%20want%20to%20know%20more%20about%20Luxury%20Suite" class="btn inline-block">Contact KYOMIX</a>
+    <section class="cta-section">
+      <div class="glass" style="padding: 50px; max-width: 900px; margin: 0 auto;">
+        <h2>Elevate Your Guest Experience</h2>
+        <p>Trusted by luxury hotels worldwide.</p>
+        <a href="https://wa.me/212661393441?text=Hello%2C%20I%20want%20to%20know%20more%20about%20Luxury%20Suite" class="hero-btn">Contact KYOMIX</a>
+      </div>
     </section>
 
     <!-- Footer -->
@@ -332,7 +622,7 @@
       const month = now.getMonth() + 1; // 1-12
       const year = now.getFullYear();
       const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-      
+
       const storageKey = `ls_unlock_${year}_${month}`;
       const lockScreen = document.getElementById('lockScreen');
       const mainContent = document.getElementById('mainContent');
@@ -340,12 +630,12 @@
       const codeInput = document.getElementById('unlockCode');
       const unlockError = document.getElementById('unlockError');
       const lockMonthLabel = document.getElementById('lockMonthLabel');
-      
+
       // Display current billing period on lock screen
       if (lockMonthLabel) {
         lockMonthLabel.textContent = `${monthNames[month - 1]} ${year}`;
       }
-      
+
       // Deterministic monthly code generator
       // You can open browser console and type: getUnlockCode(5, 2026)
       function generateExpectedCode(m, y) {
@@ -359,15 +649,15 @@
         const hex = Math.abs(hash).toString(16).toUpperCase();
         return `LX-${m.toString().padStart(2, '0')}${y.toString().slice(-2)}-${hex.substring(0, 4)}`;
       }
-      
+
       // Expose to global scope so YOU can generate codes from console
       window.getUnlockCode = generateExpectedCode;
-      
+
       function isUnlocked() {
         const stored = localStorage.getItem(storageKey);
         return stored && stored === generateExpectedCode(month, year);
       }
-      
+
       function showLock() {
         if (lockScreen) {
           lockScreen.style.display = 'flex';
@@ -379,7 +669,7 @@
         // Auto-focus input
         setTimeout(() => { if(codeInput) codeInput.focus(); }, 400);
       }
-      
+
       function showMain() {
         if (lockScreen) lockScreen.style.display = 'none';
         if (mainContent) {
@@ -389,7 +679,7 @@
         if (graceBanner) graceBanner.style.display = 'none';
         document.body.style.overflow = '';
       }
-      
+
       function showGrace() {
         if (lockScreen) lockScreen.style.display = 'none';
         if (mainContent) {
@@ -399,7 +689,7 @@
         if (graceBanner) graceBanner.style.display = 'block';
         document.body.style.overflow = '';
       }
-      
+
       // DECISION TREE
       if (isUnlocked()) {
         showMain();
@@ -408,13 +698,13 @@
       } else {
         showGrace();
       }
-      
+
       // Unlock handler
       window.attemptUnlock = function() {
         if (!codeInput) return;
         const input = codeInput.value.trim().toUpperCase();
         const expected = generateExpectedCode(month, year);
-        
+
         if (input === expected) {
           localStorage.setItem(storageKey, expected);
           showMain();
@@ -427,7 +717,7 @@
           }
         }
       };
-      
+
       // Enter key support
       if (codeInput) {
         codeInput.addEventListener('keypress', function(e) {
