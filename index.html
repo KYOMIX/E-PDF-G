@@ -380,20 +380,77 @@
       text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     }
 
-    /* Lock Screen */
+    /* Lock Screen - FIXED VERSION */
     #lockScreen {
       background: rgba(26, 26, 46, 0.95);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    #lockScreen.lock-active {
+      display: flex !important;
     }
 
     .lock-glow {
       box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
     }
 
-    #lockScreen .glass {
+    .lock-container {
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
       background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 24px;
+      padding: 40px 30px;
+      position: relative;
+      margin: auto;
+    }
+
+    .lock-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(170deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0.3) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .lock-icon-wrapper {
+      width: 80px;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px auto;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .lock-icon-wrapper span {
+      font-size: 36px;
+      line-height: 1;
     }
 
     #lockScreen h2 {
@@ -403,43 +460,141 @@
       background-clip: text;
       color: transparent;
       filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+      font-size: 28px;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .lock-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .lock-form-box {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 24px 20px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .lock-period-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .lock-period-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 24px;
     }
 
     #lockScreen input {
+      width: 100%;
+      padding: 14px 16px;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 10px;
       color: #fff;
+      font-size: 16px;
+      text-align: center;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-family: 'SF Mono', Monaco, monospace;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
     }
 
     #lockScreen input::placeholder {
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
     }
 
     #lockScreen input:focus {
       border-color: rgba(255,255,255,0.8);
       outline: none;
-      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+      box-shadow: 0 0 15px rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.15);
     }
 
-    #lockScreen button {
+    #lockScreen input.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+    }
+
+    .lock-error-msg {
+      color: #f87171;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .lock-error-msg.visible {
+      display: block;
+    }
+
+    .lock-submit-btn {
+      width: 100%;
+      padding: 14px 20px;
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.5);
-      color: white;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
       transition: all 0.3s ease;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 1;
+      display: block;
+      text-align: center;
     }
 
-    #lockScreen button:hover {
-      background: white;
+    .lock-submit-btn:hover {
+      background: #fff;
       color: #111;
       box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
     }
 
-    #lockScreen a {
+    .lock-whatsapp-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       color: #ffb3b3;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      position: relative;
+      z-index: 1;
+      margin-top: 4px;
     }
 
-    #lockScreen a:hover {
+    .lock-whatsapp-link:hover {
       color: #fff;
+    }
+
+    .lock-footer-text {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
     }
 
     /* Animations */
@@ -459,8 +614,18 @@
       .tools-grid { grid-template-columns: 1fr; }
       .why-grid { grid-template-columns: 1fr; }
       .hero { min-height: 60vh; padding-top: 80px; }
+
+      .lock-container {
+        padding: 32px 20px;
+        margin: 10px;
+      }
+
+      #lockScreen h2 {
+        font-size: 24px;
+      }
     }
   </style>
+<base target="_blank">
 <base target="_blank">
 </head>
 <body class="leading-relaxed">
@@ -474,35 +639,34 @@
   </div>
 
   <!-- LOCK SCREEN (Day 3+ if unpaid) -->
-  <div id="lockScreen" class="fixed inset-0 z-[60] hidden flex-col items-center justify-center text-white p-6">
-    <div class="max-w-md w-full text-center glass lock-glow p-8 md:p-10">
-      <div class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/30">
-        <span class="text-4xl">🔒</span>
+  <div id="lockScreen">
+    <div class="lock-container lock-glow">
+      <div class="lock-icon-wrapper">
+        <span>🔒</span>
       </div>
 
-      <h2 class="text-3xl mb-2">Access Locked</h2>
-      <p class="text-gray-300 mb-8 text-sm">Monthly subscription payment is required to continue using Luxury Suite.</p>
+      <h2>Access Locked</h2>
+      <p class="lock-subtitle">Monthly subscription payment is required to continue using Luxury Suite.</p>
 
-      <div class="glass rounded-xl p-5 mb-6">
-        <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Current Billing Period</p>
-        <p class="text-lg font-semibold text-white mb-6" id="lockMonthLabel">—</p>
+      <div class="lock-form-box">
+        <p class="lock-period-label">Current Billing Period</p>
+        <p class="lock-period-value" id="lockMonthLabel">—</p>
 
-        <input type="text" id="unlockCode" placeholder="ENTER UNLOCK CODE" 
-          class="w-full px-4 py-3 rounded-lg text-center tracking-[0.2em] uppercase mb-3 font-mono text-lg">
+        <input type="text" id="unlockCode" placeholder="ENTER UNLOCK CODE" autocomplete="off">
 
-        <p id="unlockError" class="text-red-400 text-xs mb-3 hidden font-semibold">Invalid code. Please contact KYOMIX.</p>
+        <p id="unlockError" class="lock-error-msg">Invalid code. Please contact KYOMIX.</p>
 
-        <button onclick="attemptUnlock()" class="w-full font-bold py-3 rounded-lg transition tracking-wide">
-          Unlock Access
+        <button onclick="attemptUnlock()" class="lock-submit-btn">
+          🔓 Unlock Access
         </button>
       </div>
 
       <a href="https://wa.me/212661393441?text=Hello%20KYOMIX%2C%20I%20need%20the%20monthly%20unlock%20code%20for%20Luxury%20Suite." 
-         target="_blank" class="inline-flex items-center gap-2 transition text-sm font-medium">
+         target="_blank" class="lock-whatsapp-link">
         <span>💬</span> Contact KYOMIX via WhatsApp
       </a>
 
-      <p class="text-xs text-gray-500 mt-8">Your access will be restored immediately upon payment verification.</p>
+      <p class="lock-footer-text">Your access will be restored immediately upon payment verification.</p>
     </div>
   </div>
 
@@ -661,6 +825,7 @@
       function showLock() {
         if (lockScreen) {
           lockScreen.style.display = 'flex';
+          lockScreen.classList.add('lock-active');
           lockScreen.classList.add('fade-in');
         }
         if (mainContent) mainContent.style.display = 'none';
@@ -671,7 +836,10 @@
       }
 
       function showMain() {
-        if (lockScreen) lockScreen.style.display = 'none';
+        if (lockScreen) {
+          lockScreen.style.display = 'none';
+          lockScreen.classList.remove('lock-active');
+        }
         if (mainContent) {
           mainContent.style.display = 'block';
           mainContent.classList.add('fade-in');
@@ -681,7 +849,10 @@
       }
 
       function showGrace() {
-        if (lockScreen) lockScreen.style.display = 'none';
+        if (lockScreen) {
+          lockScreen.style.display = 'none';
+          lockScreen.classList.remove('lock-active');
+        }
         if (mainContent) {
           mainContent.style.display = 'block';
           mainContent.classList.add('fade-in');
@@ -709,11 +880,10 @@
           localStorage.setItem(storageKey, expected);
           showMain();
         } else {
-          if (unlockError) unlockError.style.display = 'block';
+          if (unlockError) unlockError.classList.add('visible');
           if (codeInput) {
-            codeInput.classList.add('border-red-500');
-            codeInput.classList.add('animate-pulse');
-            setTimeout(() => codeInput.classList.remove('animate-pulse'), 500);
+            codeInput.classList.add('error');
+            setTimeout(() => codeInput.classList.remove('error'), 500);
           }
         }
       };
@@ -724,8 +894,8 @@
           if (e.key === 'Enter') attemptUnlock();
         });
         codeInput.addEventListener('input', function() {
-          if (unlockError) unlockError.style.display = 'none';
-          codeInput.classList.remove('border-red-500');
+          if (unlockError) unlockError.classList.remove('visible');
+          codeInput.classList.remove('error');
         });
       }
     })();
