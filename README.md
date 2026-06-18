@@ -391,13 +391,7 @@ body {
 }
 ```
 
-### Modifying the Lock Screen
 
-The lock/billing logic is in the `<script>` block at the bottom of `index.html`:
-- `generateExpectedCode(month, year)` — Generates the monthly unlock code
-- `window.getUnlockCode` — Exposed globally for console access
-- Grace period: Days 1-2 (banner reminder)
-- Lock period: Day 3+ (requires unlock code)
 
 ---
 
