@@ -421,7 +421,9 @@ The lock/billing logic is in the `<script>` block at the bottom of `index.html`:
 
 ## License
 
-This project is free to use for personal and commercial purposes.
+This project is free* to use for personal and commercial purposes.
+
+*you can support me on the index.html page (buy me a coffee)  
 
 ---
 
