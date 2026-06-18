@@ -395,7 +395,7 @@
                     try {
                         doc.addImage(logo.src, 'JPEG', 15, yPos + 5, 15, 15);
                     } catch (e) {
-                        console.error("Error adding logo:", e);
+                        // Logo add failed silently
                     }
                 }
                 

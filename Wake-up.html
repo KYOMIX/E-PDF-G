@@ -1098,12 +1098,10 @@
             activeAlertId: null,
             fabMenuOpen: false,
             
-            // PHP backend endpoints
+            // Backend: localStorage only (no PHP required)
             backendConfig: {
-                saveDataUrl: 'save_data.php',
-                loadDataUrl: 'load_data.php',
-                saveBlocklistUrl: 'save_blocklist.php',
-                loadBlocklistUrl: 'load_blocklist.php'
+                storageKey: 'hotel_wakeup_data',
+                blocklistKey: 'hotel_blocklist'
             },
 
             // Translations Dictionary
@@ -1148,8 +1146,8 @@
                     btnComplete: "Mark Completed",
                     voucherTitle: "Request Confirmation",
                     voucherDisclaimer: "Please retain this receipt as proof of your wake-up call request.",
-                    statusOnline: "System Active - PHP Backend",
-                    statusOffline: "Offline - Using Local Storage",
+                    statusOnline: "System Active - Local Storage",
+                    statusOffline: "Offline - Local Storage",
                     noCalls: "No calls scheduled for today.",
                     loading: "Loading..."
                 },
@@ -1193,7 +1191,7 @@
                     btnComplete: "Marquer Terminé",
                     voucherTitle: "Confirmation Demande",
                     voucherDisclaimer: "Veuillez conserver ce reçu comme preuve de votre demande.",
-                    statusOnline: "Système Actif - Backend PHP",
+                    statusOnline: "Système Actif - Stockage Local",
                     statusOffline: "Hors Ligne - Stockage Local",
                     noCalls: "Aucun appel prévu aujourd'hui.",
                     loading: "Chargement..."
@@ -1272,93 +1270,33 @@
                 }
             },
 
-            // --- PHP BACKEND STORAGE FUNCTIONS ---
+            // --- STORAGE FUNCTIONS (localStorage) ---
             async loadData() {
                 try {
-                    if (navigator.onLine) {
-                        // Try to load from PHP backend
-                        const [dataResponse, blocklistResponse] = await Promise.all([
-                            fetch(this.backendConfig.loadDataUrl),
-                            fetch(this.backendConfig.loadBlocklistUrl)
-                        ]);
-                        
-                        if (dataResponse.ok) {
-                            const result = await dataResponse.json();
-                            if (result.success) {
-                                this.data = result.data || [];
-                            }
-                        }
-                        
-                        if (blocklistResponse.ok) {
-                            const result = await blocklistResponse.json();
-                            if (result.success) {
-                                this.blocklist = result.data || [];
-                            }
-                        }
-                    }
-                } catch (error) {
-                    console.warn('PHP backend unavailable, using local storage as fallback');
-                    // Fallback to localStorage
-                    const stored = localStorage.getItem('hotel_wakeup_data');
+                    const stored = localStorage.getItem(this.backendConfig.storageKey);
                     if (stored) this.data = JSON.parse(stored);
-                    
-                    const blockStored = localStorage.getItem('hotel_blocklist');
+
+                    const blockStored = localStorage.getItem(this.backendConfig.blocklistKey);
                     if (blockStored) this.blocklist = JSON.parse(blockStored);
+                } catch (error) {
+                    // Data load failed, start fresh
                 }
             },
             
             async saveData() {
                 try {
-                    if (navigator.onLine) {
-                        // Save to PHP backend
-                        const response = await fetch(this.backendConfig.saveDataUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ data: this.data })
-                        });
-                        
-                        const result = await response.json();
-                        if (!result.success) {
-                            throw new Error('PHP save failed');
-                        }
-                    }
-                    
-                    // Always keep localStorage as backup
-                    localStorage.setItem('hotel_wakeup_data', JSON.stringify(this.data));
+                    localStorage.setItem(this.backendConfig.storageKey, JSON.stringify(this.data));
                     return true;
                 } catch (error) {
-                    console.warn('PHP backend save failed, using local storage');
-                    localStorage.setItem('hotel_wakeup_data', JSON.stringify(this.data));
                     return false;
                 }
             },
             
             async saveBlocklist() {
                 try {
-                    if (navigator.onLine) {
-                        // Save to PHP backend
-                        const response = await fetch(this.backendConfig.saveBlocklistUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ data: this.blocklist })
-                        });
-                        
-                        const result = await response.json();
-                        if (!result.success) {
-                            throw new Error('PHP save failed');
-                        }
-                    }
-                    
-                    // Always keep localStorage as backup
-                    localStorage.setItem('hotel_blocklist', JSON.stringify(this.blocklist));
+                    localStorage.setItem(this.backendConfig.blocklistKey, JSON.stringify(this.blocklist));
                     return true;
                 } catch (error) {
-                    console.warn('PHP backend save failed, using local storage');
-                    localStorage.setItem('hotel_blocklist', JSON.stringify(this.blocklist));
                     return false;
                 }
             },
@@ -1432,7 +1370,7 @@
                     }, 500);
                     
                     if (success) {
-                        console.log(`Room ${room} blocked successfully`);
+                        // Room blocked successfully
                     }
                 } else {
                     alert(`Room ${room} is already blocked.`);
@@ -1560,7 +1498,7 @@
                 saveBtn.disabled = false;
                 
                 if (success) {
-                    console.log('Data saved to PHP backend successfully');
+                    // Data saved successfully
                 }
             },
             
