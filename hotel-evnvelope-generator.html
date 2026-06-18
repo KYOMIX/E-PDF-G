@@ -340,7 +340,7 @@
             <p class="mt-2 text-xs md:text-sm">Drag & Drop or <span class="font-semibold text-indigo-600">click to select</span></p>
             <p class="text-xs text-gray-400 mt-1">PNG or JPG supported</p>
           </div>
-          <img id="logoPreview" src="" alt="Logo Preview" class="absolute inset-0 w-full h-full object-contain rounded-lg md:rounded-xl bg-white p-2"/>
+          <img id="logoPreview" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Logo Preview" class="absolute inset-0 w-full h-full object-contain rounded-lg md:rounded-xl bg-white p-2"/>
           <input type="file" id="logoInput" accept="image/png, image/jpeg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"/>
         </div>
       </div>
@@ -678,15 +678,8 @@
     // You can open browser console and run: generateLicenseCode(6, 2026)
     window.generateLicenseCode = function(month, year) {
       const code = LICENSE.generateCode(month, year);
-      console.log(`%c License Code for ${month}/${year}: ${code} `, 'background: #6366f1; color: white; font-size: 16px; padding: 8px 16px; border-radius: 8px;');
-      console.log(`%c Share this code with the user after payment confirmation. `, 'color: #6b7280; font-style: italic;');
       return code;
     };
-
-    // Also show current month code in console for easy access
-    const now = new Date();
-    console.log(`%c Current Month Code Generator Ready `, 'background: #f59e0b; color: white; font-size: 14px; padding: 6px 12px; border-radius: 6px;');
-    console.log(`Run generateLicenseCode(${now.getMonth() + 1}, ${now.getFullYear()}) to get this month's code.`);
 
     // ========================
     // ORIGINAL APP CODE (unchanged)
@@ -789,7 +782,6 @@
         showToast("Data imported successfully!");
       } catch (error) {
         showToast("Error: Invalid file format", "error");
-        console.error(error);
       } finally { e.target.value = ''; }
     });
 
@@ -928,7 +920,6 @@
         pdf.save("envelopes.pdf");
         showToast("PDF generated successfully!");
       } catch (error) {
-        console.error("Error generating PDF:", error);
         showToast("Error generating PDF", "error");
       } finally { btn.innerHTML = originalText; btn.disabled = false; }
     });
