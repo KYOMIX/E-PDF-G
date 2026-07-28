@@ -51,21 +51,7 @@
 ## Tools Overview
 
 ### 1. Envelope Suite
-**File:** `hotel-evnvelope-generator.html`
-
-Create gold-foil, print-ready guest envelopes with custom logos and branding.
-
-**Features:**
-- Upload custom hotel logo (PNG/JPG)
-- Import guest data from Excel files
-- Batch generate multiple envelopes at once
-- Gold-foil luxury design with elegant typography
-- Print-ready PDF output
-
-**Use Cases:**
-- VIP guest welcome envelopes
-- Special occasion envelopes (honeymooners, anniversaries)
-- Corporate guest packages
+- what do you want to know? please contact KYOMIX for any specifics.
 
 ---
 
